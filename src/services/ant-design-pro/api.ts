@@ -1,5 +1,5 @@
 // @ts-ignore
-/* eslint-disable */
+// eslint-disable-next-line no-use-before-define
 import { request } from 'umi';
 
 /** 获取当前的用户 GET /api/currentUser */
@@ -22,15 +22,11 @@ export async function outLogin(options?: { [key: string]: any }) {
 
 /** 登录接口 POST /api/login/account */
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
-  return request<API.LoginResult>('https://defzone.net/api/user/password-sign-in', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  });
-  return request<API.LoginResult>('/api/login/account', {
+  let url = '/api/login/account';
+  if (body.autoLogin === true) {
+    url = 'https://defzone.net/api/user/password-sign-in';
+  }
+  return request<API.LoginResult>(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
