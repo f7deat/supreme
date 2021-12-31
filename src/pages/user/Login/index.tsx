@@ -1,12 +1,12 @@
 import {
-  AlipayCircleOutlined,
+  FacebookOutlined,
   LockOutlined,
   MobileOutlined,
-  TaobaoCircleOutlined,
+  TwitterOutlined,
   UserOutlined,
-  WeiboCircleOutlined,
+  GithubOutlined,
 } from '@ant-design/icons';
-import { Alert, message, Tabs } from 'antd';
+import { Alert, Button, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
 import { useIntl, history, FormattedMessage, SelectLang, useModel } from 'umi';
@@ -96,9 +96,16 @@ const Login: React.FC = () => {
               id="pages.login.loginWith"
               defaultMessage="其他登录方式"
             />,
-            <AlipayCircleOutlined key="FacebookOutlined" className={styles.icon} />,
-            <TaobaoCircleOutlined key="TwitterOutlined" className={styles.icon} />,
-            <WeiboCircleOutlined key="GithubOutlined" className={styles.icon} />,
+            <FacebookOutlined key="FacebookOutlined" className={styles.icon} />,
+            <TwitterOutlined key="TwitterOutlined" className={styles.icon} />,
+            <GithubOutlined key="GithubOutlined" className={styles.icon} />,
+            <Button
+              type="text"
+              onClick={() => history.push('/user/register')}
+              style={{ float: 'right' }}
+            >
+              Đăng ký
+            </Button>,
           ]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
