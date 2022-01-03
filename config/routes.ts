@@ -60,6 +60,12 @@
     component: './post',
   },
   {
+    icon: 'block',
+    name: 'category',
+    path: '/category',
+    component: './category',
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },

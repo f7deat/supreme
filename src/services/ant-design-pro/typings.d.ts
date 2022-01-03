@@ -3,6 +3,7 @@
 
 declare namespace API {
   type CurrentUser = {
+    userName?: string;
     name?: string;
     avatar?: string;
     userid?: string;
@@ -27,6 +28,8 @@ declare namespace API {
     status?: string;
     type?: string;
     currentAuthority?: string;
+    succeeded?: boolean;
+    token?: string;
   };
 
   type PageParams = {
@@ -47,6 +50,8 @@ declare namespace API {
     updatedAt?: string;
     createdAt?: string;
     progress?: number;
+    id: number;
+    modifiedDate: Date;
   };
 
   type RuleList = {

@@ -50,4 +50,5 @@ export default {
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
   'menu.post': 'Bài viết',
+  'menu.category': 'Danh mục',
 };
