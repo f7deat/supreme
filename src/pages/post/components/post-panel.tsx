@@ -4,7 +4,7 @@ import { Drawer, Form, Input, message } from 'antd';
 import BraftEditor from 'braft-editor';
 import { useEffect, useState } from 'react';
 import { getPost, addPost, updatePost } from '@/services/ant-design-pro/api';
-import { getCategories } from '@/services/defzone/category';
+import { getAllCategory } from '@/services/defzone/category';
 
 interface IPostDrawerProps {
   visible: boolean;
@@ -17,9 +17,9 @@ const PostDrawer = (props: IPostDrawerProps) => {
   const [options, setOptions] = useState<any>();
 
   useEffect(() => {
-    getCategories().then((response) => {
+    getAllCategory().then((response) => {
       setOptions(
-        response.map((x) => {
+        response.map((x: API.CategoryListItem) => {
           return {
             value: x.id,
             label: x.name,
@@ -68,6 +68,8 @@ const PostDrawer = (props: IPostDrawerProps) => {
           },
         ]);
       });
+    } else {
+      form.resetFields();
     }
   }, [props.postId, form]);
 
@@ -77,7 +79,6 @@ const PostDrawer = (props: IPostDrawerProps) => {
 
   const handleFinish = async (values: any) => {
     values.content = values.content.toHTML();
-    console.log(props.postId);
     if (props.postId !== 0) {
       // UPDATE POST
       updatePost(values).then((response) => {

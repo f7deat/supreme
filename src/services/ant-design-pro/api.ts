@@ -95,7 +95,7 @@ export async function getPosts(params: {
   /** 页面的容量 */
   pageSize?: number;
 }) {
-  return request<API.RuleList>(`${gateway}/post/list`, {
+  return request<API.PostListItem>(`${gateway}/post/list`, {
     method: 'GET',
     params: {
       ...params,
@@ -124,7 +124,7 @@ export async function addPost(body: any) {
     },
     data: {
       post: body,
-      listCategoryId: [],
+      listCategoryId: body.categories,
     },
   });
 }

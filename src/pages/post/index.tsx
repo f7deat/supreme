@@ -10,6 +10,7 @@ import { useIntl, FormattedMessage } from 'umi';
 import { getPosts, deletePost } from '@/services/ant-design-pro/api';
 import PostDrawer from './components/post-panel';
 import moment from 'moment';
+import { DOMAIN } from '@/services/config';
 
 const Post: React.FC = () => {
   /**
@@ -33,6 +34,7 @@ const Post: React.FC = () => {
   };
 
   const handleAdd = () => {
+    setPostId(0);
     waitTime(2000);
     setPanelVisible(true);
   };
@@ -53,21 +55,17 @@ const Post: React.FC = () => {
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
+   * @vi-VN Cấu hình ngôn ngữ
    * */
   const intl = useIntl();
 
-  const columns: ProColumns<API.RuleListItem>[] = [
+  const columns: ProColumns<API.PostListItem>[] = [
     {
       title: 'Tiêu đề',
       dataIndex: 'title',
       render: (dom, entity) => {
         return (
-          <a
-            onClick={() => {
-              setCurrentRow(entity);
-              setShowDetail(true);
-            }}
-          >
+          <a href={`${DOMAIN}/post/${entity.url}-${entity.id}.html`} target="_blank">
             {dom}
           </a>
         );
@@ -76,6 +74,7 @@ const Post: React.FC = () => {
     {
       title: 'Lượt xem',
       dataIndex: 'view',
+      render: (dom, entity) => entity.view.toLocaleString(),
     },
     {
       title: 'Ngày cập nhật',
@@ -138,7 +137,7 @@ const Post: React.FC = () => {
   ];
   return (
     <PageContainer title="Bài viết">
-      <ProTable<API.RuleListItem, API.PageParams>
+      <ProTable<API.PostListItem, API.PageParams>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',

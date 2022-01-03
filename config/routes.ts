@@ -48,12 +48,6 @@
     ],
   },
   {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
-  },
-  {
     icon: 'block',
     name: 'post',
     path: '/post',
@@ -64,6 +58,12 @@
     name: 'category',
     path: '/category',
     component: './category',
+  },
+  {
+    icon: 'block',
+    name: 'user',
+    path: '/account',
+    component: './account',
   },
   {
     path: '/',

@@ -44,11 +44,12 @@ export default {
   'menu.account.center': 'Account Center',
   'menu.account.settings': 'Account Settings',
   'menu.account.trigger': 'Trigger Error',
-  'menu.account.logout': 'Logout',
+  'menu.account.logout': 'Đăng xuất',
   'menu.editor': 'Graphic Editor',
   'menu.editor.flow': 'Flow Editor',
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
   'menu.post': 'Bài viết',
   'menu.category': 'Danh mục',
+  'menu.user': 'Thành viên',
 };

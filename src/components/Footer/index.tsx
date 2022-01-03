@@ -16,21 +16,21 @@ const Footer: React.FC = () => {
       copyright={`${currentYear} ${defaultMessage}`}
       links={[
         {
-          key: 'Ant Design Pro',
-          title: 'Ant Design Pro',
-          href: 'https://pro.ant.design',
+          key: 'F7DEAT',
+          title: 'F7DEAT',
+          href: 'https://defzone.net',
           blankTarget: true,
         },
         {
           key: 'github',
           title: <GithubOutlined />,
-          href: 'https://github.com/ant-design/ant-design-pro',
+          href: 'https://github.com/f7deat',
           blankTarget: true,
         },
         {
-          key: 'Ant Design',
-          title: 'Ant Design',
-          href: 'https://ant.design',
+          key: 'DefZone.Net',
+          title: 'DefZone.Net',
+          href: 'https://defzone.net',
           blankTarget: true,
         },
       ]}

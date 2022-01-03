@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import { stringify } from 'querystring';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
@@ -32,6 +32,13 @@ const loginOut = async () => {
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
+
+  /**
+   * @en-US International configuration
+   * @zh-CN 国际化配置
+   * @vi-VN Cấu hình ngôn ngữ
+   * */
+  const intl = useIntl();
 
   const onMenuClick = useCallback(
     (event: MenuInfo) => {
@@ -86,7 +93,10 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 
       <Menu.Item key="logout">
         <LogoutOutlined />
-        退出登录
+        {intl.formatMessage({
+          id: 'menu.account.logout',
+          defaultMessage: 'Logout',
+        })}
       </Menu.Item>
     </Menu>
   );
