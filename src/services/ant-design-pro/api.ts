@@ -1,8 +1,9 @@
 // @ts-ignore
 // eslint-disable-next-line no-use-before-define
 import { request } from 'umi';
+import { DOMAIN } from '../config';
 
-const gateway = 'https://localhost:44308/api';
+const gateway = `${DOMAIN}/api`;
 const token = localStorage.getItem('def_token');
 
 /** 获取当前的用户 GET /api/currentUser */

@@ -24,10 +24,10 @@
     ],
   },
   {
-    path: '/welcome',
-    name: 'welcome',
-    icon: 'smile',
-    component: './Welcome',
+    path: '/dashboard',
+    name: 'dashboard',
+    icon: 'dashboard',
+    component: './dashboard',
   },
   {
     path: '/admin',
@@ -60,14 +60,34 @@
     component: './category',
   },
   {
-    icon: 'block',
-    name: 'user',
+    name: 'users',
+    icon: 'user',
     path: '/account',
-    component: './account',
+    routes: [
+      {
+        path: '/account',
+        redirect: '/account/center',
+      },
+      {
+        name: 'center',
+        path: '/account/center',
+        component: './account/center',
+      },
+      {
+        name: 'settings',
+        path: '/account/settings',
+        component: './account/settings',
+      },
+      {
+        name: 'list',
+        path: '/account/list',
+        component: './account/list',
+      },
+    ],
   },
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/dashboard',
   },
   {
     component: './404',

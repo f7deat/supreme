@@ -1,11 +1,9 @@
-import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import ProDescriptions from '@ant-design/pro-descriptions';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
-import type { ProColumns } from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Drawer, message, Popconfirm } from 'antd';
-import { useState } from 'react';
+import { Button, message, Popconfirm } from 'antd';
+import { useRef, useState } from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { getPosts, deletePost } from '@/services/ant-design-pro/api';
 import PostDrawer from './components/post-panel';
@@ -19,6 +17,7 @@ const Post: React.FC = () => {
    *  */
   const [panelVisible, setPanelVisible] = useState<boolean>(false);
   const [postId, setPostId] = useState<number>(0);
+  const ref = useRef<ActionType>();
 
   const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -28,8 +27,13 @@ const Post: React.FC = () => {
     });
   };
 
+  const reload = () => {
+    ref.current?.reload();
+  };
+
   const handleUpdate = (id: number) => {
     setPostId(id);
+    waitTime();
     setPanelVisible(true);
   };
 
@@ -47,10 +51,6 @@ const Post: React.FC = () => {
       }
     });
   };
-
-  const [showDetail, setShowDetail] = useState<boolean>(false);
-
-  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
 
   /**
    * @en-US International configuration
@@ -157,31 +157,14 @@ const Post: React.FC = () => {
         request={getPosts}
         columns={columns}
         rowSelection={{}}
+        actionRef={ref}
       />
-      <Drawer
-        width={600}
-        visible={showDetail}
-        onClose={() => {
-          setCurrentRow(undefined);
-          setShowDetail(false);
-        }}
-        closable={false}
-      >
-        {currentRow?.name && (
-          <ProDescriptions<API.RuleListItem>
-            column={2}
-            title={currentRow?.name}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.name,
-            }}
-            columns={columns as ProDescriptionsItemProps<API.RuleListItem>[]}
-          />
-        )}
-      </Drawer>
-      <PostDrawer visible={panelVisible} setVisible={setPanelVisible} postId={postId} />
+      <PostDrawer
+        visible={panelVisible}
+        setVisible={setPanelVisible}
+        postId={postId}
+        reload={reload}
+      />
     </PageContainer>
   );
 };

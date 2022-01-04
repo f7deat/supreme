@@ -51,5 +51,7 @@ export default {
   'menu.editor.koni': 'Koni Editor',
   'menu.post': 'Post',
   'menu.category': 'Category',
-  'menu.user': 'Users',
+  'menu.users': 'Users',
+  'menu.users.center': 'Account Center',
+  'menu.users.settings': 'Account Setting',
 };

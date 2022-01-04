@@ -1,8 +1,9 @@
-import ProForm, { ProFormSelect } from '@ant-design/pro-form';
+import type { ProFormInstance } from '@ant-design/pro-form';
+import ProForm, { DrawerForm, ProFormSelect } from '@ant-design/pro-form';
 import 'braft-editor/dist/index.css';
-import { Drawer, Form, Input, message } from 'antd';
+import { Input, message } from 'antd';
 import BraftEditor from 'braft-editor';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getPost, addPost, updatePost } from '@/services/ant-design-pro/api';
 import { getAllCategory } from '@/services/defzone/category';
 
@@ -10,10 +11,11 @@ interface IPostDrawerProps {
   visible: boolean;
   setVisible: any;
   postId: number;
+  reload: any;
 }
 
 const PostDrawer = (props: IPostDrawerProps) => {
-  const [form] = Form.useForm();
+  const formRef = useRef<ProFormInstance>();
   const [options, setOptions] = useState<any>();
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const PostDrawer = (props: IPostDrawerProps) => {
     if (props.postId !== 0) {
       getPost(props.postId).then((response) => {
         const { post, categories } = response;
-        form.setFields([
+        formRef.current?.setFields([
           {
             name: 'id',
             value: post.id,
@@ -69,12 +71,13 @@ const PostDrawer = (props: IPostDrawerProps) => {
         ]);
       });
     } else {
-      form.resetFields();
+      formRef.current?.resetFields();
     }
-  }, [props.postId, form]);
+  }, [props.postId]);
 
   const hanldeClose = () => {
     props.setVisible(false);
+    props.reload();
   };
 
   const handleFinish = async (values: any) => {
@@ -103,37 +106,38 @@ const PostDrawer = (props: IPostDrawerProps) => {
   };
 
   return (
-    <Drawer width={window.innerWidth - 300} visible={props.visible} onClose={hanldeClose}>
-      <ProForm onFinish={handleFinish} form={form}>
-        <ProForm.Item name="id" hidden={true}>
-          <Input />
-        </ProForm.Item>
-        <ProForm.Item name="view" hidden={true}>
-          <Input />
-        </ProForm.Item>
-        <ProForm.Item name="title" label="Tiêu đề">
-          <Input />
-        </ProForm.Item>
-        <ProForm.Item name="url" label="Đường dẫn">
-          <Input />
-        </ProForm.Item>
-        <ProForm.Item name="description" label="Mô tả">
-          <Input.TextArea />
-        </ProForm.Item>
-        <ProForm.Item name="content" label="Nội dung">
-          <BraftEditor />
-        </ProForm.Item>
-        <ProForm.Item name="categories" label="Danh mục">
-          <ProFormSelect fieldProps={{ mode: 'multiple' }} options={options} />
-        </ProForm.Item>
-        <ProForm.Item name="tags" label="Tags">
-          <Input />
-        </ProForm.Item>
-        <ProForm.Item name="thumbnail" label="Thumbnail">
-          <Input />
-        </ProForm.Item>
-      </ProForm>
-    </Drawer>
+    <DrawerForm
+      width={window.innerWidth - 300}
+      visible={props.visible}
+      onFinish={handleFinish}
+      onVisibleChange={props.setVisible}
+      formRef={formRef}
+    >
+      <ProForm.Item name="id" hidden={true}>
+        <Input />
+      </ProForm.Item>
+      <ProForm.Item name="title" label="Tiêu đề">
+        <Input />
+      </ProForm.Item>
+      <ProForm.Item name="url" label="Đường dẫn">
+        <Input />
+      </ProForm.Item>
+      <ProForm.Item name="description" label="Mô tả">
+        <Input.TextArea />
+      </ProForm.Item>
+      <ProForm.Item name="content" label="Nội dung">
+        <BraftEditor />
+      </ProForm.Item>
+      <ProForm.Item name="categories" label="Danh mục">
+        <ProFormSelect fieldProps={{ mode: 'multiple' }} options={options} />
+      </ProForm.Item>
+      <ProForm.Item name="tags" label="Tags">
+        <Input />
+      </ProForm.Item>
+      <ProForm.Item name="thumbnail" label="Thumbnail">
+        <Input />
+      </ProForm.Item>
+    </DrawerForm>
   );
 };
 

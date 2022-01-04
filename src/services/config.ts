@@ -1,2 +1,2 @@
-export const DOMAIN = 'https://localhost:44308';
+export const DOMAIN = 'https://defzone.net';
 export const TOKEN: string = 'Bearer ' + localStorage.getItem('def_token') || '';

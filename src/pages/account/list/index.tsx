@@ -3,7 +3,7 @@ import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button, Popconfirm } from 'antd';
 import { FormattedMessage, useIntl } from 'umi';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOutlined } from '@ant-design/icons';
 import { getUsers } from '@/services/defzone/user';
 
 const User: React.FC = () => {
@@ -29,11 +29,16 @@ const User: React.FC = () => {
       dataIndex: 'email',
     },
     {
+      title: 'Phone Number',
+      dataIndex: 'phoneNumber',
+    },
+    {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
         <Button type="primary" icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} />,
+        <Button icon={<FolderOutlined />} />,
         <Popconfirm
           title="Are you sure to delete this?"
           onConfirm={() => handleRemove(record.id)}
@@ -47,7 +52,7 @@ const User: React.FC = () => {
   ];
 
   return (
-    <PageContainer title={intl.formatMessage({ id: 'menu.category', defaultMessage: 'Category' })}>
+    <PageContainer title={intl.formatMessage({ id: 'menu.users', defaultMessage: 'Thành viên' })}>
       <ProTable<API.CategoryListItem, API.PageParams>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
@@ -62,7 +67,7 @@ const User: React.FC = () => {
             Import
           </Button>,
           <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-            Viết bài
+            Thêm mới
           </Button>,
         ]}
         request={getUsers}

@@ -1,6 +1,6 @@
 import component from './en-US/component';
 import globalHeader from './en-US/globalHeader';
-import menu from './en-US/menu';
+import menu from './vi-VN/menu';
 import pages from './en-US/pages';
 import pwa from './en-US/pwa';
 import settingDrawer from './vi-VN/settingDrawer';

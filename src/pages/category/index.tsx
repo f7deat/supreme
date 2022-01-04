@@ -146,7 +146,7 @@ const Category: React.FC = () => {
             Import
           </Button>,
           <Button type="primary" icon={<PlusOutlined />} onClick={() => setDrawerVisit(true)}>
-            Viết bài
+            Thêm mới
           </Button>,
         ]}
         request={getCategories}
