@@ -41,7 +41,8 @@ export type CurrentUser = {
   country: string;
   geographic: GeographicType;
   address: string;
-  phone: string;
+  phoneNumber: string;
+  userName: string;
 };
 
 export type Member = {

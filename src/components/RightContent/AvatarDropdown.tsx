@@ -86,7 +86,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
       {menu && (
         <Menu.Item key="settings">
           <SettingOutlined />
-          个人设置
+          <FormattedMessage id="menu.account.settings" defaultMessage="Cài đặt" />
         </Menu.Item>
       )}
       {menu && <Menu.Divider />}

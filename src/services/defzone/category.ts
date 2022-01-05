@@ -42,6 +42,17 @@ export async function addCategory(body: any) {
   });
 }
 
+/** UPDATE CATEGORY POST /api/category/update */
+export async function updateCategory(body: any) {
+  return request(`${_prefix}/update`, {
+    method: 'POST',
+    headers: {
+      authorization: TOKEN,
+    },
+    data: body,
+  });
+}
+
 /** LIST PARRENT CATEGORY GET /api/category/list-parrent */
 export async function getListParrentCategory() {
   return request<API.CategoryListItem[]>(`${_prefix}/list-parrent`, {

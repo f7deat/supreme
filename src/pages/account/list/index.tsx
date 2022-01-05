@@ -5,6 +5,8 @@ import { Button, Popconfirm } from 'antd';
 import { FormattedMessage, useIntl } from 'umi';
 import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOutlined } from '@ant-design/icons';
 import { getUsers } from '@/services/defzone/user';
+import { DrawerForm, ProFormText } from '@ant-design/pro-form';
+import { useState } from 'react';
 
 const User: React.FC = () => {
   /**
@@ -13,6 +15,7 @@ const User: React.FC = () => {
    * @vi-VN Cấu hình ngôn ngữ
    * */
   const intl = useIntl();
+  const [visible, setVisible] = useState<boolean>(false);
 
   const handleAdd = () => {};
   const handleRemove = (id: number) => {
@@ -74,6 +77,9 @@ const User: React.FC = () => {
         columns={columns}
         rowSelection={{}}
       />
+      <DrawerForm visible={visible} onVisibleChange={setVisible}>
+        <ProFormText name="phoneNumber" />
+      </DrawerForm>
     </PageContainer>
   );
 };

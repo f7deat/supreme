@@ -15,15 +15,19 @@ const passwordStrength = {
 
 const SecurityView: React.FC = () => {
   const [drawerPasswordVisible, setDrawerPasswordVisible] = useState<boolean>(false);
+  const [drawerPhoneNumberVisible, setDrawerPhoneNumberVisible] = useState<boolean>(false);
 
   const handleFinish = async (values: ChangePasswordType) => {
-    console.log(values);
     changePassword(values).then((response) => {
       if (response.succeeded) {
         message.success('Succeeded!');
         setDrawerPasswordVisible(false);
       }
     });
+  };
+
+  const handlePhoneNumberFinish = async (values: any) => {
+    console.log(values);
   };
 
   const getData = () => [
@@ -75,9 +79,16 @@ const SecurityView: React.FC = () => {
         onVisibleChange={setDrawerPasswordVisible}
         onFinish={handleFinish}
       >
-        <ProFormText name="oldPassword" />
-        <ProFormText name="newPassword" />
-        <ProFormText name="confirmPassword" />
+        <ProFormText name="oldPassword" label="Mật khẩu cũ" />
+        <ProFormText name="newPassword" label="Mật khẩu mới" />
+        <ProFormText name="confirmPassword" label="Nhập lại mật khẩu" />
+      </DrawerForm>
+      <DrawerForm
+        visible={drawerPhoneNumberVisible}
+        onVisibleChange={setDrawerPhoneNumberVisible}
+        onFinish={handlePhoneNumberFinish}
+      >
+        <ProFormText name="phoneNumber" />
       </DrawerForm>
     </>
   );

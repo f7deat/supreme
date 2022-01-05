@@ -1,8 +1,22 @@
+import { DOMAIN, TOKEN } from '@/services/config';
 import { request } from 'umi';
-import type { CurrentUser, ListItemDataType } from './data.d';
+import type { ListItemDataType } from './data.d';
 
-export async function queryCurrent(): Promise<{ data: CurrentUser }> {
-  return request('/api/currentUserDetail');
+export async function queryCurrent() {
+  return request(`${DOMAIN}/api/user/get`, {
+    headers: {
+      authorization: TOKEN,
+    },
+  });
+}
+
+export async function getRolesInUser(id: string) {
+  return request(`${DOMAIN}/api/user/roles/${id}`, {
+    method: 'GET',
+    headers: {
+      authorization: TOKEN,
+    },
+  });
 }
 
 export async function queryFakeList(params: {

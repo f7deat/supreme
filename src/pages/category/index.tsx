@@ -10,6 +10,7 @@ import {
   getCategories,
   getCategory,
   getListParrentCategory,
+  updateCategory,
 } from '@/services/defzone/category';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import { ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
@@ -47,13 +48,23 @@ const Category: React.FC = () => {
   };
 
   const handleFinish = async (values: any) => {
-    addCategory(values).then((response) => {
+    if (values.id) {
+      const response = await updateCategory(values);
       if (response.succeeded) {
         message.success('succeeded!');
+        setDrawerVisit(false);
       } else {
         message.error(response.message);
       }
-    });
+    } else {
+      const response = await addCategory(values);
+      if (response.succeeded) {
+        message.success('succeeded!');
+        setDrawerVisit(false);
+      } else {
+        message.error(response.message);
+      }
+    }
   };
 
   const handleRemove = (id: number) => {
@@ -71,10 +82,11 @@ const Category: React.FC = () => {
     getCategory(id).then(async (response) => {
       setDrawerVisit(true);
       await waitTime();
-      if (formRef.current) {
-        console.log('zxcz');
-      }
       formRef.current?.setFields([
+        {
+          name: 'id',
+          value: response.id,
+        },
         {
           name: 'name',
           value: response.name,
@@ -107,10 +119,26 @@ const Category: React.FC = () => {
     {
       title: 'Tên',
       dataIndex: 'name',
+      width: 200,
     },
     {
       title: 'Mô tả',
       dataIndex: 'description',
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      valueEnum: {
+        0: {
+          text: 'Đang ẩn',
+          status: 'Default',
+        },
+        1: {
+          text: 'Hoạt động',
+          status: 'Processing',
+        },
+      },
+      width: 150,
     },
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
@@ -169,6 +197,7 @@ const Category: React.FC = () => {
         }}
         onFinish={handleFinish}
       >
+        <ProFormText name="id" hidden={true} />
         <ProForm.Group>
           <ProFormText name="name" width="md" label="Tên danh mục" />
           <ProFormText
