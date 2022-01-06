@@ -1,5 +1,5 @@
 import component from './en-US/component';
-import globalHeader from './en-US/globalHeader';
+import globalHeader from './vi-VN/globalHeader';
 import menu from './vi-VN/menu';
 import pages from './en-US/pages';
 import pwa from './en-US/pwa';

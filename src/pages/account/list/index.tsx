@@ -3,7 +3,13 @@ import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button, Popconfirm } from 'antd';
 import { FormattedMessage, useIntl } from 'umi';
-import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+  FolderOutlined,
+  CheckCircleTwoTone,
+} from '@ant-design/icons';
 import { getUsers } from '@/services/defzone/user';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
 import { useState } from 'react';
@@ -18,18 +24,32 @@ const User: React.FC = () => {
   const [visible, setVisible] = useState<boolean>(false);
 
   const handleAdd = () => {};
-  const handleRemove = (id: number) => {
+  const handleRemove = (id: string) => {
     console.log(id);
   };
 
-  const handleUpdate = (id: number) => {
+  const handleUpdate = (id: string) => {
     console.log(id);
   };
 
-  const columns: ProColumns<API.CategoryListItem>[] = [
+  const ActiveIcon = (active: boolean) => {
+    let twoToneColor = '#eb2f96';
+    if (active) {
+      twoToneColor = '#52c41a';
+    }
+    return <CheckCircleTwoTone twoToneColor={twoToneColor} />;
+  };
+
+  const columns: ProColumns<API.UserListItem>[] = [
     {
       title: 'Email',
       dataIndex: 'email',
+      render: (dom, entity) => (
+        <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+          {ActiveIcon(entity.emailConfirmed)}
+          {dom}
+        </div>
+      ),
     },
     {
       title: 'Phone Number',
@@ -56,7 +76,7 @@ const User: React.FC = () => {
 
   return (
     <PageContainer title={intl.formatMessage({ id: 'menu.users', defaultMessage: 'Thành viên' })}>
-      <ProTable<API.CategoryListItem, API.PageParams>
+      <ProTable<API.UserListItem, API.PageParams>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',
