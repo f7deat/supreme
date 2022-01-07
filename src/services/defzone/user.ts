@@ -1,7 +1,4 @@
-import { request } from 'umi';
-import { DOMAIN, TOKEN } from '../config';
-
-const _prefix = `${DOMAIN}/api/user`;
+import request from '../config';
 
 /** LIST USER GET /api/user/list */
 export async function getUsers(params: {
@@ -10,13 +7,10 @@ export async function getUsers(params: {
   /** PAGE SIZE */
   pageSize?: number;
 }) {
-  return request<API.CategoryListItem[]>(`${_prefix}/list`, {
+  return request<API.CategoryListItem[]>(`/user/list`, {
     method: 'GET',
     params: {
       ...params,
-    },
-    headers: {
-      authorization: TOKEN,
     },
   });
 }

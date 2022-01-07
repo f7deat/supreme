@@ -1,5 +1,4 @@
-import { DOMAIN } from '@/services/config';
-import { request } from 'umi';
+import request from '@/services/config';
 
 export interface StateType {
   status?: 'ok' | 'error';
@@ -16,7 +15,7 @@ export interface UserRegisterParams {
 }
 
 export async function fakeRegister(params: UserRegisterParams) {
-  return request(`${DOMAIN}/api/user/create`, {
+  return request(`/user/create`, {
     method: 'POST',
     data: params,
   });
