@@ -41,9 +41,3 @@ export type CurrentUser = {
   address: string;
   phone: string;
 };
-
-export type ChangePasswordType = {
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-};

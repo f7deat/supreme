@@ -1,5 +1,7 @@
 import { extend } from 'umi-request';
 
+export const DOMAIN = 'https://defzone.net';
+
 const request = extend({
   prefix: `https://defzone.net/api`,
   headers: {

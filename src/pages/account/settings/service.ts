@@ -1,6 +1,5 @@
-import { DOMAIN, TOKEN } from '@/services/config';
 import { request } from 'umi';
-import type { ChangePasswordType, CurrentUser, GeographicItemType } from './data';
+import type { CurrentUser, GeographicItemType } from './data';
 
 export async function queryCurrent(): Promise<{ data: CurrentUser }> {
   return request('/api/accountSettingCurrentUser');
@@ -15,15 +14,5 @@ export async function queryCity(province: string): Promise<{ data: GeographicIte
 }
 
 export async function query() {
-  return request('/api/users');
-}
-
-export async function changePassword(body: ChangePasswordType) {
-  return request(`${DOMAIN}/api/user/change-password`, {
-    method: 'POST',
-    headers: {
-      authorization: TOKEN,
-    },
-    data: body,
-  });
+  return null;
 }

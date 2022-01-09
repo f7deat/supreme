@@ -1,7 +1,7 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Popconfirm } from 'antd';
+import { Button, Col, Popconfirm, Row } from 'antd';
 import { FormattedMessage, useIntl } from 'umi';
 import {
   EditOutlined,
@@ -13,6 +13,7 @@ import {
 import { getUsers } from '@/services/defzone/user';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
 import { useState } from 'react';
+import Role from './components/role';
 
 const User: React.FC = () => {
   /**
@@ -22,6 +23,7 @@ const User: React.FC = () => {
    * */
   const intl = useIntl();
   const [visible, setVisible] = useState<boolean>(false);
+  const [roleId, setRoleId] = useState<string>('');
 
   const handleAdd = () => {};
   const handleRemove = (id: string) => {
@@ -76,30 +78,37 @@ const User: React.FC = () => {
 
   return (
     <PageContainer title={intl.formatMessage({ id: 'menu.users', defaultMessage: 'Thành viên' })}>
-      <ProTable<API.UserListItem, API.PageParams>
-        headerTitle={intl.formatMessage({
-          id: 'pages.searchTable.title',
-          defaultMessage: 'Enquiry form',
-        })}
-        rowKey="id"
-        search={{
-          labelWidth: 120,
-        }}
-        toolBarRender={() => [
-          <Button type="primary" danger>
-            Import
-          </Button>,
-          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-            Thêm mới
-          </Button>,
-        ]}
-        request={getUsers}
-        columns={columns}
-        rowSelection={{}}
-      />
-      <DrawerForm visible={visible} onVisibleChange={setVisible}>
-        <ProFormText name="phoneNumber" />
-      </DrawerForm>
+      <Row gutter={16}>
+        <Col span={8}>
+          <Role roleId={roleId} setRoleId={setRoleId} />
+        </Col>
+        <Col span={16}>
+          <ProTable<API.UserListItem, API.PageParams>
+            headerTitle={intl.formatMessage({
+              id: 'pages.searchTable.title',
+              defaultMessage: 'Enquiry form',
+            })}
+            rowKey="id"
+            search={{
+              labelWidth: 120,
+            }}
+            toolBarRender={() => [
+              <Button type="primary" danger>
+                Import
+              </Button>,
+              <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+                Thêm mới
+              </Button>,
+            ]}
+            request={getUsers}
+            columns={columns}
+            rowSelection={{}}
+          />
+          <DrawerForm visible={visible} onVisibleChange={setVisible}>
+            <ProFormText name="phoneNumber" />
+          </DrawerForm>
+        </Col>
+      </Row>
     </PageContainer>
   );
 };

@@ -2,8 +2,8 @@ import React from 'react';
 import { List, message } from 'antd';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
 import { useState } from 'react';
-import type { ChangePasswordType } from '../data';
-import { changePassword } from '../service';
+import { changePassword } from '@/services/defzone/user';
+import type { ChangePasswordType } from '@/services/typings/user';
 
 type Unpacked<T> = T extends (infer U)[] ? U : T;
 

@@ -13,4 +13,10 @@ declare namespace API {
     id: string;
     email: string;
   };
+  type RoleListItem = {
+    id: string;
+    name: string;
+    normalizedName: string;
+    concurrencyStamp: string;
+  };
 }
