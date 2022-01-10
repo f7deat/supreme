@@ -55,4 +55,5 @@ export default {
   'menu.users.center': 'Hồ sơ',
   'menu.users.settings': 'Cài đặt',
   'menu.users.list': 'Danh sách',
+  'menu.files': 'Tệp tin',
 };

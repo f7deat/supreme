@@ -60,6 +60,12 @@
     component: './category',
   },
   {
+    icon: 'block',
+    name: 'files',
+    path: '/files',
+    component: './files',
+  },
+  {
     name: 'users',
     icon: 'user',
     path: '/account',
