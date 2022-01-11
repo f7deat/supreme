@@ -68,6 +68,10 @@ const PostDrawer = (props: IPostDrawerProps) => {
             name: 'categories',
             value: categories,
           },
+          {
+            name: 'status',
+            value: post.status,
+          },
         ]);
       });
     } else {
@@ -126,7 +130,7 @@ const PostDrawer = (props: IPostDrawerProps) => {
         <Input.TextArea />
       </ProForm.Item>
       <ProForm.Item name="content" label="Nội dung">
-        <BraftEditor />
+        <BraftEditor language="en" />
       </ProForm.Item>
       <ProForm.Item name="categories" label="Danh mục">
         <ProFormSelect fieldProps={{ mode: 'multiple' }} options={options} />
@@ -136,6 +140,20 @@ const PostDrawer = (props: IPostDrawerProps) => {
       </ProForm.Item>
       <ProForm.Item name="thumbnail" label="Thumbnail">
         <Input />
+      </ProForm.Item>
+      <ProForm.Item name="status" label="Trạng thái">
+        <ProFormSelect
+          options={[
+            {
+              value: 0,
+              label: 'Draft',
+            },
+            {
+              value: 1,
+              label: 'Active',
+            },
+          ]}
+        />
       </ProForm.Item>
     </DrawerForm>
   );

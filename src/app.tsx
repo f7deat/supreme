@@ -23,11 +23,11 @@ export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
   loading?: boolean;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  fetchUserInfo?: (token?: string) => Promise<API.CurrentUser | undefined>;
 }> {
-  const fetchUserInfo = async () => {
+  const fetchUserInfo = async (token: string = '') => {
     try {
-      const msg = await queryCurrentUser();
+      const msg = await queryCurrentUser(token);
       return msg;
     } catch (error) {
       history.push(loginPath);

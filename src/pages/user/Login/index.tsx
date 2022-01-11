@@ -36,8 +36,8 @@ const Login: React.FC = () => {
 
   const intl = useIntl();
 
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
+  const fetchUserInfo = async (token?: string) => {
+    const userInfo = await initialState?.fetchUserInfo?.(token);
     if (userInfo) {
       await setInitialState((s: any) => ({
         ...s,
@@ -55,10 +55,10 @@ const Login: React.FC = () => {
         msg.status = 'ok';
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
-          defaultMessage: '登录成功！',
+          defaultMessage: 'Đăng nhập thành công!',
         });
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
+        await fetchUserInfo(msg.token);
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;
         const { query } = history.location;
