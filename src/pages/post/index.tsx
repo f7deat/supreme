@@ -4,7 +4,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
-import { useIntl, FormattedMessage } from 'umi';
+import { FormattedMessage } from 'umi';
 import { getPosts, deletePost } from '@/services/ant-design-pro/api';
 import PostDrawer from './components/post-panel';
 import moment from 'moment';
@@ -52,13 +52,6 @@ const Post: React.FC = () => {
     });
   };
 
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * @vi-VN Cấu hình ngôn ngữ
-   * */
-  const intl = useIntl();
-
   const columns: ProColumns<API.PostListItem>[] = [
     {
       title: 'Tiêu đề',
@@ -87,18 +80,11 @@ const Post: React.FC = () => {
       hideInForm: true,
       valueEnum: {
         0: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.default"
-              defaultMessage="Shut down"
-            />
-          ),
+          text: 'Draft',
           status: 'Default',
         },
         1: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running" />
-          ),
+          text: 'Active',
           status: 'Processing',
         },
         2: {
@@ -125,7 +111,7 @@ const Post: React.FC = () => {
       render: (_, record) => [
         <Button type="primary" icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} />,
         <Popconfirm
-          title="Are you sure to delete this task?"
+          title="Are you sure to delete this?"
           onConfirm={() => handleRemove(record.id)}
           okText="Yes"
           cancelText="No"
@@ -138,10 +124,7 @@ const Post: React.FC = () => {
   return (
     <PageContainer title="Bài viết">
       <ProTable<API.PostListItem, API.PageParams>
-        headerTitle={intl.formatMessage({
-          id: 'pages.searchTable.title',
-          defaultMessage: 'Enquiry form',
-        })}
+        headerTitle="Danh sách"
         rowKey="id"
         search={{
           labelWidth: 120,

@@ -9,6 +9,7 @@ import EditableLinkGroup from './components/EditableLinkGroup';
 import styles from './style.less';
 import type { ActivitiesType, CurrentUser } from './data.d';
 import { queryProjectNotice, queryActivities, fakeChartData } from './service';
+import { queryPostsByUser } from '../../services/defzone/api';
 
 const links = [
   {
@@ -74,6 +75,8 @@ const ExtraContent: FC<Record<string, any>> = () => (
 const Workplace: FC = () => {
   const { loading: projectLoading, data: projectNotice = [] } = useRequest(queryProjectNotice);
   const { loading: activitiesLoading, data: activities = [] } = useRequest(queryActivities);
+  const { loading: postsByUserLoading, data: postsByUser = [] } = useRequest(queryPostsByUser);
+
   const { data } = useRequest(fakeChartData);
   const { initialState } = useModel<any>('@@initialState');
   const { currentUser } = initialState;
@@ -166,7 +169,7 @@ const Workplace: FC = () => {
             bodyStyle={{ padding: 0 }}
             bordered={false}
             className={styles.activeCard}
-            title="动态"
+            title="Hoạt động"
             loading={activitiesLoading}
           >
             <List<ActivitiesType>
@@ -177,6 +180,7 @@ const Workplace: FC = () => {
               size="large"
             />
           </Card>
+          <Card>{JSON.stringify(postsByUser)}</Card>
         </Col>
         <Col xl={8} lg={24} md={24} sm={24} xs={24}>
           <Card

@@ -48,7 +48,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (values: API.LoginParams) => {
     try {
-      // 登录
+      // Login
       const msg = await login({ ...values, type });
       if (msg.succeeded) {
         localStorage.setItem('def_token', msg.token || '');
@@ -66,12 +66,13 @@ const Login: React.FC = () => {
         history.push(redirect || '/');
         return;
       }
-      // 如果失败去设置用户错误信息
+      msg.status = 'error';
+      // Thông báo lỗi tới người dùng khi đăng nhập thất bại
       setUserLoginState(msg);
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
-        defaultMessage: '登录失败，请重试！',
+        defaultMessage: 'Đăng nhập thất bại!',
       });
       message.error(defaultLoginFailureMessage);
     }

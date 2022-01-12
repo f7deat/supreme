@@ -6,3 +6,8 @@ export async function getBackup() {
     responseType: 'blob',
   });
 }
+
+/** Danh sách bài viết theo user */
+export async function queryPostsByUser(id: string) {
+  return request(`/post/list-in-user/${id}`);
+}
