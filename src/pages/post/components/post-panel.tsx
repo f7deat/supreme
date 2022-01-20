@@ -141,7 +141,7 @@ const PostDrawer = (props: IPostDrawerProps) => {
       <ProForm.Item name="thumbnail" label="Thumbnail">
         <Input />
       </ProForm.Item>
-      <ProForm.Item name="status" label="Trạng thái">
+      <ProForm.Item name="status" label="Trạng thái" initialValue={1}>
         <ProFormSelect
           options={[
             {

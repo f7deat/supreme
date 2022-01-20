@@ -126,10 +126,7 @@ const Center: React.FC<RouteChildrenProps> = () => {
             {currentUser && (
               <div>
                 <div className={styles.avatarHolder}>
-                  <img
-                    alt=""
-                    src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
-                  />
+                  <img alt="" src={currentUser.avatar} />
                   <div className={styles.name}>{currentUser.userName}</div>
                   <div>{currentUser?.signature}</div>
                 </div>

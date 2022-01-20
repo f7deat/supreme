@@ -1,9 +1,9 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, message, Popconfirm } from 'antd';
+import { Button, Image, message, Popconfirm, Space } from 'antd';
 import { FormattedMessage, useIntl } from 'umi';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOpenOutlined } from '@ant-design/icons';
 import {
   addCategory,
   deleteCategory,
@@ -16,6 +16,7 @@ import type { ProFormInstance } from '@ant-design/pro-form';
 import { ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import ProForm, { DrawerForm } from '@ant-design/pro-form';
 import { useEffect, useRef, useState } from 'react';
+import Explorer from '../files/components/explorer';
 
 const Category: React.FC = () => {
   /**
@@ -27,6 +28,8 @@ const Category: React.FC = () => {
   const formRef = useRef<ProFormInstance>();
   const [drawerVisit, setDrawerVisit] = useState<boolean>();
   const [parrentCategries, setParrentCategories] = useState<any>();
+  const [previewImage, setPreviewImage] = useState<string>();
+  const [explorerVisible, setExplorerVisible] = useState<boolean>(false);
   const ref = useRef<ActionType>();
 
   useEffect(() => {
@@ -112,6 +115,7 @@ const Category: React.FC = () => {
           value: response.thumbnail,
         },
       ]);
+      setPreviewImage(response.thumbnail);
     });
   };
 
@@ -126,7 +130,7 @@ const Category: React.FC = () => {
       dataIndex: 'description',
     },
     {
-      title: 'Trạng thái',
+      title: <FormattedMessage id="global.status" defaultMessage="Status" />,
       dataIndex: 'status',
       valueEnum: {
         0: {
@@ -182,10 +186,7 @@ const Category: React.FC = () => {
         rowSelection={{}}
         actionRef={ref}
       />
-      <DrawerForm<{
-        name: string;
-        company: string;
-      }>
+      <DrawerForm
         title="Manager"
         formRef={formRef}
         onVisibleChange={setDrawerVisit}
@@ -196,6 +197,7 @@ const Category: React.FC = () => {
           destroyOnClose: true,
         }}
         onFinish={handleFinish}
+        width={736}
       >
         <ProFormText name="id" hidden={true} />
         <ProForm.Group>
@@ -232,8 +234,24 @@ const Category: React.FC = () => {
             label="Trạng thái"
           />
         </ProForm.Group>
-        <ProFormText name="thumbnail" label="Thumbnail" />
+        <Space align="end">
+          <ProFormText name="thumbnail" label="Thumbnail" width="xl" />
+          <Button
+            style={{ marginBottom: 24 }}
+            icon={<FolderOpenOutlined />}
+            onClick={() => setExplorerVisible(true)}
+          >
+            Explorer
+          </Button>
+        </Space>
+
+        <Image src={previewImage} />
       </DrawerForm>
+      <Explorer
+        visible={explorerVisible}
+        onVisibleChange={setExplorerVisible}
+        onFinish={setExplorerVisible}
+      />
     </PageContainer>
   );
 };

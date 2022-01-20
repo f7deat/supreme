@@ -2,7 +2,7 @@ import request from '@/services/config';
 import type { ListItemDataType } from './data.d';
 
 export async function queryCurrent() {
-  return request(`/user/get`);
+  return request(`/user`);
 }
 
 export async function getRolesInUser(id: string) {

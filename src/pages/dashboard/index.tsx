@@ -118,7 +118,7 @@ const Workplace: FC = () => {
       content={
         <PageHeaderContent
           currentUser={{
-            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+            avatar: currentUser.avatar,
             name: currentUser.userName,
             userid: currentUser.id,
             email: currentUser.email,

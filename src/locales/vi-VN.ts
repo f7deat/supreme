@@ -4,6 +4,7 @@ import menu from './vi-VN/menu';
 import pages from './en-US/pages';
 import pwa from './en-US/pwa';
 import settingDrawer from './vi-VN/settingDrawer';
+import globalText from './vi-VN/globalText';
 import settings from './en-US/settings';
 
 export default {
@@ -22,4 +23,5 @@ export default {
   ...pwa,
   ...component,
   ...pages,
+  ...globalText,
 };

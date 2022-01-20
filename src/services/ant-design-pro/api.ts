@@ -5,14 +5,14 @@ import request from '../config';
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(token: string) {
   if (token) {
-    return request<API.CurrentUser>(`/user/get`, {
+    return request<API.CurrentUser>(`/user`, {
       method: 'GET',
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
   }
-  return request<API.CurrentUser>(`/user/get`, {
+  return request<API.CurrentUser>(`/user`, {
     method: 'GET',
   });
 }
