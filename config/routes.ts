@@ -71,18 +71,16 @@
     path: '/account',
     routes: [
       {
-        path: '/account',
-        redirect: '/account/center',
-      },
-      {
         name: 'center',
         path: '/account/center',
         component: './account/center',
+        hideInMenu: true,
       },
       {
         name: 'settings',
         path: '/account/settings',
         component: './account/settings',
+        hideInMenu: true,
       },
       {
         name: 'list',

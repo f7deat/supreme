@@ -1,5 +1,5 @@
-import { HomeOutlined, ContactsOutlined, ClusterOutlined } from '@ant-design/icons';
-import { Avatar, Card, Col, Divider, Row, Tag } from 'antd';
+import { HomeOutlined, ContactsOutlined, ClusterOutlined, EditOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Col, Divider, Row, Tag } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Link } from 'umi';
@@ -118,6 +118,12 @@ const Center: React.FC<RouteChildrenProps> = () => {
     return null;
   };
 
+  const Extra = () => (
+    <Link to="/account/settings">
+      <Button icon={<EditOutlined />} type='primary'>Edit</Button>
+    </Link>
+  )
+
   return (
     <GridContent>
       <Row gutter={24}>
@@ -161,6 +167,7 @@ const Center: React.FC<RouteChildrenProps> = () => {
             onTabChange={(_tabKey: string) => {
               setTabKey(_tabKey as tabKeyType);
             }}
+            extra={<Extra />}
           >
             {renderChildrenByTabKey(tabKey)}
           </Card>

@@ -1,7 +1,7 @@
-import { DrawerForm } from '@ant-design/pro-form';
 import ProTable from '@ant-design/pro-table';
 import { FormattedMessage } from 'umi';
 import { queryFiles } from '@/services/defzone/api';
+import { Drawer } from 'antd';
 
 type ExplorerProps = {
   visible: boolean;
@@ -21,14 +21,13 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
     },
   ];
   return (
-    <DrawerForm
+    <Drawer
       visible={props.visible}
-      onVisibleChange={props.onVisibleChange}
-      onFinish={props.onFinish}
       width={window.innerWidth - 400}
+      onClose={() => props.onFinish(false)}
     >
       <ProTable columns={columns} request={queryFiles} />
-    </DrawerForm>
+    </Drawer>
   );
 };
 export default Explorer;

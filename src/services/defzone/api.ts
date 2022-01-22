@@ -25,3 +25,20 @@ export async function queryFiles(params: {
     },
   });
 }
+
+export async function querySetting(key: string) {
+  return request(`/appsetting/details/${key}`);
+}
+
+export async function saveSetting(body: any) {
+  return request(`/appsetting/save`, {
+    data: body,
+    method: 'POST',
+  });
+}
+
+export async function queryUser() {
+  return request<API.CurrentUser>(`/user`, {
+    method: 'GET',
+  });
+}

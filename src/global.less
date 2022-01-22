@@ -1,4 +1,8 @@
 @import '~antd/es/style/variable.less';
+:root {
+  --slate-100: #f1f5f9;
+  --red-500: #ef4444;
+}
 
 html,
 body,
@@ -36,6 +40,14 @@ ol {
   background-color: white;
 }
 
+.hover\:bg-slate-100:hover {
+  background-color: var(--slate-100);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .flex {
   display: flex;
 }
@@ -60,8 +72,17 @@ ol {
   align-items: center;
 }
 
+.p-2 {
+  padding: 0.5rem;
+}
+
 .p-4 {
   padding: 1rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .rounded {
@@ -72,8 +93,16 @@ ol {
   color: var(--ant-primary-color);
 }
 
+.text-red-500 {
+  color: var(--red-500);
+}
+
 .text-sm {
   font-size: small;
+}
+
+.text-right {
+  text-align: right;
 }
 
 @media (max-width: @screen-xs) {

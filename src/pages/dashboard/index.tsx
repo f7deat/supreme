@@ -1,7 +1,8 @@
 import type { FC } from 'react';
+import { useState } from 'react';
 import { Avatar, Card, Col, List, Skeleton, Row, Statistic } from 'antd';
 import { Radar } from '@ant-design/charts';
-
+import { FacebookFilled } from '@ant-design/icons';
 import { Link, useModel, useRequest } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import moment from 'moment';
@@ -10,6 +11,7 @@ import styles from './style.less';
 import type { ActivitiesType, CurrentUser } from './data.d';
 import { queryProjectNotice, queryActivities, fakeChartData } from './service';
 import { queryPostsByUser } from '../../services/defzone/api';
+import FacebookSetting from '../settings/components/facebook';
 
 const links = [
   {
@@ -76,6 +78,7 @@ const Workplace: FC = () => {
   const { loading: projectLoading, data: projectNotice = [] } = useRequest(queryProjectNotice);
   const { loading: activitiesLoading, data: activities = [] } = useRequest(queryActivities);
   const { loading: postsByUserLoading, data: postsByUser = [] } = useRequest(queryPostsByUser);
+  const [facebookSettingVisible, setFacebookSettingVisible] = useState<any>(false);
 
   const { data } = useRequest(fakeChartData);
   const { initialState } = useModel<any>('@@initialState');
@@ -189,7 +192,7 @@ const Workplace: FC = () => {
             bordered={false}
             bodyStyle={{ padding: 0 }}
           >
-            <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
+            <EditableLinkGroup onAdd={() => { }} links={links} linkElement={Link} />
           </Card>
           <Card
             style={{ marginBottom: 24 }}
@@ -201,15 +204,8 @@ const Workplace: FC = () => {
               <Radar
                 height={343}
                 data={data?.radarData || []}
-                angleField="label"
-                seriesField="name"
-                radiusField="value"
-                area={{
-                  visible: false,
-                }}
-                point={{
-                  visible: true,
-                }}
+                xField="name"
+                yField="value"
                 legend={{
                   position: 'bottom',
                 }}
@@ -219,24 +215,24 @@ const Workplace: FC = () => {
           <Card
             bodyStyle={{ paddingTop: 12, paddingBottom: 12 }}
             bordered={false}
-            title="团队"
-            loading={projectLoading}
+            title="Application"
           >
             <div className={styles.members}>
               <Row gutter={48}>
-                {projectNotice.map((item) => (
-                  <Col span={12} key={`members-item-${item.id}`}>
-                    <Link to={item.href}>
-                      <Avatar src={item.logo} size="small" />
-                      <span className={styles.member}>{item.member}</span>
-                    </Link>
-                  </Col>
-                ))}
+                <Col span={12}>
+                  <div
+                    className="cursor-pointer hover:bg-slate-100 p-2"
+                    onClick={() => setFacebookSettingVisible(true)}
+                  >
+                    <FacebookFilled className="text-primary" /> Facebook
+                  </div>
+                </Col>
               </Row>
             </div>
           </Card>
         </Col>
       </Row>
+      <FacebookSetting visible={facebookSettingVisible} onClose={setFacebookSettingVisible} />
     </PageContainer>
   );
 };
