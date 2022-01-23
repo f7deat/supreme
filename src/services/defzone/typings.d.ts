@@ -19,4 +19,11 @@ declare namespace API {
     normalizedName: string;
     concurrencyStamp: string;
   };
+  type FileListItem = {
+    extension: string;
+    id: string;
+    name: string;
+    size: number;
+    uploadedDate: Date;
+  };
 }

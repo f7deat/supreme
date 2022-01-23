@@ -162,6 +162,11 @@ const Category: React.FC = () => {
     },
   ];
 
+  const handleSelectThumbnail = (url: string) => {
+    formRef.current?.setFieldsValue({ thumbnail: url })
+    setPreviewImage(url)
+  }
+
   return (
     <PageContainer title="Danh mục">
       <ProTable<API.CategoryListItem, API.PageParams>
@@ -250,7 +255,7 @@ const Category: React.FC = () => {
       <Explorer
         visible={explorerVisible}
         onVisibleChange={setExplorerVisible}
-        onFinish={setExplorerVisible}
+        onSelect={handleSelectThumbnail}
       />
     </PageContainer>
   );

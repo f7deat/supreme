@@ -46,6 +46,7 @@ const Post: React.FC = () => {
     deletePost(id).then((response) => {
       if (response.succeeded) {
         message.success('deleted!');
+        reload();
       } else {
         message.error('error!');
       }

@@ -1,14 +1,16 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import { CloudDownloadOutlined, CloudUploadOutlined, FileImageOutlined } from '@ant-design/icons';
 import { Button, Col, Progress, Row, Space, Typography } from 'antd';
-import { getBackup } from '../../services/defzone/api';
+import { getBackup, queryTotalUsed } from '../../services/defzone/api';
 import { useState } from 'react';
 import Import from './components/import';
 import RecentFiles from './components/recent';
+import { useRequest } from 'umi';
 
 const Files: React.FC = () => {
   const { Text } = Typography;
   const [visibleImport, setVisibleImport] = useState<boolean>(false);
+  const { data: totalUsed } = useRequest(queryTotalUsed)
 
   const handleBackup = async () => {
     const response = await getBackup();
@@ -53,7 +55,7 @@ const Files: React.FC = () => {
         <Col span={6}>
           <div className="p-4 bg-white rounded">
             <div className="flex justify-between items-center">
-              <h1 className="text-primary">45.5GB</h1>
+              <h1 className="text-primary">{totalUsed}KB</h1>
               <h1>50GB</h1>
             </div>
             <div className="flex justify-between">

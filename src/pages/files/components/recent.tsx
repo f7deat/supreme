@@ -1,38 +1,56 @@
-import type { ActionType } from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { queryFiles } from '@/services/defzone/api';
+import { deleteFile, queryFiles } from '@/services/defzone/api';
 import UploadFiles from './upload';
 
 const RecentFiles: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [visibleUpload, setVisibleUpload] = useState<boolean>(false);
-  const columns = [
+
+  const handleRemove = async (id: string) => {
+    const response = await deleteFile(id);
+    if (response.succeeded) {
+      message.success('File was deleted!')
+      actionRef.current?.reload()
+    }
+  }
+
+  const columns: ProColumns<API.FileListItem>[] = [
     {
       title: 'Name',
       dataIndex: 'name',
     },
     {
-      title: 'Last modified',
-      dataIndex: 'modifiedDate',
+      title: 'Uploaded date',
+      dataIndex: 'uploadedDate',
+    },
+    {
+      title: 'Size',
+      render: (dom, entity) => entity.size + 'KB'
     },
     {
       title: 'Option',
-      render: () => (
-        <Button type="primary" danger>
-          <DeleteOutlined />
-        </Button>
+      render: (dom, entity) => (
+        <Popconfirm
+          title="Are you sure to delete this?"
+          onConfirm={() => handleRemove(entity.id)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button type="primary" danger icon={<DeleteOutlined />} />
+        </Popconfirm>
       ),
     },
   ];
   return (
     <div>
-      <ProTable<API.RuleListItem, API.PageParams>
+      <ProTable<API.FileListItem, API.PageParams>
         headerTitle="Recent files"
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}

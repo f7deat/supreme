@@ -38,7 +38,24 @@ export async function saveSetting(body: any) {
 }
 
 export async function queryUser() {
-  return request<API.CurrentUser>(`/user`, {
-    method: 'GET',
+  return request<API.CurrentUser>(`/user`);
+}
+
+/** Total storage file size (KB) */
+export async function queryTotalUsed() {
+  return { data: await request<number>(`/file/total-used`) };
+}
+
+export async function upload(data: any) {
+  return request(`/file/upload`, {
+    method: 'POST',
+    data,
+  });
+}
+
+/** Delete file */
+export async function deleteFile(id: string) {
+  return request(`/file/delete/${id}`, {
+    method: 'POST',
   });
 }

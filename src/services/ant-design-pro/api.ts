@@ -135,8 +135,8 @@ export async function updatePost(body: any) {
 
 /** Remove post DELETE /api/post/delete */
 export async function deletePost(postId: number) {
-  return request(`/post/remove/${postId}`, {
-    method: 'DELETE',
+  return request(`/post/delete/${postId}`, {
+    method: 'POST',
   });
 }
 
