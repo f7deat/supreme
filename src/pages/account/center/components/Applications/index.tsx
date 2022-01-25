@@ -8,7 +8,6 @@ import { useRequest } from 'umi';
 import { Avatar, Card, Dropdown, List, Menu, Tooltip } from 'antd';
 import React from 'react';
 import type { ListItemDataType } from '../../data.d';
-import { queryFakeList } from '../../service';
 import stylesApplications from './index.less';
 
 export function formatWan(val: number) {
@@ -40,9 +39,7 @@ export function formatWan(val: number) {
 const Applications: React.FC = () => {
   // 获取tab列表数据
   const { data: listData } = useRequest(() => {
-    return queryFakeList({
-      count: 30,
-    });
+    return [];
   });
 
   const itemMenu = (

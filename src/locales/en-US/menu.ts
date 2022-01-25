@@ -54,4 +54,6 @@ export default {
   'menu.users': 'Users',
   'menu.users.center': 'Account Center',
   'menu.users.settings': 'Account Setting',
+  'menu.files': 'Files',
+  'menu.users.list': 'List User',
 };

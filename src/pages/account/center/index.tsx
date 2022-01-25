@@ -1,5 +1,5 @@
 import { HomeOutlined, ContactsOutlined, ClusterOutlined, EditOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Col, Divider, Row, Tag } from 'antd';
+import { Button, Card, Col, Divider, Row, Tag } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { GridContent } from '@ant-design/pro-layout';
 import { Link } from 'umi';
@@ -7,9 +7,10 @@ import type { RouteChildrenProps } from 'react-router';
 import Projects from './components/Projects';
 import Articles from './components/Articles';
 import Applications from './components/Applications';
-import type { CurrentUser, tabKeyType } from './data.d';
-import { getRolesInUser, queryCurrent } from './service';
+import type { tabKeyType } from './data.d';
 import styles from './center.less';
+import { queryUser } from '@/services/defzone/api';
+import { queryRoleByUser } from '@/services/defzone/user';
 
 const operationTabList = [
   {
@@ -51,12 +52,12 @@ const TagList: React.FC<{ tags: string[] }> = ({ tags }) => {
 
 const Center: React.FC<RouteChildrenProps> = () => {
   const [tabKey, setTabKey] = useState<tabKeyType>('articles');
-  const [currentUser, setCurrentUser] = useState<CurrentUser>();
+  const [currentUser, setCurrentUser] = useState<API.CurrentUser>();
   const [roles, setRoles] = useState<any>();
   useEffect(() => {
-    queryCurrent().then((response) => {
+    queryUser().then((response) => {
       setCurrentUser(response);
-      getRolesInUser(response.id).then((rolesResponse) => {
+      queryRoleByUser(response.id).then((rolesResponse) => {
         setRoles(rolesResponse);
         console.log(rolesResponse);
       });
@@ -64,7 +65,7 @@ const Center: React.FC<RouteChildrenProps> = () => {
   }, []);
 
   //  渲染用户信息
-  const renderUserInfo = ({ phoneNumber, group, geographic }: Partial<CurrentUser>) => {
+  const renderUserInfo = ({ phoneNumber, group }: Partial<API.CurrentUser>) => {
     return (
       <div className={styles.detail}>
         <p>
@@ -89,16 +90,6 @@ const Center: React.FC<RouteChildrenProps> = () => {
               marginRight: 8,
             }}
           />
-          {(geographic || { province: { label: '' } }).province.label}
-          {
-            (
-              geographic || {
-                city: {
-                  label: '',
-                },
-              }
-            ).city.label
-          }
         </p>
       </div>
     );
@@ -120,9 +111,11 @@ const Center: React.FC<RouteChildrenProps> = () => {
 
   const Extra = () => (
     <Link to="/account/settings">
-      <Button icon={<EditOutlined />} type='primary'>Edit</Button>
+      <Button icon={<EditOutlined />} type="primary">
+        Edit
+      </Button>
     </Link>
-  )
+  );
 
   return (
     <GridContent>
@@ -142,17 +135,6 @@ const Center: React.FC<RouteChildrenProps> = () => {
                 <Divider style={{ marginTop: 16 }} dashed />
                 <div className={styles.team}>
                   <div className={styles.teamTitle}>Tags</div>
-                  <Row gutter={36}>
-                    {currentUser.notice &&
-                      currentUser.notice.map((item: any) => (
-                        <Col key={item.id} lg={24} xl={12}>
-                          <Link to={item.href}>
-                            <Avatar size="small" src={item.logo} />
-                            {item.member}
-                          </Link>
-                        </Col>
-                      ))}
-                  </Row>
                 </div>
               </div>
             )}

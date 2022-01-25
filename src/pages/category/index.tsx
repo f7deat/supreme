@@ -17,6 +17,7 @@ import { ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-for
 import ProForm, { DrawerForm } from '@ant-design/pro-form';
 import { useEffect, useRef, useState } from 'react';
 import Explorer from '../files/components/explorer';
+import PostCategory from './components/posts';
 
 const Category: React.FC = () => {
   /**
@@ -30,6 +31,7 @@ const Category: React.FC = () => {
   const [parrentCategries, setParrentCategories] = useState<any>();
   const [previewImage, setPreviewImage] = useState<string>();
   const [explorerVisible, setExplorerVisible] = useState<boolean>(false);
+  const [visiblePosts, setVisiblePosts] = useState<boolean>(false);
   const ref = useRef<ActionType>();
 
   useEffect(() => {
@@ -163,16 +165,21 @@ const Category: React.FC = () => {
   ];
 
   const handleSelectThumbnail = (url: string) => {
-    formRef.current?.setFieldsValue({ thumbnail: url })
-    setPreviewImage(url)
-  }
+    formRef.current?.setFieldsValue({ thumbnail: url });
+    setPreviewImage(url);
+  };
 
   return (
-    <PageContainer title="Danh mục">
+    <PageContainer
+      title={intl.formatMessage({
+        id: 'menu.category',
+        defaultMessage: 'Categry',
+      })}
+    >
       <ProTable<API.CategoryListItem, API.PageParams>
         headerTitle={intl.formatMessage({
-          id: 'pages.searchTable.title',
-          defaultMessage: 'Enquiry form',
+          id: 'menu.category',
+          defaultMessage: 'Categry',
         })}
         rowKey="id"
         search={{
@@ -257,6 +264,7 @@ const Category: React.FC = () => {
         onVisibleChange={setExplorerVisible}
         onSelect={handleSelectThumbnail}
       />
+      <PostCategory visible={visiblePosts} />
     </PageContainer>
   );
 };

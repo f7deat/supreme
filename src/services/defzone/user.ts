@@ -33,3 +33,7 @@ export async function getRoles() {
   };
   return Promise.resolve(data);
 }
+
+export async function queryRoleByUser(id: string) {
+  return request(`/user/roles/${id}`);
+}
