@@ -1,5 +1,5 @@
 ﻿---
-title: 业务组件
+title: Business Component
 sidemenu: false
 ---
 

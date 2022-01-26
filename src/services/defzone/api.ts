@@ -60,12 +60,16 @@ export async function deleteFile(id: string) {
   });
 }
 
-export async function queryPostByCategory(params: {
-  current?: number;
-  pageSize?: number;
-  id: number;
-}) {
-  return request(`/post/list-by-category`, {
-    ...params,
+export async function queryPostByCategory(
+  id: number,
+  params: {
+    current?: number;
+    pageSize?: number;
+  },
+) {
+  return request(`/post/list-by-category/${id}`, {
+    params: {
+      ...params,
+    },
   });
 }

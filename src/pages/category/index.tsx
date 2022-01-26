@@ -2,6 +2,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button, Image, message, Popconfirm, Space } from 'antd';
+// @ts-ignore
 import { FormattedMessage, useIntl } from 'umi';
 import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOpenOutlined } from '@ant-design/icons';
 import {
@@ -32,6 +33,7 @@ const Category: React.FC = () => {
   const [previewImage, setPreviewImage] = useState<string>();
   const [explorerVisible, setExplorerVisible] = useState<boolean>(false);
   const [visiblePosts, setVisiblePosts] = useState<boolean>(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
   const ref = useRef<ActionType>();
 
   useEffect(() => {
@@ -70,6 +72,12 @@ const Category: React.FC = () => {
         message.error(response.message);
       }
     }
+  };
+
+  const handleAdd = () => {
+    formRef.current?.resetFields();
+    setPreviewImage('');
+    setDrawerVisit(true);
   };
 
   const handleRemove = (id: number) => {
@@ -121,6 +129,11 @@ const Category: React.FC = () => {
     });
   };
 
+  const handleShowPosts = (id: number) => {
+    setSelectedCategoryId(id);
+    setVisiblePosts(true);
+  };
+
   const columns: ProColumns<API.CategoryListItem>[] = [
     {
       title: 'Tên',
@@ -151,6 +164,7 @@ const Category: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
+        <Button icon={<FolderOpenOutlined />} onClick={() => handleShowPosts(record.id)} />,
         <Button type="primary" icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} />,
         <Popconfirm
           title="Are you sure to delete this?"
@@ -189,7 +203,7 @@ const Category: React.FC = () => {
           <Button type="primary" danger>
             Import
           </Button>,
-          <Button type="primary" icon={<PlusOutlined />} onClick={() => setDrawerVisit(true)}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
             Thêm mới
           </Button>,
         ]}
@@ -264,7 +278,7 @@ const Category: React.FC = () => {
         onVisibleChange={setExplorerVisible}
         onSelect={handleSelectThumbnail}
       />
-      <PostCategory visible={visiblePosts} />
+      <PostCategory visible={visiblePosts} onClose={setVisiblePosts} id={selectedCategoryId} />
     </PageContainer>
   );
 };

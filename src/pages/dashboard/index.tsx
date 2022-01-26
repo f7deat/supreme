@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Avatar, Card, Col, List, Skeleton, Row, Statistic } from 'antd';
 import { Radar } from '@ant-design/charts';
 import { FacebookFilled } from '@ant-design/icons';
+// @ts-ignore
 import { Link, useModel, useRequest } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import moment from 'moment';
@@ -10,7 +11,6 @@ import EditableLinkGroup from './components/EditableLinkGroup';
 import styles from './style.less';
 import type { ActivitiesType, CurrentUser } from './data.d';
 import { queryProjectNotice, queryActivities, fakeChartData } from './service';
-import { queryPostsByUser } from '../../services/defzone/api';
 import FacebookSetting from '../settings/components/facebook';
 
 const links = [
@@ -77,7 +77,6 @@ const ExtraContent: FC<Record<string, any>> = () => (
 const Workplace: FC = () => {
   const { loading: projectLoading, data: projectNotice = [] } = useRequest(queryProjectNotice);
   const { loading: activitiesLoading, data: activities = [] } = useRequest(queryActivities);
-  const { loading: postsByUserLoading, data: postsByUser = [] } = useRequest(queryPostsByUser);
   const [facebookSettingVisible, setFacebookSettingVisible] = useState<any>(false);
 
   const { data } = useRequest(fakeChartData);
@@ -144,7 +143,7 @@ const Workplace: FC = () => {
             loading={projectLoading}
             bodyStyle={{ padding: 0 }}
           >
-            {projectNotice.map((item) => (
+            {projectNotice.map((item: any) => (
               <Card.Grid className={styles.projectGrid} key={item.id}>
                 <Card bodyStyle={{ padding: 0 }} bordered={false}>
                   <Card.Meta
@@ -183,21 +182,20 @@ const Workplace: FC = () => {
               size="large"
             />
           </Card>
-          <Card>{JSON.stringify(postsByUser)}</Card>
         </Col>
         <Col xl={8} lg={24} md={24} sm={24} xs={24}>
           <Card
             style={{ marginBottom: 24 }}
-            title="快速开始 / 便捷导航"
+            title="Truy cập nhanh"
             bordered={false}
             bodyStyle={{ padding: 0 }}
           >
-            <EditableLinkGroup onAdd={() => { }} links={links} linkElement={Link} />
+            <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
           </Card>
           <Card
             style={{ marginBottom: 24 }}
             bordered={false}
-            title="XX 指数"
+            title="Dữ liệu"
             loading={data?.radarData?.length === 0}
           >
             <div className={styles.chart}>

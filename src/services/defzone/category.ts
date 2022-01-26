@@ -48,7 +48,7 @@ export async function getListParrentCategory() {
 /** DELETE CATEGORY GET /api/category/delete */
 export async function deleteCategory(id: number) {
   return request(`/category/delete/${id}`, {
-    method: 'DELETE',
+    method: 'POST',
   });
 }
 
