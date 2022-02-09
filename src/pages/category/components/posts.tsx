@@ -2,6 +2,7 @@ import { queryPostByCategory } from '@/services/defzone/api';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Drawer } from 'antd';
+import { useRef } from 'react';
 
 type PostCategoryProps = {
   id: number;
@@ -10,6 +11,7 @@ type PostCategoryProps = {
 };
 
 const PostCategory: React.FC<PostCategoryProps> = (props) => {
+  const actionRef = useRef<any>()
   const requestDataSource = async (params: any) => {
     return queryPostByCategory(props.id, params);
   };
@@ -38,7 +40,7 @@ const PostCategory: React.FC<PostCategoryProps> = (props) => {
       onClose={() => props.onClose(false)}
       width={window.innerWidth - window.innerWidth / 2}
     >
-      <ProTable request={requestDataSource} rowKey="id" columns={columns} />
+      <ProTable request={requestDataSource} rowKey="id" columns={columns} actionRef={actionRef} />
     </Drawer>
   );
 };

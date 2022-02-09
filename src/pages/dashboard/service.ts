@@ -1,13 +1,9 @@
 import { DOMAIN } from '@/services/config';
 import { request } from 'umi';
-import type { NoticeType, ActivitiesType, AnalysisData } from './data';
+import type { NoticeType, AnalysisData } from './data';
 
 export async function queryProjectNotice(): Promise<{ data: NoticeType[] }> {
   return request('/api/project/notice');
-}
-
-export async function queryActivities(): Promise<{ data: ActivitiesType[] }> {
-  return request('/api/activities');
 }
 
 export async function fakeChartData(): Promise<{ data: AnalysisData }> {

@@ -5,6 +5,7 @@ declare namespace API {
   };
   type PostListItem = {
     id: number;
+    title: string;
     url?: string;
     modifiedDate: Date;
     view: number;

@@ -1,6 +1,7 @@
 import type { FC } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
-import { Avatar, Card, Col, List, Skeleton, Row, Statistic } from 'antd';
+import { Avatar, Card, Col, List, Skeleton, Row, Statistic, Typography } from 'antd';
 import { Radar } from '@ant-design/charts';
 import { FacebookFilled } from '@ant-design/icons';
 // @ts-ignore
@@ -9,9 +10,10 @@ import { PageContainer } from '@ant-design/pro-layout';
 import moment from 'moment';
 import EditableLinkGroup from './components/EditableLinkGroup';
 import styles from './style.less';
-import type { ActivitiesType, CurrentUser } from './data.d';
-import { queryProjectNotice, queryActivities, fakeChartData } from './service';
+import type { CurrentUser } from './data.d';
+import { queryProjectNotice, fakeChartData } from './service';
 import FacebookSetting from '../settings/components/facebook';
+import { queryPopularPosts } from '@/services/defzone/api';
 
 const links = [
   {
@@ -76,45 +78,17 @@ const ExtraContent: FC<Record<string, any>> = () => (
 
 const Workplace: FC = () => {
   const { loading: projectLoading, data: projectNotice = [] } = useRequest(queryProjectNotice);
-  const { loading: activitiesLoading, data: activities = [] } = useRequest(queryActivities);
   const [facebookSettingVisible, setFacebookSettingVisible] = useState<any>(false);
+  const [popularPosts, setPopularPosts] = useState<API.PostListItem[]>()
 
   const { data } = useRequest(fakeChartData);
   const { initialState } = useModel<any>('@@initialState');
   const { currentUser } = initialState;
-
-  const renderActivities = (item: ActivitiesType) => {
-    const events = item.template.split(/@\{([^{}]*)\}/gi).map((key) => {
-      if (item[key]) {
-        return (
-          <a href={item[key].link} key={item[key].name}>
-            {item[key].name}
-          </a>
-        );
-      }
-      return key;
-    });
-    return (
-      <List.Item key={item.id}>
-        <List.Item.Meta
-          avatar={<Avatar src={item.user.avatar} />}
-          title={
-            <span>
-              <a className={styles.username}>{item.user.name}</a>
-              &nbsp;
-              <span className={styles.event}>{events}</span>
-            </span>
-          }
-          description={
-            <span className={styles.datetime} title={item.updatedAt}>
-              {moment(item.updatedAt).fromNow()}
-            </span>
-          }
-        />
-      </List.Item>
-    );
-  };
-
+  useEffect(() => {
+    queryPopularPosts().then(response => {
+      setPopularPosts(response)
+    })
+  }, [])
   return (
     <PageContainer
       content={
@@ -137,9 +111,9 @@ const Workplace: FC = () => {
           <Card
             className={styles.projectList}
             style={{ marginBottom: 24 }}
-            title="进行中的项目"
+            title="Dự án đang khởi chạy"
             bordered={false}
-            extra={<Link to="/">全部项目</Link>}
+            extra={<Link to="/">Xem thêm</Link>}
             loading={projectLoading}
             bodyStyle={{ padding: 0 }}
           >
@@ -171,15 +145,16 @@ const Workplace: FC = () => {
             bodyStyle={{ padding: 0 }}
             bordered={false}
             className={styles.activeCard}
-            title="Hoạt động"
-            loading={activitiesLoading}
+            title="Bài viết xem nhiều"
           >
-            <List<ActivitiesType>
-              loading={activitiesLoading}
-              renderItem={(item) => renderActivities(item)}
-              dataSource={activities}
-              className={styles.activitiesList}
-              size="large"
+            <List
+              bordered
+              dataSource={popularPosts}
+              renderItem={item => (
+                <List.Item>
+                  <Typography.Text mark>[{item.id}]</Typography.Text> {item.title} - {item.view}
+                </List.Item>
+              )}
             />
           </Card>
         </Col>
@@ -190,7 +165,7 @@ const Workplace: FC = () => {
             bordered={false}
             bodyStyle={{ padding: 0 }}
           >
-            <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
+            <EditableLinkGroup onAdd={() => { }} links={links} linkElement={Link} />
           </Card>
           <Card
             style={{ marginBottom: 24 }}

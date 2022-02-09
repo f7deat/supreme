@@ -14,23 +14,10 @@ const FacebookSetting: React.FC<FacebookSettingProps> = (props) => {
   useEffect(() => {
     if (props.visible) {
       querySetting('FACEBOOK').then((response) => {
-        const value = JSON.parse(response.value);
         formRef.current?.setFields([
           {
-            name: 'id',
-            value: response.id,
-          },
-          {
-            name: 'client_id',
-            value: value.client_id,
-          },
-          {
-            name: 'client_secret',
-            value: value.client_secret,
-          },
-          {
             name: 'access_token',
-            value: value.access_token,
+            value: response.value,
           },
         ]);
       });
@@ -38,14 +25,9 @@ const FacebookSetting: React.FC<FacebookSettingProps> = (props) => {
   }, [props.visible]);
 
   const handleFinish = async (values: any) => {
-    const value = {
-      client_id: values.client_id,
-      access_token: values.access_token,
-      client_secret: values.client_secret,
-    };
     const body = {
       id: Number(values.id),
-      value: JSON.stringify(value),
+      value: values.access_token,
       key: 1,
       name: 'facebook',
       description: 'zxc',
@@ -62,8 +44,6 @@ const FacebookSetting: React.FC<FacebookSettingProps> = (props) => {
   return (
     <Drawer visible={props.visible} onClose={() => props.onClose(false)}>
       <ProForm formRef={formRef} onFinish={handleFinish}>
-        <ProFormText name="client_id" label="Client Id" />
-        <ProFormText name="client_secret" label="Client Secret" />
         <ProFormText name="access_token" label="Access token" />
       </ProForm>
       <div className='py-2 text-right'>

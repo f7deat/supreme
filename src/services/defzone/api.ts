@@ -73,3 +73,7 @@ export async function queryPostByCategory(
     },
   });
 }
+
+export async function queryPopularPosts() {
+  return request(`/post/get-list-popular`);
+}
