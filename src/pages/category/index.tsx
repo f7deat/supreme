@@ -1,7 +1,7 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Image, message, Popconfirm, Space } from 'antd';
+import { Button, Image, message, Popconfirm } from 'antd';
 // @ts-ignore
 import { FormattedMessage, useIntl } from 'umi';
 import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOpenOutlined } from '@ant-design/icons';
@@ -15,7 +15,7 @@ import {
 } from '@/services/defzone/category';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import { ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import ProForm, { DrawerForm } from '@ant-design/pro-form';
+import { DrawerForm } from '@ant-design/pro-form';
 import { useEffect, useRef, useState } from 'react';
 import Explorer from '../files/components/explorer';
 import PostCategory from './components/posts';
@@ -223,45 +223,55 @@ const Category: React.FC = () => {
           destroyOnClose: true,
         }}
         onFinish={handleFinish}
-        width={736}
+        width={window.innerWidth / 4}
       >
         <ProFormText name="id" hidden={true} />
-        <ProForm.Group>
-          <ProFormText name="name" width="md" label="Tên danh mục" />
-          <ProFormText
-            width="md"
-            name="normalizeName"
-            label="Normalize name"
-            tooltip="Name without special character"
-          />
-        </ProForm.Group>
+        <div className='flex gap-4'>
+          <div className='w-1/2'>
+            <ProFormText name="name" label="Tên danh mục" className='w-full' />
+          </div>
+          <div className='w-1/2'>
+            <ProFormText
+              name="normalizeName"
+              label="Normalize name"
+              tooltip="Name without special character"
+              className='w-full'
+            />
+          </div>
+        </div>
         <ProFormTextArea name="description" label="Description" />
-        <ProForm.Group>
-          <ProFormSelect
-            options={parrentCategries}
-            width="md"
-            name="parrentId"
-            label="Danh mục cha"
-          />
-          <ProFormSelect
-            width="md"
-            initialValue={1}
-            options={[
-              {
-                value: 0,
-                label: 'Draft',
-              },
-              {
-                value: 1,
-                label: 'Active',
-              },
-            ]}
-            name="status"
-            label="Trạng thái"
-          />
-        </ProForm.Group>
-        <Space align="end">
-          <ProFormText name="thumbnail" label="Thumbnail" width="xl" />
+        <div className='flex gap-4'>
+          <div className='w-1/2'>
+            <ProFormSelect
+              options={parrentCategries}
+              name="parrentId"
+              label="Danh mục cha"
+              className='w-full'
+            />
+          </div>
+          <div className='w-1/2'>
+            <ProFormSelect
+              className='w-full'
+              initialValue={1}
+              options={[
+                {
+                  value: 0,
+                  label: 'Draft',
+                },
+                {
+                  value: 1,
+                  label: 'Active',
+                },
+              ]}
+              name="status"
+              label="Trạng thái"
+            />
+          </div>
+        </div>
+        <div className='flex gap-4'>
+          <div className='flex-grow'>
+            <ProFormText name="thumbnail" className='w-full' />
+          </div>
           <Button
             style={{ marginBottom: 24 }}
             icon={<FolderOpenOutlined />}
@@ -269,7 +279,7 @@ const Category: React.FC = () => {
           >
             Explorer
           </Button>
-        </Space>
+        </div>
 
         <Image src={previewImage} />
       </DrawerForm>

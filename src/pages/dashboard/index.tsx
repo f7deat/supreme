@@ -151,7 +151,7 @@ const Workplace: FC = () => {
               bordered
               dataSource={popularPosts}
               renderItem={item => (
-                <List.Item>
+                <List.Item key={item.id}>
                   <Typography.Text mark>[{item.id}]</Typography.Text> {item.title} - {item.view}
                 </List.Item>
               )}
