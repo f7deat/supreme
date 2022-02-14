@@ -27,4 +27,9 @@ declare namespace API {
     size: number;
     uploadedDate: Date;
   };
+  type FileRecentParams = {
+    current?: number;
+    pageSize?: number;
+    name: string;
+  };
 }

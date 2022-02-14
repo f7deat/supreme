@@ -1,7 +1,7 @@
 import { PageContainer } from '@ant-design/pro-layout';
-import type { ProColumns } from '@ant-design/pro-table';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Col, Popconfirm, Row } from 'antd';
+import { Button, Col, message, Popconfirm, Row } from 'antd';
 import { FormattedMessage, useIntl } from 'umi';
 import {
   EditOutlined,
@@ -10,9 +10,9 @@ import {
   FolderOutlined,
   CheckCircleTwoTone,
 } from '@ant-design/icons';
-import { getUsers } from '@/services/defzone/user';
+import { deleteUser, getUsers } from '@/services/defzone/user';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Role from './components/role';
 
 const User: React.FC = () => {
@@ -24,10 +24,16 @@ const User: React.FC = () => {
   const intl = useIntl();
   const [visible, setVisible] = useState<boolean>(false);
   const [roleId, setRoleId] = useState<string>('');
+  const actionRef = useRef<ActionType>()
 
-  const handleAdd = () => {};
+  const handleAdd = () => { };
   const handleRemove = (id: string) => {
-    console.log(id);
+    deleteUser(id).then(response => {
+      if (response.succeeded) {
+        message.success('succeeded!')
+        actionRef.current?.reload()
+      }
+    })
   };
 
   const handleUpdate = (id: string) => {
@@ -103,6 +109,7 @@ const User: React.FC = () => {
             request={getUsers}
             columns={columns}
             rowSelection={{}}
+            actionRef={actionRef}
           />
           <DrawerForm visible={visible} onVisibleChange={setVisible}>
             <ProFormText name="phoneNumber" />

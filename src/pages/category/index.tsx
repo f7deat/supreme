@@ -223,7 +223,6 @@ const Category: React.FC = () => {
           destroyOnClose: true,
         }}
         onFinish={handleFinish}
-        width={window.innerWidth / 4}
       >
         <ProFormText name="id" hidden={true} />
         <div className='flex gap-4'>

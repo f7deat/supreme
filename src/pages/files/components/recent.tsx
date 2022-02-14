@@ -26,13 +26,16 @@ const RecentFiles: React.FC = () => {
     {
       title: 'Uploaded date',
       dataIndex: 'uploadedDate',
+      search: false
     },
     {
       title: 'Size',
-      render: (dom, entity) => entity.size + 'KB'
+      render: (dom, entity) => entity.size + 'KB',
+      search: false
     },
     {
       title: 'Option',
+      search: false,
       render: (dom, entity) => (
         <Popconfirm
           title="Are you sure to delete this?"
@@ -47,7 +50,7 @@ const RecentFiles: React.FC = () => {
   ];
   return (
     <div>
-      <ProTable<API.FileListItem, API.PageParams>
+      <ProTable<API.FileListItem, API.FileRecentParams>
         headerTitle="Recent files"
         actionRef={actionRef}
         rowKey="id"

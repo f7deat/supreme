@@ -37,3 +37,9 @@ export async function getRoles() {
 export async function queryRoleByUser(id: string) {
   return request(`/user/roles/${id}`);
 }
+
+export async function deleteUser(id: string) {
+  return request(`/user/delete/${id}`, {
+    method: 'POST',
+  });
+}

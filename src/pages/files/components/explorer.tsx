@@ -35,6 +35,7 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
       queryFiles({
         current: 1,
         pageSize: 10,
+        name: ''
       }).then((response) => setDataSource(response.data));
     }
   }, [props.visible]);

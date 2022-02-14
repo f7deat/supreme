@@ -17,6 +17,7 @@ export async function queryFiles(params: {
   current?: number;
   /** PAGE SIZE */
   pageSize?: number;
+  name: string;
 }) {
   return request(`/file/list`, {
     method: 'GET',
