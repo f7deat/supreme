@@ -1,17 +1,7 @@
-// @ts-ignore
-// eslint-disable-next-line no-use-before-define
 import request from '../config';
 
 /** 获取当前的用户 GET /api/currentUser */
-export async function currentUser(token: string) {
-  if (token) {
-    return request<API.CurrentUser>(`/user`, {
-      method: 'GET',
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-  }
+export async function currentUser() {
   return request<API.CurrentUser>(`/user`, {
     method: 'GET',
   });
@@ -29,9 +19,6 @@ export async function outLogin(options?: Record<string, any>) {
 export async function login(body: API.LoginParams, options?: Record<string, any>) {
   return request<API.LoginResult>(`/user/password-sign-in`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
     data: body,
     ...(options || {}),
   });

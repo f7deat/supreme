@@ -23,11 +23,12 @@ export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
   loading?: boolean;
-  fetchUserInfo?: (token?: string) => Promise<API.CurrentUser | undefined>;
+  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
-  const fetchUserInfo = async (token: string = '') => {
+  const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser(token);
+      const msg = await queryCurrentUser();
+      debugger;
       return msg;
     } catch (error) {
       history.push(loginPath);
@@ -60,7 +61,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
-      // 如果没有登录，重定向到 login
+      // Nếu chưa đăng nhập => Login
       if (
         !initialState?.currentUser &&
         location.pathname !== loginPath &&

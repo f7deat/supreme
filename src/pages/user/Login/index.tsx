@@ -36,8 +36,8 @@ const Login: React.FC = () => {
 
   const intl = useIntl();
 
-  const fetchUserInfo = async (token?: string) => {
-    const userInfo = await initialState?.fetchUserInfo?.(token);
+  const fetchUserInfo = async () => {
+    const userInfo = initialState?.fetchUserInfo;
     if (userInfo) {
       await setInitialState((s: any) => ({
         ...s,
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
           defaultMessage: 'Đăng nhập thành công!',
         });
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo(msg.token);
+        await fetchUserInfo();
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;
         const { query } = history.location;
@@ -106,7 +106,7 @@ const Login: React.FC = () => {
               onClick={() => history.push('/user/register')}
               style={{ float: 'right' }}
             >
-              Đăng ký
+              <FormattedMessage id="global.register" defaultMessage="Đăng ký" />
             </Button>,
           ]}
           onFinish={async (values) => {
