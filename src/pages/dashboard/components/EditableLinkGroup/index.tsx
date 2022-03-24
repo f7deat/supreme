@@ -1,8 +1,7 @@
-import React, { createElement } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { FacebookOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-
-import styles from './index.less';
+import FacebookSetting from '@/pages/settings/components/facebook';
 
 export type EditableLink = {
   title: string;
@@ -16,24 +15,14 @@ type EditableLinkGroupProps = {
   linkElement: any;
 };
 
-const EditableLinkGroup: React.FC<EditableLinkGroupProps> = (props) => {
-  const { links, linkElement, onAdd } = props;
+const EditableLinkGroup: React.FC<EditableLinkGroupProps> = () => {
+  const [facebookSettingVisible, setFacebookSettingVisible] = useState<any>(false);
   return (
-    <div className={styles.linkGroup}>
-      {links.map((link) =>
-        createElement(
-          linkElement,
-          {
-            key: `linkGroup-item-${link.id || link.title}`,
-            to: link.href,
-            href: link.href,
-          },
-          link.title,
-        ),
-      )}
-      <Button size="small" type="primary" ghost onClick={onAdd}>
-        <PlusOutlined /> 添加
+    <div className="p-2">
+      <Button size="small" type="primary" ghost onClick={() => setFacebookSettingVisible(true)}>
+        <FacebookOutlined /> Facebook
       </Button>
+      <FacebookSetting visible={facebookSettingVisible} onClose={setFacebookSettingVisible} />
     </div>
   );
 };
