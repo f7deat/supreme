@@ -24,7 +24,7 @@ export async function changePassword(body: ChangePasswordType) {
 }
 
 export async function getRoles() {
-  const response = await request<API.RoleListItem[]>(`/role/get-list`);
+  const response = await request<API.RoleListItem[]>(`/role/list`);
   const data = {
     data: response,
     current: 1,

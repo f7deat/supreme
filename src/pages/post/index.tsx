@@ -69,11 +69,13 @@ const Post: React.FC = () => {
       title: 'Lượt xem',
       dataIndex: 'view',
       render: (dom, entity) => entity.view.toLocaleString(),
+      search: false
     },
     {
       title: 'Ngày cập nhật',
       dataIndex: 'modifiedDate',
       render: (dom, entity) => moment(entity.modifiedDate).format('DD/MM/YYYY hh:mm:ss'),
+      search: false
     },
     {
       title: <FormattedMessage id="global.status" defaultMessage="Status" />,
@@ -87,21 +89,6 @@ const Post: React.FC = () => {
         1: {
           text: 'Active',
           status: 'Processing',
-        },
-        2: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.online" defaultMessage="Online" />
-          ),
-          status: 'Success',
-        },
-        3: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.abnormal"
-              defaultMessage="Abnormal"
-            />
-          ),
-          status: 'Error',
         },
       },
     },

@@ -147,9 +147,15 @@ const PostDrawer = (props: IPostDrawerProps) => {
       <ProForm.Item name="title" label="Tiêu đề">
         <Input />
       </ProForm.Item>
-      <ProForm.Item name="url" label="Đường dẫn">
-        <Input />
-      </ProForm.Item>
+      <div className='mb-2'>Đường dẫn</div>
+      <div className='flex gap-4'>
+        <div className='flex-grow'>
+          <ProForm.Item name="url">
+            <Input />
+          </ProForm.Item>
+        </div>
+        <Button>Generate</Button>
+      </div>
       <ProForm.Item name="description" label="Mô tả">
         <Input.TextArea />
       </ProForm.Item>
