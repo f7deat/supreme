@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { deleteFile, queryFiles } from '@/services/defzone/api';
 import UploadFiles from './upload';
+import moment from 'moment';
 
 const RecentFiles: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -13,10 +14,10 @@ const RecentFiles: React.FC = () => {
   const handleRemove = async (id: string) => {
     const response = await deleteFile(id);
     if (response.succeeded) {
-      message.success('File was deleted!')
-      actionRef.current?.reload()
+      message.success('File was deleted!');
+      actionRef.current?.reload();
     }
-  }
+  };
 
   const columns: ProColumns<API.FileListItem>[] = [
     {
@@ -26,12 +27,13 @@ const RecentFiles: React.FC = () => {
     {
       title: 'Uploaded date',
       dataIndex: 'uploadedDate',
-      search: false
+      search: false,
+      render: (dom, entity) => moment(entity.uploadedDate).format('DD/MM/yyyy hh:mm:ss'),
     },
     {
       title: 'Size',
-      render: (dom, entity) => entity.size + 'KB',
-      search: false
+      render: (dom, entity) => entity.size.toLocaleString() + 'KB',
+      search: false,
     },
     {
       title: 'Option',

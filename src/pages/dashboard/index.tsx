@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { Avatar, Card, Col, List, Skeleton, Row, Statistic, Typography } from 'antd';
 import { Radar } from '@ant-design/charts';
-import { FacebookFilled } from '@ant-design/icons';
 // @ts-ignore
 import { Link, useModel, useRequest } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -12,7 +11,6 @@ import EditableLinkGroup from './components/EditableLinkGroup';
 import styles from './style.less';
 import type { CurrentUser } from './data.d';
 import { queryProjectNotice, fakeChartData } from './service';
-import FacebookSetting from '../settings/components/facebook';
 import { queryPopularPosts } from '@/services/defzone/api';
 
 const links = [
@@ -78,17 +76,16 @@ const ExtraContent: FC<Record<string, any>> = () => (
 
 const Workplace: FC = () => {
   const { loading: projectLoading, data: projectNotice = [] } = useRequest(queryProjectNotice);
-  const [facebookSettingVisible, setFacebookSettingVisible] = useState<any>(false);
-  const [popularPosts, setPopularPosts] = useState<API.PostListItem[]>()
+  const [popularPosts, setPopularPosts] = useState<API.PostListItem[]>();
 
   const { data } = useRequest(fakeChartData);
   const { initialState } = useModel<any>('@@initialState');
   const { currentUser } = initialState;
   useEffect(() => {
-    queryPopularPosts().then(response => {
-      setPopularPosts(response)
-    })
-  }, [])
+    queryPopularPosts().then((response) => {
+      setPopularPosts(response);
+    });
+  }, []);
   return (
     <PageContainer
       content={
@@ -150,9 +147,10 @@ const Workplace: FC = () => {
             <List
               bordered
               dataSource={popularPosts}
-              renderItem={item => (
+              renderItem={(item) => (
                 <List.Item key={item.id}>
-                  <Typography.Text mark>[{item.id}]</Typography.Text> {item.title} - {item.view}
+                  <Typography.Text mark>[{item.id}]</Typography.Text> {item.title} -{' '}
+                  {item.view.toLocaleString()}
                 </List.Item>
               )}
             />
@@ -165,7 +163,7 @@ const Workplace: FC = () => {
             bordered={false}
             bodyStyle={{ padding: 0 }}
           >
-            <EditableLinkGroup onAdd={() => { }} links={links} linkElement={Link} />
+            <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
           </Card>
           <Card
             style={{ marginBottom: 24 }}
@@ -185,27 +183,8 @@ const Workplace: FC = () => {
               />
             </div>
           </Card>
-          <Card
-            bodyStyle={{ paddingTop: 12, paddingBottom: 12 }}
-            bordered={false}
-            title="Application"
-          >
-            <div className={styles.members}>
-              <Row gutter={48}>
-                <Col span={12}>
-                  <div
-                    className="cursor-pointer hover:bg-slate-100 p-2"
-                    onClick={() => setFacebookSettingVisible(true)}
-                  >
-                    <FacebookFilled className="text-primary" /> Facebook
-                  </div>
-                </Col>
-              </Row>
-            </div>
-          </Card>
         </Col>
       </Row>
-      <FacebookSetting visible={facebookSettingVisible} onClose={setFacebookSettingVisible} />
     </PageContainer>
   );
 };

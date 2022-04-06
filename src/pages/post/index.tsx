@@ -68,12 +68,14 @@ const Post: React.FC = () => {
     {
       title: 'Lượt xem',
       dataIndex: 'view',
+      search: false,
       render: (dom, entity) => entity.view.toLocaleString(),
       search: false
     },
     {
       title: 'Ngày cập nhật',
       dataIndex: 'modifiedDate',
+      search: false,
       render: (dom, entity) => moment(entity.modifiedDate).format('DD/MM/YYYY hh:mm:ss'),
       search: false
     },
