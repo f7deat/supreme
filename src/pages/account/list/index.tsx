@@ -14,6 +14,7 @@ import { deleteUser, getUsers } from '@/services/defzone/user';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
 import { useRef, useState } from 'react';
 import Role from './components/role';
+import { history } from 'umi';
 
 const User: React.FC = () => {
   /**
@@ -26,7 +27,6 @@ const User: React.FC = () => {
   const [roleId, setRoleId] = useState<string>('');
   const actionRef = useRef<ActionType>()
 
-  const handleAdd = () => { };
   const handleRemove = (id: string) => {
     deleteUser(id).then(response => {
       if (response.succeeded) {
@@ -82,8 +82,14 @@ const User: React.FC = () => {
     },
   ];
 
+  const Extra = () => (
+    <div>
+      <Button icon={<PlusOutlined />} type="primary" onClick={() => history.push('/account/new')}>Create new</Button>
+    </div>
+  )
+
   return (
-    <PageContainer title={intl.formatMessage({ id: 'menu.users', defaultMessage: 'Thành viên' })}>
+    <PageContainer title={intl.formatMessage({ id: 'menu.users', defaultMessage: 'Thành viên' })} extra={<Extra />}>
       <Row gutter={16}>
         <Col span={8}>
           <Role roleId={roleId} setRoleId={setRoleId} />
@@ -98,14 +104,6 @@ const User: React.FC = () => {
             search={{
               labelWidth: 120,
             }}
-            toolBarRender={() => [
-              <Button type="primary" danger>
-                Import
-              </Button>,
-              <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-                Thêm mới
-              </Button>,
-            ]}
             request={getUsers}
             columns={columns}
             rowSelection={{}}

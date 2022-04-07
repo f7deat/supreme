@@ -1,4 +1,4 @@
-import type { ProFormInstance } from '@ant-design/pro-form';
+import { ProFormInstance, ProFormText } from '@ant-design/pro-form';
 import ProForm, { DrawerForm, ProFormSelect } from '@ant-design/pro-form';
 import 'braft-editor/dist/index.css';
 import { Button, Image, Input, message, Popover } from 'antd';
@@ -144,16 +144,14 @@ const PostDrawer = (props: IPostDrawerProps) => {
       <ProForm.Item name="id" hidden={true}>
         <Input />
       </ProForm.Item>
-      <ProForm.Item name="title" label="Tiêu đề">
-        <Input />
-      </ProForm.Item>
-      <ProForm.Item name="url" label="Đường dẫn">
+      <ProFormText name="title" label="Tiêu đề" rules={[{ required: true }]} />
+      <ProForm.Item name="url" label="Đường dẫn" rules={[{ required: true }]}>
         <Input />
       </ProForm.Item>
       <ProForm.Item name="description" label="Mô tả">
         <Input.TextArea />
       </ProForm.Item>
-      <ProForm.Item name="content" label="Nội dung">
+      <ProForm.Item name="content" label="Nội dung" rules={[{ required: true }]}>
         <BraftEditor language="en" style={{ border: '1px solid #d1d1d1' }} />
       </ProForm.Item>
       <div className='mb-2'>Ảnh đại diện</div>

@@ -87,6 +87,17 @@
         path: '/account/list',
         component: './account/list',
       },
+      {
+        name: 'new-user',
+        path: '/account/new',
+        component: './account/new',
+        hideInMenu: true,
+      },
+      {
+        name: 'billing',
+        path: '/account/billing',
+        component: './account/billing'
+      }
     ],
   },
   {
