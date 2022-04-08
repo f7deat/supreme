@@ -78,3 +78,11 @@ export async function queryPostByCategory(
 export async function queryPopularPosts() {
   return request(`/post/get-list-popular`);
 }
+
+export async function readAllText(type: string) {
+  return request(`/file/read-all-text`, {
+    params: {
+      type
+    }
+  })
+}
