@@ -1,7 +1,7 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Col, message, Popconfirm, Row } from 'antd';
+import { Button, Col, message, Popconfirm, Popover, Row, Select } from 'antd';
 import { FormattedMessage, useIntl } from 'umi';
 import {
   EditOutlined,
@@ -10,13 +10,14 @@ import {
   FolderOutlined,
   CheckCircleTwoTone,
 } from '@ant-design/icons';
-import { deleteUser, getUsers } from '@/services/defzone/user';
+import { addToRole, deleteUser, getUsers } from '@/services/defzone/user';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
 import { useRef, useState } from 'react';
 import Role from './components/role';
 import { history } from 'umi';
 
 const User: React.FC = () => {
+  const { Option } = Select;
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
@@ -24,7 +25,10 @@ const User: React.FC = () => {
    * */
   const intl = useIntl();
   const [visible, setVisible] = useState<boolean>(false);
+  const [visibleAddToRole, setVisibleAddToRole] = useState<boolean>(false);
   const [roleId, setRoleId] = useState<string>('');
+  const [userId, setUserId] = useState<string>('');
+  const [roleName, setRoleName] = useState<string>('')
   const actionRef = useRef<ActionType>()
 
   const handleRemove = (id: string) => {
@@ -35,6 +39,24 @@ const User: React.FC = () => {
       }
     })
   };
+
+  const handleAddToRole = () => {
+    addToRole(userId, roleName).then(response => {
+      if (response.succeeded) {
+        message.success('Succeeded!')
+      }
+    })
+  }
+
+  const AddToRole = () => (
+    <div className='flex'>
+      <Select defaultValue="member" onChange={(value) => setRoleName(value)}>
+        <Option value="member">Member</Option>
+        <Option value="admin">Admin</Option>
+      </Select>
+      <Button onClick={handleAddToRole}>Add</Button>
+    </div>
+  )
 
   const handleUpdate = (id: string) => {
     console.log(id);
@@ -69,7 +91,15 @@ const User: React.FC = () => {
       valueType: 'option',
       render: (_, record) => [
         <Button type="primary" icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} />,
-        <Button icon={<FolderOutlined />} />,
+        <Popover
+          content={<AddToRole />}
+          title="Add to role"
+          trigger="click"
+          visible={visibleAddToRole}
+          onVisibleChange={setVisibleAddToRole}
+        >
+          <Button icon={<FolderOutlined />} onClick={() => setUserId(record.id)} />
+        </Popover>,
         <Popconfirm
           title="Are you sure to delete this?"
           onConfirm={() => handleRemove(record.id)}
@@ -91,10 +121,10 @@ const User: React.FC = () => {
   return (
     <PageContainer title={intl.formatMessage({ id: 'menu.users', defaultMessage: 'Thành viên' })} extra={<Extra />}>
       <Row gutter={16}>
-        <Col span={8}>
+        <Col span={10}>
           <Role roleId={roleId} setRoleId={setRoleId} />
         </Col>
-        <Col span={16}>
+        <Col span={14}>
           <ProTable<API.UserListItem, API.PageParams>
             headerTitle={intl.formatMessage({
               id: 'pages.searchTable.title',
@@ -102,7 +132,7 @@ const User: React.FC = () => {
             })}
             rowKey="id"
             search={{
-              labelWidth: 120,
+              layout: 'vertical'
             }}
             request={getUsers}
             columns={columns}

@@ -57,7 +57,7 @@ const RecentFiles: React.FC = () => {
         actionRef={actionRef}
         rowKey="id"
         search={{
-          labelWidth: 120,
+          layout: 'vertical'
         }}
         toolBarRender={() => [
           <Button type="primary" key="primary" onClick={() => setVisibleUpload(true)}>

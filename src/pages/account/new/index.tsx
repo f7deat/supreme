@@ -1,5 +1,5 @@
 import { Button, Card, Col, Form, Input, Row, Space } from "antd"
-import { FormattedMessage } from "umi"
+import { FormattedMessage, history } from "umi"
 
 const NewUser: React.FC = () => {
     return (
@@ -22,7 +22,7 @@ const NewUser: React.FC = () => {
                         </Form.Item>
                         <div className="flex justify-end">
                             <Space>
-                                <Button htmlType="button">
+                                <Button htmlType="button" onClick={() => history.push('/account/list')}>
                                     <FormattedMessage id="global.back-to-list" />
                                 </Button>
                                 <Button type="primary" htmlType="submit">Create</Button>

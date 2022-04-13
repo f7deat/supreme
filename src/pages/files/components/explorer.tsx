@@ -1,9 +1,10 @@
 import { FormattedMessage } from 'umi';
 import { queryFiles } from '@/services/defzone/api';
-import { Button, Drawer, Image, Popover, Table } from 'antd';
+import { Button, Drawer, Image, Popover } from 'antd';
 import { useEffect, useState } from 'react';
-import type { ColumnType } from 'antd/lib/table';
 import { DOMAIN } from '@/services/config';
+import type { ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
 
 type ExplorerProps = {
   visible: boolean;
@@ -45,10 +46,11 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
     props.onVisibleChange(false);
   };
 
-  const columns: ColumnType<API.FileListItem>[] = [
+  const columns: ProColumns<API.FileListItem>[] = [
     {
       title: '#',
       render: (dom: any, record: any, index: number) => index + 1,
+      search: false
     },
     {
       title: <FormattedMessage defaultMessage="Name" id="global.name" />,
@@ -57,10 +59,12 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
     {
       title: 'Uploaded date',
       dataIndex: 'uploadedDate',
+      search: false
     },
     {
       title: 'Size',
-      render: (value) => value.size + 'KB',
+      render: (dom, record) => record.size + 'KB',
+      search: false
     },
     {
       title: 'Action',
@@ -69,16 +73,21 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
           Choose
         </Button>
       ),
+      search: false
     },
   ];
   return (
     <Drawer
+      title="File Explorer"
       visible={props.visible}
       width={window.innerWidth - 500}
       onClose={() => props.onVisibleChange(false)}
     >
-      <Table<API.FileListItem>
+      <ProTable<API.FileListItem>
         columns={columns}
+        search={{
+          layout: 'vertical'
+        }}
         key="id"
         dataSource={dataSource}
         rowSelection={{}}

@@ -1,3 +1,4 @@
+import { DOMAIN } from '@/services/config';
 import { DrawerForm } from '@ant-design/pro-form';
 import { message, Upload } from 'antd';
 type UploadProps = {
@@ -9,7 +10,7 @@ const UploadFiles: React.FC<UploadProps> = (props) => {
   const uploadProps = {
     name: 'file',
     multiple: true,
-    action: 'https://defzone.net/api/file/upload',
+    action: `${DOMAIN}/api/file/upload`,
     headers: {
       authorization: `Bearer ${localStorage.getItem('def_token')}`,
     },
