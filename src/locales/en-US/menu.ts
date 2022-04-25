@@ -56,4 +56,5 @@ export default {
   'menu.users.settings': 'Account Setting',
   'menu.files': 'Files',
   'menu.users.list': 'List User',
+  'menu.billing': 'Billing'
 };

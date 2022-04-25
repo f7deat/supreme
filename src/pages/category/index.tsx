@@ -19,6 +19,7 @@ import { DrawerForm } from '@ant-design/pro-form';
 import { useEffect, useRef, useState } from 'react';
 import Explorer from '../files/components/explorer';
 import PostCategory from './components/posts';
+import CategoryImport from './components/import';
 
 const Category: React.FC = () => {
   /**
@@ -34,6 +35,7 @@ const Category: React.FC = () => {
   const [explorerVisible, setExplorerVisible] = useState<boolean>(false);
   const [visiblePosts, setVisiblePosts] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
+  const [visibleImport, setVisibleImport] = useState<boolean>(false);
   const ref = useRef<ActionType>();
 
   useEffect(() => {
@@ -183,12 +185,19 @@ const Category: React.FC = () => {
     setPreviewImage(url);
   };
 
+  const Extra = () => (
+    <div>
+      <Button type='primary' danger onClick={() => setVisibleImport(true)}>Import</Button>
+    </div>
+  )
+
   return (
     <PageContainer
       title={intl.formatMessage({
         id: 'menu.category',
         defaultMessage: 'Categry',
       })}
+      extra={<Extra />}
     >
       <ProTable<API.CategoryListItem, API.PageParams>
         headerTitle={intl.formatMessage({
@@ -197,12 +206,9 @@ const Category: React.FC = () => {
         })}
         rowKey="id"
         search={{
-          labelWidth: 120,
+          layout: 'vertical'
         }}
         toolBarRender={() => [
-          <Button type="primary" danger>
-            Import
-          </Button>,
           <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
             Thêm mới
           </Button>,
@@ -288,6 +294,7 @@ const Category: React.FC = () => {
         onSelect={handleSelectThumbnail}
       />
       <PostCategory visible={visiblePosts} onClose={setVisiblePosts} id={selectedCategoryId} />
+      <CategoryImport visible={visibleImport} setVisible={setVisibleImport} />
     </PageContainer>
   );
 };

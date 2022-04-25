@@ -117,7 +117,7 @@ const Post: React.FC = () => {
         headerTitle="Danh sách"
         rowKey="id"
         search={{
-          labelWidth: 120,
+          layout: 'vertical'
         }}
         toolBarRender={() => [
           <Button type="primary" danger>

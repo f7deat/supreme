@@ -87,7 +87,30 @@
         path: '/account/list',
         component: './account/list',
       },
-    ],
+      {
+        name: 'new-user',
+        path: '/account/new',
+        component: './account/new',
+        hideInMenu: true,
+      },
+      {
+        name: 'billing',
+        path: '/account/billing',
+        component: './account/billing'
+      }
+    ]
+  },
+  {
+    name: 'settings',
+    icon: 'setting',
+    access: 'canAdmin',
+    routes: [
+      {
+        name: 'theme',
+        path: '/settings/themes',
+        component: './settings/themes'
+      }
+    ]
   },
   {
     path: '/',

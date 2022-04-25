@@ -1,8 +1,9 @@
 import React from 'react';
-import { Input, message } from 'antd';
+import { Divider, Image, Input, message } from 'antd';
 import ProForm, {
   ProFormDependency,
   ProFormFieldSet,
+  ProFormGroup,
   ProFormSelect,
   ProFormText,
   ProFormTextArea,
@@ -25,13 +26,12 @@ const validatorPhone = (rule: any, value: string[], callback: (message?: string)
 };
 // 头像组件 方便以后独立，增加裁剪之类的功能
 const AvatarView = ({ avatar }: { avatar: string }) => (
-  <>
-    <div className={styles.avatar_title}>Avatar</div>
+  <div className='flex gap-4'>
     <div className={styles.avatar}>
-      <img src={avatar} alt="avatar" />
+      <Image src={avatar} alt="avatar" width={72} height={72} />
     </div>
     <a href='https://gravatar.com' target="_blank">Change avatar</a>
-  </>
+  </div>
 );
 
 const BaseView: React.FC = () => {
@@ -58,76 +58,85 @@ const BaseView: React.FC = () => {
     message.success('更新基本信息成功');
   };
   return (
-    <div className={styles.baseView}>
-      <div className={styles.left}>
+    <div>
+      <div>
+        <AvatarView avatar={getAvatarURL()} />
+      </div>
+      <Divider />
+      <div>
         <ProForm
           layout="vertical"
           onFinish={handleFinish}
           submitter={{
-            resetButtonProps: {
-              style: {
-                display: 'none',
-              },
-            },
             submitButtonProps: {
               children: '更新基本信息',
             },
           }}
           hideRequiredMark
         >
-          <ProFormText
-            width="md"
-            name="email"
-            label="Email"
-            initialValue={currentUser?.email}
-            rules={[
-              {
-                required: true,
-                message: 'Please input email!',
-              },
-            ]}
-            disabled
-          />
-          <ProFormText
-            width="md"
-            name="name"
-            label="Name"
-            rules={[
-              {
-                required: true,
-                message: 'Please input name!',
-              },
-            ]}
-            disabled
-          />
+          <ProFormGroup>
+            <ProFormText
+              name="name"
+              label="Name"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input name!',
+                },
+              ]}
+              disabled
+            />
+            <ProFormText
+              name="email"
+              label="Email"
+              initialValue={currentUser?.email}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input email!',
+                },
+              ]}
+              disabled
+            />
+            <ProFormFieldSet
+              name="phoneNumber"
+              label="Phone number"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input phone number!',
+                },
+                { validator: validatorPhone },
+              ]}
+            >
+              <Input className={styles.area_code} disabled />
+              <Input className={styles.phone_number} disabled />
+            </ProFormFieldSet>
+          </ProFormGroup>
           <ProFormTextArea
             name="profile"
             label="Bio"
             placeholder="At least 30 character..."
             disabled
           />
-          <ProFormSelect
-            width="sm"
-            name="country"
-            label="Country"
-            options={[
-              {
-                label: 'Viet Nam',
-                value: 'vi-VN',
-              },
-            ]}
-            disabled
-          />
 
           <ProForm.Group title="Province" size={8}>
             <ProFormSelect
-              width="sm"
+              name="country"
+              options={[
+                {
+                  label: 'Viet Nam',
+                  value: 'vi-VN',
+                },
+              ]}
+              disabled
+            />
+            <ProFormSelect
               fieldProps={{
                 labelInValue: true,
               }}
               disabled
               name="province"
-              className={styles.item}
               request={async () => {
                 return queryProvince().then(({ data }) => {
                   return data.map((item) => {
@@ -147,9 +156,7 @@ const BaseView: React.FC = () => {
                       key: province?.value,
                     }}
                     name="city"
-                    width="sm"
                     disabled={!province}
-                    className={styles.item}
                     request={async () => {
                       if (!province?.key) {
                         return [];
@@ -169,7 +176,6 @@ const BaseView: React.FC = () => {
             </ProFormDependency>
           </ProForm.Group>
           <ProFormText
-            width="md"
             name="address"
             label="Address"
             rules={[
@@ -180,24 +186,7 @@ const BaseView: React.FC = () => {
             ]}
             disabled
           />
-          <ProFormFieldSet
-            name="phoneNumber"
-            label="Phone number"
-            rules={[
-              {
-                required: true,
-                message: 'Please input phone number!',
-              },
-              { validator: validatorPhone },
-            ]}
-          >
-            <Input className={styles.area_code} disabled />
-            <Input className={styles.phone_number} disabled />
-          </ProFormFieldSet>
         </ProForm>
-      </div>
-      <div className={styles.right}>
-        <AvatarView avatar={getAvatarURL()} />
       </div>
     </div>
   );

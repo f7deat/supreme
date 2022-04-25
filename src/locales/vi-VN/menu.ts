@@ -56,4 +56,5 @@ export default {
   'menu.users.settings': 'Cài đặt',
   'menu.users.list': 'Danh sách',
   'menu.files': 'Tệp tin',
+  'menu.billing': 'Thanh toán'
 };

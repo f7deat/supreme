@@ -34,12 +34,28 @@ export async function getRoles() {
   return Promise.resolve(data);
 }
 
-export async function queryRoleByUser(id: string) {
-  return request(`/user/roles/${id}`);
-}
-
 export async function deleteUser(id: string) {
   return request(`/user/delete/${id}`, {
     method: 'POST',
   });
+}
+
+export async function addToRole(userId: string, roleName: string) {
+  return request(`/user/add-to-role`, {
+    method: 'POST',
+    data: {
+      userId,
+      roleName
+    }
+  })
+}
+
+export async function queryRoleByUser(id: string) {
+  return request(`/user/roles/${id}`);
+}
+
+export async function syncRole() {
+  return request(`/role/sync`, {
+    method: 'POST'
+  })
 }

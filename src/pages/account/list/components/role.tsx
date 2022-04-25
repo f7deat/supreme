@@ -1,8 +1,8 @@
-import { getRoles } from '@/services/defzone/user';
+import { getRoles, syncRole } from '@/services/defzone/user';
 import { FolderViewOutlined, SyncOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 
 type RoleProps = {
   setRoleId: any;
@@ -34,6 +34,16 @@ const Role: React.FC<RoleProps> = (props) => {
     },
   ];
 
+  const sync = () => {
+    syncRole().then(response => {
+      if (response.succeeded) {
+        console.log(response)
+      } else {
+        message.error(response.errors[0].description)
+      }
+    })
+  }
+
   return (
     <div>
       <ProTable<API.RoleListItem, API.PageParams>
@@ -43,7 +53,7 @@ const Role: React.FC<RoleProps> = (props) => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Button type="primary" icon={<SyncOutlined />}>
+          <Button type="primary" icon={<SyncOutlined />} onClick={sync}>
             Đồng bộ
           </Button>,
         ]}
