@@ -37,6 +37,7 @@ export async function getInitialState(): Promise<{
   // 如果是登录页面，不执行
   if (history.location.pathname !== loginPath) {
     const currentUser = await fetchUserInfo();
+    debugger
     return {
       fetchUserInfo,
       currentUser,
@@ -71,15 +72,15 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     },
     links: isDev
       ? [
-          <Link to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>OpenAPI</span>
-          </Link>,
-          <Link to="/~docs">
-            <BookOutlined />
-            <span>Document</span>
-          </Link>,
-        ]
+        <Link to="/umi/plugin/openapi" target="_blank">
+          <LinkOutlined />
+          <span>OpenAPI</span>
+        </Link>,
+        <Link to="/~docs">
+          <BookOutlined />
+          <span>Document</span>
+        </Link>,
+      ]
       : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面

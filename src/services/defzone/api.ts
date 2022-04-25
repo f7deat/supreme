@@ -82,7 +82,21 @@ export async function queryPopularPosts() {
 export async function readAllText(type: string) {
   return request(`/file/read-all-text`, {
     params: {
-      type
-    }
-  })
+      type,
+    },
+  });
+}
+
+export async function queryMenus(params: {
+  /** PAGE INDEX */
+  current?: number;
+  /** PAGE SIZE */
+  pageSize?: number;
+  name?: string;
+}) {
+  return request(`/menus/list`, {
+    params: {
+      ...params,
+    },
+  });
 }

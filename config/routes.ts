@@ -96,9 +96,9 @@
       {
         name: 'billing',
         path: '/account/billing',
-        component: './account/billing'
-      }
-    ]
+        component: './account/billing',
+      },
+    ],
   },
   {
     name: 'settings',
@@ -108,9 +108,14 @@
       {
         name: 'theme',
         path: '/settings/themes',
-        component: './settings/themes'
-      }
-    ]
+        component: './settings/themes',
+      },
+      {
+        name: 'navbar',
+        path: '/settings/navbar',
+        component: './settings/navbar',
+      },
+    ],
   },
   {
     path: '/',

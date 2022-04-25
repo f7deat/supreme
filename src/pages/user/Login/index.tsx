@@ -58,6 +58,7 @@ const Login: React.FC = () => {
           defaultMessage: 'Đăng nhập thành công!',
         });
         message.success(defaultLoginSuccessMessage);
+        debugger
         await fetchUserInfo();
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;

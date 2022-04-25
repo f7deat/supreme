@@ -32,4 +32,8 @@ declare namespace API {
     pageSize?: number;
     name: string;
   };
+  type MenuListItem = {
+    id: number;
+    name: string;
+  };
 }
