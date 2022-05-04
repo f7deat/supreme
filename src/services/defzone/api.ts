@@ -94,8 +94,21 @@ export async function queryMenus(params: {
   pageSize?: number;
   name?: string;
 }) {
-  return request(`/menus/list`, {
+  return request(`/menu/list`, {
     params: {
+      ...params,
+    },
+  });
+}
+
+export async function queryParrents() {
+  return request(`/menu/all-parrent`);
+}
+
+export async function addMenu(params: API.MenuListItem) {
+  return request(`/menu/add`, {
+    method: 'POST',
+    data: {
       ...params,
     },
   });
