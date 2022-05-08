@@ -37,4 +37,9 @@ declare namespace API {
     name: string;
     url: string;
   };
+  type BillingListItem = {
+    id: string;
+    name: string;
+    price: number;
+  };
 }

@@ -165,6 +165,7 @@ const Category: React.FC = () => {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
       dataIndex: 'option',
       valueType: 'option',
+      width: 150,
       render: (_, record) => [
         <Button icon={<FolderOpenOutlined />} onClick={() => handleShowPosts(record.id)} />,
         <Button type="primary" icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} />,

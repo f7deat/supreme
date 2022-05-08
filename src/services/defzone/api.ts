@@ -113,3 +113,25 @@ export async function addMenu(params: API.MenuListItem) {
     },
   });
 }
+
+export async function queryBillings(params: {
+  /** PAGE INDEX */
+  current?: number;
+  /** PAGE SIZE */
+  pageSize?: number;
+}) {
+  return request(`/billing/list`, {
+    params: {
+      ...params,
+    },
+  });
+}
+
+export async function addBilling(params: API.BillingListItem) {
+  return request(`/billing/add`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}

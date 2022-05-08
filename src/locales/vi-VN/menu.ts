@@ -56,7 +56,9 @@ export default {
   'menu.users.settings': 'Cài đặt',
   'menu.users.list': 'Danh sách',
   'menu.files': 'Tệp tin',
-  'menu.billing': 'Thanh toán',
+  'menu.users.billing': 'Thanh toán',
   'menu.settings': 'Cài đặt',
   'menu.settings.theme': 'Giao diện',
+  'menu.users.new-user': 'Thành viên mới',
+  'menu.settings.navbar': 'Navbar',
 };
