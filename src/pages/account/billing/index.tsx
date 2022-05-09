@@ -1,4 +1,4 @@
-import { addBilling, queryBillings } from "@/services/defzone/api"
+import { addBilling, queryBillings, queryBillingTotal } from "@/services/defzone/api"
 import { PlusOutlined } from "@ant-design/icons"
 import type { ProFormInstance } from "@ant-design/pro-form";
 import { DrawerForm, ProFormText } from "@ant-design/pro-form"
@@ -6,13 +6,20 @@ import { PageContainer } from "@ant-design/pro-layout"
 import type { ActionType, ProColumns } from "@ant-design/pro-table";
 import ProTable from "@ant-design/pro-table"
 import { Button, Card, Col, Divider, message, Row, Typography } from "antd"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const Billing: React.FC = () => {
 
     const [visible, setVisible] = useState<boolean>(false)
     const actionRef = useRef<ActionType>();
     const formRef = useRef<ProFormInstance>();
+    const [total, setTotal] = useState(0);
+
+    useEffect(() => {
+        queryBillingTotal().then(response => {
+            setTotal(response);
+        })
+    })
 
     const handleAdd = () => {
         formRef.current?.resetFields();
@@ -27,6 +34,7 @@ const Billing: React.FC = () => {
 
     const onFinish = async (values: API.BillingListItem) => {
         values.price = Number(values.price)
+        values.quantity = Number(values.quantity)
         addBilling(values).then((response: any) => {
             console.log(response)
             message.success('succeeded')
@@ -43,6 +51,11 @@ const Billing: React.FC = () => {
         {
             title: 'Name',
             dataIndex: 'name'
+        },
+        {
+            title: 'Quantity',
+            dataIndex: 'quantity',
+            search: false
         },
         {
             title: 'Price',
@@ -71,7 +84,7 @@ const Billing: React.FC = () => {
                                     <div className="font-bold">Paypal</div>
                                     <div className="">Freelance Payment</div>
                                     <Divider />
-                                    <Typography.Title level={4}>$455.00</Typography.Title>
+                                    <Typography.Title level={4}>{total.toLocaleString()}₫</Typography.Title>
                                 </div>
                             </Card>
                         </Col>
@@ -84,7 +97,8 @@ const Billing: React.FC = () => {
                             rowKey="id"
                             columns={columns}
                             actionRef={actionRef}
-                            request={queryBillings} />
+                            request={queryBillings}
+                            rowSelection={{}} />
                     </Card>
                 </Col>
                 <Col span={8}>
@@ -94,6 +108,7 @@ const Billing: React.FC = () => {
             <DrawerForm visible={visible} onVisibleChange={setVisible} onFinish={onFinish} formRef={formRef}>
                 <ProFormText name="name" label="Name" required />
                 <ProFormText name="price" label="Price" required />
+                <ProFormText name="quantity" label="Quantity" required />
             </DrawerForm>
         </PageContainer>
     )

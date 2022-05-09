@@ -135,3 +135,7 @@ export async function addBilling(params: API.BillingListItem) {
     },
   });
 }
+
+export async function queryBillingTotal() {
+  return request(`/billing/total`);
+}
