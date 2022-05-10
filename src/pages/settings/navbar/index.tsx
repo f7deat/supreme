@@ -55,19 +55,13 @@ const MenuPage: React.FC = () => {
             <DrawerForm<API.MenuListItem>
                 title="新建表单"
                 formRef={formRef}
-                trigger={
-                    <Button type="primary">
-                        <PlusOutlined />
-                        新建表单
-                    </Button>
-                }
                 autoFocusFirstInput
                 drawerProps={{
                     destroyOnClose: true,
                 }}
                 onFinish={handleFinish}
                 visible={visible}
-                onValuesChange={setVisible}
+                onVisibleChange={setVisible}
             >
                 <ProFormText name="name" label={intl.formatMessage({
                     id: 'global.name'

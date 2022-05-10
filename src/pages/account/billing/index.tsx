@@ -65,7 +65,7 @@ const Billing: React.FC = () => {
     ]
 
     return (
-        <PageContainer title="Billing" extra={<Extra />}>
+        <PageContainer title="Billing">
             <Row gutter={16}>
                 <Col span={16}>
                     <Row gutter={16} className="mb-4">
@@ -89,7 +89,7 @@ const Billing: React.FC = () => {
                             </Card>
                         </Col>
                     </Row>
-                    <Card title="Transaction">
+                    <Card title="Transaction" extra={<Extra />}>
                         <ProTable
                             search={{
                                 layout: "vertical"

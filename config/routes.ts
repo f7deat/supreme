@@ -97,6 +97,7 @@
         name: 'billing',
         path: '/account/billing',
         component: './account/billing',
+        hideInMenu: true,
       },
     ],
   },
