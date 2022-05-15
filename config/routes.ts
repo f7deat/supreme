@@ -49,15 +49,19 @@
   },
   {
     icon: 'block',
-    name: 'post',
-    path: '/post',
-    component: './post',
-  },
-  {
-    icon: 'block',
-    name: 'category',
-    path: '/category',
-    component: './category',
+    name: 'blog',
+    routes: [
+      {
+        name: 'post',
+        path: '/post',
+        component: './post',
+      },
+      {
+        name: 'category',
+        path: '/category',
+        component: './category',
+      },
+    ],
   },
   {
     icon: 'block',
