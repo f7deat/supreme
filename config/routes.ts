@@ -64,6 +64,22 @@
     ],
   },
   {
+    icon: 'shop',
+    name: 'commerce',
+    routes: [
+      {
+        name: 'overview',
+        path: '/commerce',
+        component: './commerce',
+      },
+      {
+        name: 'products',
+        path: '/commerce/products',
+        component: './commerce/products',
+      },
+    ],
+  },
+  {
     icon: 'block',
     name: 'files',
     path: '/files',

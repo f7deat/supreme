@@ -62,4 +62,7 @@ export default {
   'menu.settings.theme': 'Giao diện',
   'menu.users.new-user': 'Thành viên mới',
   'menu.settings.navbar': 'Navbar',
+  'menu.commerce': 'Commerce',
+  'menu.commerce.overview': 'Overview',
+  'menu.commerce.products': 'Products',
 };

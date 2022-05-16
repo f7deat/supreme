@@ -58,4 +58,11 @@ export default {
   'menu.files': 'Files',
   'menu.users.list': 'List User',
   'menu.users.billing': 'Billing',
+  'menu.settings': 'Settings',
+  'menu.settings.theme': 'Themes',
+  'menu.users.new-user': 'New user',
+  'menu.settings.navbar': 'Navbar',
+  'menu.commerce': 'Commerce',
+  'menu.commerce.overview': 'Overview',
+  'menu.commerce.products': 'Products',
 };
