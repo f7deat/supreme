@@ -125,4 +125,54 @@ const Billing: React.FC = () => {
   );
 };
 
-export default Billing;
+    return (
+        <PageContainer title="Billing">
+            <Row gutter={16}>
+                <Col span={16}>
+                    <Row gutter={16} className="mb-4">
+                        <Col span={12}>
+                            <Card />
+                        </Col>
+                        <Col span={6}>
+                            <Card />
+                        </Col>
+                        <Col span={6}>
+                            <Card>
+                                <div className="text-center">
+                                    <div className="mb-2">
+                                        <img src="https://www.paypalobjects.com/digitalassets/c/website/logo/full-text/pp_fc_hl.svg" alt="Paypal" width={150} />
+                                    </div>
+                                    <div className="font-bold">Paypal</div>
+                                    <div className="">Freelance Payment</div>
+                                    <Divider />
+                                    <Typography.Title level={4}>{total.toLocaleString()}₫</Typography.Title>
+                                </div>
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Card title="Transaction" extra={<Extra />}>
+                        <ProTable
+                            search={{
+                                layout: "vertical"
+                            }}
+                            rowKey="id"
+                            columns={columns}
+                            actionRef={actionRef}
+                            request={queryBillings}
+                            rowSelection={{}} />
+                    </Card>
+                </Col>
+                <Col span={8}>
+                    <Card />
+                </Col>
+            </Row>
+            <DrawerForm visible={visible} onVisibleChange={setVisible} onFinish={onFinish} formRef={formRef}>
+                <ProFormText name="name" label="Name" required />
+                <ProFormText name="price" label="Price" required />
+                <ProFormText name="quantity" label="Quantity" required />
+            </DrawerForm>
+        </PageContainer>
+    )
+}
+
+export default Billing
