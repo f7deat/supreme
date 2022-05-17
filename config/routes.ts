@@ -49,15 +49,35 @@
   },
   {
     icon: 'block',
-    name: 'post',
-    path: '/post',
-    component: './post',
+    name: 'blog',
+    routes: [
+      {
+        name: 'post',
+        path: '/post',
+        component: './post',
+      },
+      {
+        name: 'category',
+        path: '/category',
+        component: './category',
+      },
+    ],
   },
   {
-    icon: 'block',
-    name: 'category',
-    path: '/category',
-    component: './category',
+    icon: 'shop',
+    name: 'commerce',
+    routes: [
+      {
+        name: 'overview',
+        path: '/commerce',
+        component: './commerce',
+      },
+      {
+        name: 'products',
+        path: '/commerce/products',
+        component: './commerce/products',
+      },
+    ],
   },
   {
     icon: 'block',
@@ -97,6 +117,7 @@
         name: 'billing',
         path: '/account/billing',
         component: './account/billing',
+        hideInMenu: true,
       },
     ],
   },

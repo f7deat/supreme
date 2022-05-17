@@ -167,9 +167,15 @@ const Category: React.FC = () => {
       valueType: 'option',
       width: 150,
       render: (_, record) => [
-        <Button icon={<FolderOpenOutlined />} onClick={() => handleShowPosts(record.id)} />,
-        <Button type="primary" icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} />,
+        <Button key={0} icon={<FolderOpenOutlined />} onClick={() => handleShowPosts(record.id)} />,
+        <Button
+          key={1}
+          type="primary"
+          icon={<EditOutlined />}
+          onClick={() => handleUpdate(record.id)}
+        />,
         <Popconfirm
+          key={2}
           title="Are you sure to delete this?"
           onConfirm={() => handleRemove(record.id)}
           okText="Yes"
@@ -188,29 +194,31 @@ const Category: React.FC = () => {
 
   const Extra = () => (
     <div>
-      <Button type='primary' danger onClick={() => setVisibleImport(true)}>Import</Button>
+      <Button type="primary" danger onClick={() => setVisibleImport(true)}>
+        Import
+      </Button>
     </div>
-  )
+  );
 
   return (
     <PageContainer
       title={intl.formatMessage({
-        id: 'menu.category',
-        defaultMessage: 'Categry',
+        id: 'menu.blog.category',
+        defaultMessage: 'Category',
       })}
       extra={<Extra />}
     >
       <ProTable<API.CategoryListItem, API.PageParams>
         headerTitle={intl.formatMessage({
-          id: 'menu.category',
+          id: 'menu.blog.category',
           defaultMessage: 'Categry',
         })}
         rowKey="id"
         search={{
-          layout: 'vertical'
+          layout: 'vertical',
         }}
         toolBarRender={() => [
-          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+          <Button type="primary" key={0} icon={<PlusOutlined />} onClick={handleAdd}>
             Thêm mới
           </Button>,
         ]}
@@ -232,32 +240,32 @@ const Category: React.FC = () => {
         onFinish={handleFinish}
       >
         <ProFormText name="id" hidden={true} />
-        <div className='flex gap-4'>
-          <div className='w-1/2'>
-            <ProFormText name="name" label="Tên danh mục" className='w-full' />
+        <div className="flex gap-4">
+          <div className="w-1/2">
+            <ProFormText name="name" label="Tên danh mục" className="w-full" />
           </div>
-          <div className='w-1/2'>
+          <div className="w-1/2">
             <ProFormText
               name="normalizeName"
               label="Normalize name"
               tooltip="Name without special character"
-              className='w-full'
+              className="w-full"
             />
           </div>
         </div>
         <ProFormTextArea name="description" label="Description" />
-        <div className='flex gap-4'>
-          <div className='w-1/2'>
+        <div className="flex gap-4">
+          <div className="w-1/2">
             <ProFormSelect
               options={parrentCategries}
               name="parrentId"
               label="Danh mục cha"
-              className='w-full'
+              className="w-full"
             />
           </div>
-          <div className='w-1/2'>
+          <div className="w-1/2">
             <ProFormSelect
-              className='w-full'
+              className="w-full"
               initialValue={1}
               options={[
                 {
@@ -274,9 +282,9 @@ const Category: React.FC = () => {
             />
           </div>
         </div>
-        <div className='flex gap-4'>
-          <div className='flex-grow'>
-            <ProFormText name="thumbnail" className='w-full' />
+        <div className="flex gap-4">
+          <div className="flex-grow">
+            <ProFormText name="thumbnail" className="w-full" />
           </div>
           <Button
             style={{ marginBottom: 24 }}
