@@ -12,8 +12,8 @@ const Theme: React.FC = () => {
     useEffect(() => {
         readAllText('css').then(response => {
             formFef.current?.setFieldsValue({
-                name: 'style',
-                value: response.data
+                name: 'css',
+                value: response
             })
         })
     }, [])
@@ -22,9 +22,8 @@ const Theme: React.FC = () => {
         <PageContainer title="Theme">
             <Card title="Customize theme">
                 <ProForm layout="vertical" formRef={formFef}>
-                    <ProForm.Item label="style.css" name="style">
-                        <ProFormTextArea />
-                    </ProForm.Item>
+                    <ProFormTextArea label="css" name="css" />
+                    <ProFormTextArea name="js" label="js" />
                 </ProForm>
             </Card>
         </PageContainer>

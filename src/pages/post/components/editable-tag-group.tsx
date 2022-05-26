@@ -102,7 +102,7 @@ const EditableTagGroup: React.FC<EditableTagGroupProps> = (props) => {
                 <Input
                     ref={input}
                     type="text"
-                    width={78}
+                    className="w-20"
                     size="small"
                     value={inputValue}
                     onChange={handleInputChange}

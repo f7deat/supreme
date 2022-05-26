@@ -5,7 +5,7 @@ import ProTable from '@ant-design/pro-table';
 import { Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 import { FormattedMessage } from 'umi';
-import { getPosts, deletePost } from '@/services/ant-design-pro/api';
+import { queryPosts, deletePost } from '@/services/ant-design-pro/api';
 import PostDrawer from './components/post-panel';
 import moment from 'moment';
 import { DOMAIN } from '@/services/config';
@@ -97,12 +97,13 @@ const Post: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
-        <Button type="primary" icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} />,
+        <Button type="primary" icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} key={0} />,
         <Popconfirm
           title="Are you sure to delete this?"
           onConfirm={() => handleRemove(record.id)}
           okText="Yes"
           cancelText="No"
+          key={1}
         >
           <Button type="primary" danger icon={<DeleteOutlined />} />
         </Popconfirm>,
@@ -110,7 +111,7 @@ const Post: React.FC = () => {
     },
   ];
   return (
-    <PageContainer title="Bài viết">
+    <PageContainer>
       <ProTable<API.PostListItem, API.PageParams>
         headerTitle="Danh sách"
         rowKey="id"
@@ -118,14 +119,14 @@ const Post: React.FC = () => {
           layout: 'vertical'
         }}
         toolBarRender={() => [
-          <Button type="primary" danger>
+          <Button type="primary" danger key={0}>
             Import
           </Button>,
-          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} key={1}>
             Viết bài
           </Button>,
         ]}
-        request={getPosts}
+        request={queryPosts}
         columns={columns}
         rowSelection={{}}
         actionRef={ref}

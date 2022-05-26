@@ -38,7 +38,10 @@ export async function saveSetting(body: any) {
   });
 }
 
-export async function queryUser() {
+export async function queryUser(id: string) {
+  if (id) {
+    return request<API.CurrentUser>(`/user/${id}`);
+  }
   return request<API.CurrentUser>(`/user`);
 }
 
@@ -111,6 +114,12 @@ export async function addMenu(params: API.MenuListItem) {
     data: {
       ...params,
     },
+  });
+}
+
+export async function deleteMenu(id: number) {
+  return request(`/menu/delete/${id}`, {
+    method: 'POST',
   });
 }
 

@@ -1,7 +1,7 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Image, message, Popconfirm } from 'antd';
+import { Button, Image, message, Popconfirm, Space } from 'antd';
 // @ts-ignore
 import { FormattedMessage, useIntl } from 'umi';
 import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOpenOutlined } from '@ant-design/icons';
@@ -145,17 +145,18 @@ const Category: React.FC = () => {
     {
       title: 'Mô tả',
       dataIndex: 'description',
+      search: false
     },
     {
       title: <FormattedMessage id="global.status" defaultMessage="Status" />,
       dataIndex: 'status',
       valueEnum: {
         0: {
-          text: 'Đang ẩn',
+          text: 'Draft',
           status: 'Default',
         },
         1: {
-          text: 'Hoạt động',
+          text: 'Active',
           status: 'Processing',
         },
       },
@@ -193,21 +194,18 @@ const Category: React.FC = () => {
   };
 
   const Extra = () => (
-    <div>
+    <Space>
       <Button type="primary" danger onClick={() => setVisibleImport(true)}>
         Import
       </Button>
-    </div>
+      <Button type="primary" key={0} icon={<PlusOutlined />} onClick={handleAdd}>
+        Thêm mới
+      </Button>
+    </Space>
   );
 
   return (
-    <PageContainer
-      title={intl.formatMessage({
-        id: 'menu.blog.category',
-        defaultMessage: 'Category',
-      })}
-      extra={<Extra />}
-    >
+    <PageContainer extra={<Extra />}>
       <ProTable<API.CategoryListItem, API.PageParams>
         headerTitle={intl.formatMessage({
           id: 'menu.blog.category',
@@ -217,11 +215,6 @@ const Category: React.FC = () => {
         search={{
           layout: 'vertical',
         }}
-        toolBarRender={() => [
-          <Button type="primary" key={0} icon={<PlusOutlined />} onClick={handleAdd}>
-            Thêm mới
-          </Button>,
-        ]}
         request={getCategories}
         columns={columns}
         rowSelection={{}}

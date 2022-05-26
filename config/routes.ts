@@ -48,28 +48,30 @@
     ],
   },
   {
+    path: '/blog',
     icon: 'block',
     name: 'blog',
     routes: [
       {
         name: 'post',
-        path: '/post',
+        path: '/blog/post',
         component: './post',
       },
       {
         name: 'category',
-        path: '/category',
+        path: '/blog/category',
         component: './category',
       },
     ],
   },
   {
+    path: '/commerce',
     icon: 'shop',
     name: 'commerce',
     routes: [
       {
         name: 'overview',
-        path: '/commerce',
+        path: '/commerce/overview',
         component: './commerce',
       },
       {
@@ -92,7 +94,7 @@
     routes: [
       {
         name: 'center',
-        path: '/account/center',
+        path: '/account/center/:id',
         component: './account/center',
         hideInMenu: true,
       },
@@ -125,6 +127,7 @@
     name: 'settings',
     icon: 'setting',
     access: 'canAdmin',
+    path: '/settings',
     routes: [
       {
         name: 'theme',
@@ -135,6 +138,12 @@
         name: 'navbar',
         path: '/settings/navbar',
         component: './settings/navbar',
+      },
+      {
+        name: 'application',
+        path: '/settings/applications',
+        component: './settings/applications',
+        access: 'canAdmin',
       },
     ],
   },

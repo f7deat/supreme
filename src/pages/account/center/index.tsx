@@ -50,19 +50,20 @@ const TagList: React.FC<{ tags: string[] }> = ({ tags }) => {
   );
 };
 
-const Center: React.FC<RouteChildrenProps> = () => {
+const Center: React.FC<RouteChildrenProps> = (props) => {
+
   const [tabKey, setTabKey] = useState<tabKeyType>('articles');
   const [currentUser, setCurrentUser] = useState<API.CurrentUser>();
   const [roles, setRoles] = useState<any>();
   useEffect(() => {
-    queryUser().then((response) => {
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    queryUser(props.match?.params['id']).then((response) => {
       setCurrentUser(response);
       queryRoleByUser(response.id).then((rolesResponse) => {
         setRoles(rolesResponse);
-        console.log(rolesResponse);
       });
     });
-  }, []);
+  }, [props.match?.params]);
 
   //  渲染用户信息
   const renderUserInfo = ({ phoneNumber, group }: Partial<API.CurrentUser>) => {

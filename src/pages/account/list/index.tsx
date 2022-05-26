@@ -59,7 +59,7 @@ const User: React.FC = () => {
   )
 
   const handleUpdate = (id: string) => {
-    console.log(id);
+    history.push(`/account/center/${id}`)
   };
 
   const ActiveIcon = (active: boolean) => {

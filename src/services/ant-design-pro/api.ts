@@ -76,7 +76,7 @@ export async function removeRule(options?: Record<string, any>) {
   });
 }
 /** 删除规则 GET /api/post */
-export async function getPosts(params: {
+export async function queryPosts(params: {
   // query
   /** 当前的页码 */
   current?: number;

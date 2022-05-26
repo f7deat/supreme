@@ -40,6 +40,6 @@ const routers = formatter(RouterConfig);
 
 routers.forEach((route) => {
   test(`test route page ${route}`, async ({ page }) => {
-    await testPage(route, page);
+    testPage(route, page);
   });
 });

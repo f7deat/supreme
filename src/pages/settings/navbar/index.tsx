@@ -1,12 +1,12 @@
-import { addMenu, queryMenus, queryParrents } from '@/services/defzone/api';
-import { PlusOutlined } from '@ant-design/icons';
+import { addMenu, deleteMenu, queryMenus, queryParrents } from '@/services/defzone/api';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import { ProFormSelect } from '@ant-design/pro-form';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, message } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 import { useIntl } from 'umi';
 
@@ -20,11 +20,41 @@ const MenuPage: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [visible, setVisible] = useState(false);
 
+  const handleRemove = (id: number) => {
+    deleteMenu(id).then(response => {
+      if (response.succeeded) {
+        message.success(response.message)
+        actionRef.current?.reload();
+      } else {
+        message.error(response.message)
+      }
+    })
+  }
+
   const columns: ProColumns<API.MenuListItem>[] = [
     {
       title: 'Tiêu đề',
       dataIndex: 'name',
     },
+    {
+      title: 'Modified Date',
+      dataIndex: 'modifiedDate',
+      search: false
+    },
+    {
+      title: '',
+      render: (_, record) => [
+        <Popconfirm
+          title="Are you sure to delete this?"
+          onConfirm={() => handleRemove(record.id)}
+          okText="Yes"
+          cancelText="No"
+          key={1}
+        >
+          <Button type="primary" danger icon={<DeleteOutlined />} />
+        </Popconfirm>
+      ]
+    }
   ];
 
   async function handleFinish(values: API.MenuListItem) {
