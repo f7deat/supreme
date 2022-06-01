@@ -33,9 +33,10 @@ declare namespace API {
     name: string;
   };
   type MenuListItem = {
-    id: number;
+    id: string;
     name: string;
     url: string;
+    modifiedDate: Date;
   };
   type BillingListItem = {
     id: string;
@@ -43,4 +44,5 @@ declare namespace API {
     price: number;
     quantity: number;
   };
+  type ProductListItem = {};
 }

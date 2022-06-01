@@ -104,8 +104,8 @@ export async function queryMenus(params: {
   });
 }
 
-export async function queryParrents() {
-  return request(`/menu/all-parrent`);
+export async function queryAllParrentMenu() {
+  return request(`/menu/parrent/all`);
 }
 
 export async function addMenu(params: API.MenuListItem) {
@@ -117,12 +117,24 @@ export async function addMenu(params: API.MenuListItem) {
   });
 }
 
-export async function deleteMenu(id: number) {
+export async function deleteMenu(id: string) {
   return request(`/menu/delete/${id}`, {
     method: 'POST',
   });
 }
 
+export async function queryFindMenu(id: string) {
+  return request(`/menu/${id}`);
+}
+
+export async function updateMenu(params: API.MenuListItem) {
+  return request(`/menu/update`, {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
 export async function queryBillings(params: {
   /** PAGE INDEX */
   current?: number;

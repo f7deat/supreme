@@ -11,6 +11,7 @@ import {
   getCategories,
   getCategory,
   getListParrentCategory,
+  queryListType,
   updateCategory,
 } from '@/services/defzone/category';
 import type { ProFormInstance } from '@ant-design/pro-form';
@@ -36,6 +37,7 @@ const Category: React.FC = () => {
   const [visiblePosts, setVisiblePosts] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
   const [visibleImport, setVisibleImport] = useState<boolean>(false);
+  const [types, setTypes] = useState<string[]>([])
   const ref = useRef<ActionType>();
 
   useEffect(() => {
@@ -47,6 +49,20 @@ const Category: React.FC = () => {
       ),
     );
   }, []);
+
+  const getListType = () => {
+    if (types.length > 0) {
+      return;
+    }
+    queryListType().then(response => {
+      setTypes(response.map((x: string, i: number) => {
+        return {
+          value: i,
+          label: x
+        }
+      }));
+    })
+  }
 
   const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -62,6 +78,7 @@ const Category: React.FC = () => {
       if (response.succeeded) {
         message.success('succeeded!');
         setDrawerVisit(false);
+        ref.current?.reload();
       } else {
         message.error(response.message);
       }
@@ -70,6 +87,7 @@ const Category: React.FC = () => {
       if (response.succeeded) {
         message.success('succeeded!');
         setDrawerVisit(false);
+        ref.current?.reload();
       } else {
         message.error(response.message);
       }
@@ -77,6 +95,7 @@ const Category: React.FC = () => {
   };
 
   const handleAdd = () => {
+    getListType();
     formRef.current?.resetFields();
     setPreviewImage('');
     setDrawerVisit(true);
@@ -94,6 +113,7 @@ const Category: React.FC = () => {
   };
 
   const handleUpdate = (id: number) => {
+    getListType();
     getCategory(id).then(async (response) => {
       setDrawerVisit(true);
       await waitTime();
@@ -126,6 +146,10 @@ const Category: React.FC = () => {
           name: 'thumbnail',
           value: response.thumbnail,
         },
+        {
+          name: 'type',
+          value: response.type
+        }
       ]);
       setPreviewImage(response.thumbnail);
     });
@@ -195,10 +219,10 @@ const Category: React.FC = () => {
 
   const Extra = () => (
     <Space>
-      <Button type="primary" danger onClick={() => setVisibleImport(true)}>
+      <Button type="primary" key={0} danger onClick={() => setVisibleImport(true)}>
         Import
       </Button>
-      <Button type="primary" key={0} icon={<PlusOutlined />} onClick={handleAdd}>
+      <Button type="primary" key={1} icon={<PlusOutlined />} onClick={handleAdd}>
         Thêm mới
       </Button>
     </Space>
@@ -275,6 +299,12 @@ const Category: React.FC = () => {
             />
           </div>
         </div>
+        <ProFormSelect
+          options={types}
+          name="type"
+          label="Type"
+          className="w-full"
+        />
         <div className="flex gap-4">
           <div className="flex-grow">
             <ProFormText name="thumbnail" className="w-full" />

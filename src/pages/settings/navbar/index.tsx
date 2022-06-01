@@ -1,5 +1,5 @@
-import { addMenu, deleteMenu, queryMenus, queryParrents } from '@/services/defzone/api';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { addMenu, deleteMenu, queryFindMenu, queryMenus, queryAllParrentMenu, updateMenu } from '@/services/defzone/api';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import { ProFormSelect } from '@ant-design/pro-form';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
@@ -7,8 +7,9 @@ import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button, message, Popconfirm } from 'antd';
+import moment from 'moment';
 import { useRef, useState } from 'react';
-import { useIntl } from 'umi';
+import { FormattedMessage, useIntl } from 'umi';
 
 const MenuPage: React.FC = () => {
   /**
@@ -20,7 +21,7 @@ const MenuPage: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [visible, setVisible] = useState(false);
 
-  const handleRemove = (id: number) => {
+  const handleRemove = (id: string) => {
     deleteMenu(id).then(response => {
       if (response.succeeded) {
         message.success(response.message)
@@ -31,6 +32,46 @@ const MenuPage: React.FC = () => {
     })
   }
 
+  const waitTime = (time: number = 100) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, time);
+    });
+  };
+
+  const handleUpdate = async (id: string) => {
+    setVisible(true);
+    const response = await queryFindMenu(id);
+    await waitTime();
+    formRef.current?.setFields([
+      {
+        name: 'id',
+        value: response.id,
+      },
+      {
+        name: 'name',
+        value: response.name,
+      },
+      {
+        name: 'url',
+        value: response.url,
+      },
+      {
+        name: 'icon',
+        value: response.icon,
+      },
+      {
+        name: 'parrentId',
+        value: response.parrentId,
+      },
+      {
+        name: 'status',
+        value: response.status,
+      }
+    ])
+  }
+
   const columns: ProColumns<API.MenuListItem>[] = [
     {
       title: 'Tiêu đề',
@@ -39,11 +80,29 @@ const MenuPage: React.FC = () => {
     {
       title: 'Modified Date',
       dataIndex: 'modifiedDate',
+      render: (_, record) => moment(record.modifiedDate).format('DD/MM/YYYY hh:mm:ss'),
       search: false
     },
     {
+      title: <FormattedMessage id="global.status" defaultMessage="Status" />,
+      dataIndex: 'status',
+      hideInForm: true,
+      valueEnum: {
+        0: {
+          text: 'Draft',
+          status: 'Default',
+        },
+        1: {
+          text: 'Active',
+          status: 'Processing',
+        },
+      },
+    },
+    {
       title: '',
+      valueType: 'option',
       render: (_, record) => [
+        <Button type='primary' icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} key={0} />,
         <Popconfirm
           title="Are you sure to delete this?"
           onConfirm={() => handleRemove(record.id)}
@@ -58,12 +117,23 @@ const MenuPage: React.FC = () => {
   ];
 
   async function handleFinish(values: API.MenuListItem) {
-    addMenu(values).then((response) => {
-      if (response.succeeded) {
-        actionRef.current?.reload();
-        message.success('succeeded');
-      }
-    });
+    if (values.id) {
+      updateMenu(values).then(response => {
+        if (response.succeeded) {
+          message.success(response.message);
+          actionRef.current?.reload();
+          setVisible(false)
+        }
+      })
+    } else {
+      addMenu(values).then((response) => {
+        if (response.succeeded) {
+          actionRef.current?.reload();
+          message.success('succeeded');
+          setVisible(false)
+        }
+      });
+    }
   }
 
   const toolBarRender = () => [
@@ -97,6 +167,7 @@ const MenuPage: React.FC = () => {
         visible={visible}
         onVisibleChange={setVisible}
       >
+        <ProFormText name="id" hidden />
         <ProFormText
           name="name"
           label={intl.formatMessage({
@@ -104,7 +175,18 @@ const MenuPage: React.FC = () => {
           })}
         />
         <ProFormText name="url" label="Url" />
-        <ProFormSelect name="parrentId" label="Parrent" request={queryParrents} />
+        <ProFormText name="icon" label="Icon" />
+        <ProFormSelect name="parrentId" label="Parrent" request={queryAllParrentMenu} />
+        <ProFormSelect name="status" label="Status" options={[
+          {
+            label: 'Draft',
+            value: 0
+          },
+          {
+            label: 'Active',
+            value: 1
+          }
+        ]} />
       </DrawerForm>
     </PageContainer>
   );

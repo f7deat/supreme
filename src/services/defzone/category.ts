@@ -54,7 +54,9 @@ export async function deleteCategory(id: number) {
 
 /** GET SINGLE CATEGORY GET /api/category/get */
 export async function getCategory(id: number) {
-  return request(`/category/${id}`, {
-    method: 'GET',
-  });
+  return request(`/category/${id}`);
+}
+
+export async function queryListType() {
+  return request(`/category/list-type`);
 }
