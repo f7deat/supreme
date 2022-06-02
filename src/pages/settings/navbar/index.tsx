@@ -1,5 +1,5 @@
-import { addMenu, deleteMenu, queryFindMenu, queryMenus, queryAllParrentMenu, updateMenu } from '@/services/defzone/api';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { addMenu, deleteMenu, queryFindMenu, queryMenus, queryAllParrentMenu, updateMenu, syncMenu, backupMenu } from '@/services/defzone/api';
+import { DeleteOutlined, DownloadOutlined, EditOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import { ProFormSelect } from '@ant-design/pro-form';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
@@ -136,9 +136,36 @@ const MenuPage: React.FC = () => {
     }
   }
 
+  const sync = () => {
+    syncMenu().then(response => {
+      if (response.succeeded) {
+        message.success('succeeded');
+        actionRef.current?.reload()
+      }
+    })
+  }
+
+  const backup = async () => {
+    const response = await backupMenu()
+    const blob = new Blob([JSON.stringify(response)], { type: 'application/json' });
+    const href = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = href;
+    link.download = `menu-${moment().format('YYYY-MM-DD')}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   const toolBarRender = () => [
-    <Button icon={<PlusOutlined />} onClick={() => setVisible(true)}>
+    <Button key={0} icon={<PlusOutlined />} onClick={() => setVisible(true)}>
       Add New
+    </Button>,
+    <Button key={1} icon={<SyncOutlined />} onClick={() => sync()}>
+      Sync
+    </Button>,
+    <Button key={2} icon={<DownloadOutlined />} onClick={() => backup()}>
+      Backup
     </Button>,
   ];
 

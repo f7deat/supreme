@@ -117,6 +117,16 @@ export async function addMenu(params: API.MenuListItem) {
   });
 }
 
+export async function syncMenu() {
+  return request(`/menu/sync`, {
+    method: 'POST',
+  });
+}
+
+export async function backupMenu() {
+  return request(`/menu/backup`);
+}
+
 export async function deleteMenu(id: string) {
   return request(`/menu/delete/${id}`, {
     method: 'POST',
