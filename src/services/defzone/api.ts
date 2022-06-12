@@ -12,6 +12,10 @@ export async function queryPostsByUser(id: string) {
   return request(`/post/list-in-user/${id}`);
 }
 
+export async function queryPost(id: number) {
+  return request(`/post/${id}`);
+}
+
 export async function queryFiles(params: {
   /** PAGE INDEX */
   current?: number;

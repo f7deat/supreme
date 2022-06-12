@@ -64,6 +64,7 @@ export default {
   'menu.users.new-user': 'Thành viên mới',
   'menu.settings.navbar': 'Navbar',
   'menu.commerce': 'Commerce',
-  'menu.commerce.overview': 'Overview',
-  'menu.commerce.products': 'Products',
+  'menu.commerce.overview': 'Tổng quan',
+  'menu.commerce.products': 'Sản phẩm',
+  'menu.commerce.productCenter': 'Thông tin sản phẩm',
 };

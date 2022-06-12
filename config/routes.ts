@@ -79,6 +79,12 @@
         path: '/commerce/products',
         component: './commerce/products',
       },
+      {
+        name: 'productCenter',
+        path: '/commerce/products/center/:id?',
+        component: './commerce/products/center',
+        hideInMenu: true,
+      },
     ],
   },
   {

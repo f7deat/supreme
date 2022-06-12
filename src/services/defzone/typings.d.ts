@@ -44,5 +44,7 @@ declare namespace API {
     price: number;
     quantity: number;
   };
-  type ProductListItem = {};
+  type ProductListItem = {
+    id: number;
+  };
 }

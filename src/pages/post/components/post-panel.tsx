@@ -1,4 +1,5 @@
-import { ProFormInstance, ProFormText } from '@ant-design/pro-form';
+import type { ProFormInstance } from '@ant-design/pro-form';
+import { ProFormText } from '@ant-design/pro-form';
 import ProForm, { DrawerForm, ProFormSelect } from '@ant-design/pro-form';
 import 'braft-editor/dist/index.css';
 import { Button, Image, Input, message, Popover } from 'antd';

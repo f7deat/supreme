@@ -66,4 +66,5 @@ export default {
   'menu.commerce': 'Commerce',
   'menu.commerce.overview': 'Overview',
   'menu.commerce.products': 'Products',
+  'menu.commerce.productCenter': 'Product Center',
 };
