@@ -28,38 +28,38 @@ const User: React.FC = () => {
   const [visibleAddToRole, setVisibleAddToRole] = useState<boolean>(false);
   const [roleId, setRoleId] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
-  const [roleName, setRoleName] = useState<string>('')
-  const actionRef = useRef<ActionType>()
+  const [roleName, setRoleName] = useState<string>('');
+  const actionRef = useRef<ActionType>();
 
   const handleRemove = (id: string) => {
-    deleteUser(id).then(response => {
+    deleteUser(id).then((response) => {
       if (response.succeeded) {
-        message.success('succeeded!')
-        actionRef.current?.reload()
+        message.success('succeeded!');
+        actionRef.current?.reload();
       }
-    })
+    });
   };
 
   const handleAddToRole = () => {
-    addToRole(userId, roleName).then(response => {
+    addToRole(userId, roleName).then((response) => {
       if (response.succeeded) {
-        message.success('Succeeded!')
+        message.success('Succeeded!');
       }
-    })
-  }
+    });
+  };
 
   const AddToRole = () => (
-    <div className='flex'>
+    <div className="flex">
       <Select defaultValue="member" onChange={(value) => setRoleName(value)}>
         <Option value="member">Member</Option>
         <Option value="admin">Admin</Option>
       </Select>
       <Button onClick={handleAddToRole}>Add</Button>
     </div>
-  )
+  );
 
   const handleUpdate = (id: string) => {
-    history.push(`/account/center/${id}`)
+    history.push(`/account/center/${id}`);
   };
 
   const ActiveIcon = (active: boolean) => {
@@ -90,8 +90,14 @@ const User: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
-        <Button type="primary" icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} />,
+        <Button
+          type="primary"
+          key={0}
+          icon={<EditOutlined />}
+          onClick={() => handleUpdate(record.id)}
+        />,
         <Popover
+          key={1}
           content={<AddToRole />}
           title="Add to role"
           trigger="click"
@@ -101,6 +107,7 @@ const User: React.FC = () => {
           <Button icon={<FolderOutlined />} onClick={() => setUserId(record.id)} />
         </Popover>,
         <Popconfirm
+          key={2}
           title="Are you sure to delete this?"
           onConfirm={() => handleRemove(record.id)}
           okText="Yes"
@@ -114,12 +121,17 @@ const User: React.FC = () => {
 
   const Extra = () => (
     <div>
-      <Button icon={<PlusOutlined />} type="primary" onClick={() => history.push('/account/new')}>Create new</Button>
+      <Button icon={<PlusOutlined />} type="primary" onClick={() => history.push('/account/new')}>
+        Create new
+      </Button>
     </div>
-  )
+  );
 
   return (
-    <PageContainer title={intl.formatMessage({ id: 'menu.users', defaultMessage: 'Thành viên' })} extra={<Extra />}>
+    <PageContainer
+      title={intl.formatMessage({ id: 'menu.users', defaultMessage: 'Thành viên' })}
+      extra={<Extra />}
+    >
       <Row gutter={16}>
         <Col span={10}>
           <Role roleId={roleId} setRoleId={setRoleId} />
@@ -132,7 +144,7 @@ const User: React.FC = () => {
             })}
             rowKey="id"
             search={{
-              layout: 'vertical'
+              layout: 'vertical',
             }}
             request={getUsers}
             columns={columns}
