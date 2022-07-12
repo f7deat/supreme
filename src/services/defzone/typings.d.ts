@@ -46,5 +46,8 @@ declare namespace API {
   };
   type ProductListItem = {
     id: number;
+    title: string;
+    thumbnail: string;
+    createdDate: Date;
   };
 }

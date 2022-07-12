@@ -51,7 +51,6 @@ const TagList: React.FC<{ tags: string[] }> = ({ tags }) => {
 };
 
 const Center: React.FC<RouteChildrenProps> = (props) => {
-
   const [tabKey, setTabKey] = useState<tabKeyType>('articles');
   const [currentUser, setCurrentUser] = useState<API.CurrentUser>();
   const [roles, setRoles] = useState<any>();
@@ -111,7 +110,7 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
   };
 
   const Extra = () => (
-    <Link to="/account/settings">
+    <Link to={`/account/settings/${currentUser?.id}`}>
       <Button icon={<EditOutlined />} type="primary">
         Edit
       </Button>
