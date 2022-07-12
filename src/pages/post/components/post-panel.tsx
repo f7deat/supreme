@@ -146,7 +146,7 @@ const PostDrawer = (props: IPostDrawerProps) => {
         <Input />
       </ProForm.Item>
       <ProFormText name="title" label="Tiêu đề" rules={[{ required: true }]} />
-      <ProForm.Item name="url" label="Đường dẫn" rules={[{ required: true }]}>
+      <ProForm.Item name="url" label="Đường dẫn">
         <Input />
       </ProForm.Item>
       <ProForm.Item name="description" label="Mô tả">

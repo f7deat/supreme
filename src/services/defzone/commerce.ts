@@ -10,3 +10,10 @@ export async function queryAddProduct(params: any) {
     data: params,
   });
 }
+
+export async function queryUpdateProduct(params: any) {
+  return request(`/product/update`, {
+    method: 'POST',
+    data: params,
+  });
+}

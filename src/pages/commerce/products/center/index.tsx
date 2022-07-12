@@ -1,5 +1,5 @@
 import { queryPost } from "@/services/defzone/api";
-import { queryAddProduct } from "@/services/defzone/commerce";
+import { queryAddProduct, queryUpdateProduct } from "@/services/defzone/commerce";
 import type { ProFormInstance } from "@ant-design/pro-form";
 import ProForm, { ProFormSelect, ProFormText } from "@ant-design/pro-form"
 import { PageContainer } from "@ant-design/pro-layout"
@@ -49,13 +49,14 @@ const ProductCenterPage: React.FC = () => {
 
     const onFinish = async (values: any) => {
         values.content = values.content.toHTML();
+        let response = null;
         if (values.id) {
-
+            response = await queryUpdateProduct(values);
         } else {
-            const response = await queryAddProduct(values);
-            if (response.succeeded) {
-                history.push(`/commerce/products`);
-            }
+            response = await queryAddProduct(values);
+        }
+        if (response.succeeded) {
+            history.push(`/commerce/products`);
         }
     }
 
