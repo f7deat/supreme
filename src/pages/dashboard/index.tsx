@@ -1,44 +1,13 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { Avatar, Card, Col, List, Skeleton, Row, Statistic, Typography } from 'antd';
+import { Avatar, Card, Col, List, Skeleton, Row, Statistic, Typography, Space } from 'antd';
 import { Radar } from '@ant-design/charts';
-// @ts-ignore
-import { Link, useModel, useRequest } from 'umi';
+import { useModel, useRequest } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import moment from 'moment';
-import EditableLinkGroup from './components/EditableLinkGroup';
-import styles from './style.less';
 import type { CurrentUser } from './data.d';
-import { queryProjectNotice, fakeChartData } from './service';
+import { fakeChartData } from './service';
 import { queryPopularPosts } from '@/services/defzone/api';
-
-const links = [
-  {
-    title: '操作一',
-    href: '',
-  },
-  {
-    title: '操作二',
-    href: '',
-  },
-  {
-    title: '操作三',
-    href: '',
-  },
-  {
-    title: '操作四',
-    href: '',
-  },
-  {
-    title: '操作五',
-    href: '',
-  },
-  {
-    title: '操作六',
-    href: '',
-  },
-];
 
 const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentUser }) => {
   const loading = currentUser && Object.keys(currentUser).length;
@@ -46,36 +15,35 @@ const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentU
     return <Skeleton avatar paragraph={{ rows: 1 }} active />;
   }
   return (
-    <div className={styles.pageHeaderContent}>
-      <div className={styles.avatar}>
+    <Space>
+      <div>
         <Avatar size="large" src={currentUser.avatar} />
       </div>
-      <div className={styles.content}>
-        <div className={styles.contentTitle}>Hi, {currentUser.name}!</div>
+      <div>
+        <div>Hi, {currentUser.name}!</div>
         <div>
           {currentUser.title} |{currentUser.group}
         </div>
       </div>
-    </div>
+    </Space>
   );
 };
 
 const ExtraContent: FC<Record<string, any>> = () => (
-  <div className={styles.extraContent}>
-    <div className={styles.statItem}>
+  <Space size="large">
+    <div>
       <Statistic title="Bài viết" value={56} />
     </div>
-    <div className={styles.statItem}>
+    <div>
       <Statistic title="Xếp hạng" value={8} suffix="/ 24" />
     </div>
-    <div className={styles.statItem}>
+    <div>
       <Statistic title="Lượt xem" value={2223} />
     </div>
-  </div>
+  </Space>
 );
 
 const Workplace: FC = () => {
-  const { loading: projectLoading, data: projectNotice = [] } = useRequest(queryProjectNotice);
   const [popularPosts, setPopularPosts] = useState<API.PostListItem[]>();
 
   const { data } = useRequest(fakeChartData);
@@ -104,46 +72,11 @@ const Workplace: FC = () => {
       extraContent={<ExtraContent />}
     >
       <Row gutter={24}>
-        <Col xl={16} lg={24} md={24} sm={24} xs={24}>
-          <Card
-            className={styles.projectList}
-            style={{ marginBottom: 24 }}
-            title="Dự án đang khởi chạy"
-            bordered={false}
-            extra={<Link to="/">Xem thêm</Link>}
-            loading={projectLoading}
-            bodyStyle={{ padding: 0 }}
-          >
-            {projectNotice.map((item: any) => (
-              <Card.Grid className={styles.projectGrid} key={item.id}>
-                <Card bodyStyle={{ padding: 0 }} bordered={false}>
-                  <Card.Meta
-                    title={
-                      <div className={styles.cardTitle}>
-                        <Avatar size="small" src={item.logo} />
-                        <Link to={item.href}>{item.title}</Link>
-                      </div>
-                    }
-                    description={item.description}
-                  />
-                  <div className={styles.projectItemContent}>
-                    <Link to={item.memberLink}>{item.member || ''}</Link>
-                    {item.updatedAt && (
-                      <span className={styles.datetime} title={item.updatedAt}>
-                        {moment(item.updatedAt).fromNow()}
-                      </span>
-                    )}
-                  </div>
-                </Card>
-              </Card.Grid>
-            ))}
+        <Col span={16}>
+          <Card title="Dự án đang khởi chạy">
+            <Card.Grid>CRM</Card.Grid>
           </Card>
-          <Card
-            bodyStyle={{ padding: 0 }}
-            bordered={false}
-            className={styles.activeCard}
-            title="Bài viết xem nhiều"
-          >
+          <Card title="Bài viết xem nhiều">
             <List
               bordered
               dataSource={popularPosts}
@@ -157,21 +90,8 @@ const Workplace: FC = () => {
           </Card>
         </Col>
         <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-          <Card
-            style={{ marginBottom: 24 }}
-            title="Truy cập nhanh"
-            bordered={false}
-            bodyStyle={{ padding: 0 }}
-          >
-            <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
-          </Card>
-          <Card
-            style={{ marginBottom: 24 }}
-            bordered={false}
-            title="Dữ liệu"
-            loading={data?.radarData?.length === 0}
-          >
-            <div className={styles.chart}>
+          <Card title="Dữ liệu" loading={data?.radarData?.length === 0}>
+            <div>
               <Radar
                 height={343}
                 data={data?.radarData || []}

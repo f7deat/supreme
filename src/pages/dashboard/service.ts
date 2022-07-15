@@ -1,4 +1,3 @@
-import { DOMAIN } from '@/services/config';
 import { request } from 'umi';
 import type { NoticeType, AnalysisData } from './data';
 
@@ -11,5 +10,5 @@ export async function fakeChartData(): Promise<{ data: AnalysisData }> {
 }
 
 export async function getUserPostCounnt(id: string) {
-  return request(`${DOMAIN}/post/get-count-in-user/${id}`);
+  return request(`/post/get-count-in-user/${id}`);
 }

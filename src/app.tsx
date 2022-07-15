@@ -1,7 +1,7 @@
 import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { SettingDrawer } from '@ant-design/pro-layout';
 import { PageLoading } from '@ant-design/pro-layout';
-import type { RunTimeLayoutConfig } from 'umi';
+import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
 import { history, Link } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
@@ -49,6 +49,21 @@ export async function getInitialState(): Promise<{
   };
 }
 
+export const request: RequestConfig = {
+  requestInterceptors: [
+    (url: string, options: any) => {
+      const token = localStorage.getItem('def_token');
+      options.headers = {
+        authorization: `Bearer ${token}`,
+      };
+      return {
+        url: `https://localhost:60176/api${url}`,
+        options,
+      };
+    },
+  ],
+};
+
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
@@ -71,15 +86,15 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     },
     links: isDev
       ? [
-        <Link to="/umi/plugin/openapi" target="_blank">
-          <LinkOutlined />
-          <span>OpenAPI</span>
-        </Link>,
-        <Link to="/~docs">
-          <BookOutlined />
-          <span>Document</span>
-        </Link>,
-      ]
+          <Link to="/umi/plugin/openapi" target="_blank" key={0}>
+            <LinkOutlined />
+            <span>OpenAPI</span>
+          </Link>,
+          <Link to="/~docs" key={1}>
+            <BookOutlined />
+            <span>Document</span>
+          </Link>,
+        ]
       : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面

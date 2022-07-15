@@ -2,7 +2,6 @@ import { FormattedMessage } from 'umi';
 import { queryFiles } from '@/services/defzone/api';
 import { Button, Drawer, Image, Popover } from 'antd';
 import { useEffect, useState } from 'react';
-import { DOMAIN } from '@/services/config';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 
@@ -36,13 +35,13 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
       queryFiles({
         current: 1,
         pageSize: 10,
-        name: ''
+        name: '',
       }).then((response) => setDataSource(response.data));
     }
   }, [props.visible]);
 
   const handleSelect = (name: string) => {
-    props.onSelect(`${DOMAIN}/files/${name}`);
+    props.onSelect(`/files/${name}`);
     props.onVisibleChange(false);
   };
 
@@ -50,7 +49,7 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
     {
       title: '#',
       render: (dom: any, record: any, index: number) => index + 1,
-      search: false
+      search: false,
     },
     {
       title: <FormattedMessage defaultMessage="Name" id="global.name" />,
@@ -59,12 +58,12 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
     {
       title: 'Uploaded date',
       dataIndex: 'uploadedDate',
-      search: false
+      search: false,
     },
     {
       title: 'Size',
       render: (dom, record) => record.size + 'KB',
-      search: false
+      search: false,
     },
     {
       title: 'Action',
@@ -73,7 +72,7 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
           Choose
         </Button>
       ),
-      search: false
+      search: false,
     },
   ];
   return (
@@ -86,7 +85,7 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
       <ProTable<API.FileListItem>
         columns={columns}
         search={{
-          layout: 'vertical'
+          layout: 'vertical',
         }}
         key="id"
         dataSource={dataSource}

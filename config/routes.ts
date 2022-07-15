@@ -58,6 +58,12 @@
         component: './post',
       },
       {
+        name: 'center',
+        path: '/blog/post/center/:id?',
+        component: './post/center',
+        hideInMenu: true,
+      },
+      {
         name: 'category',
         path: '/blog/category',
         component: './category',

@@ -1,4 +1,4 @@
-import request from '@/services/config';
+import { request } from 'umi';
 
 export interface StateType {
   status?: 'ok' | 'error';

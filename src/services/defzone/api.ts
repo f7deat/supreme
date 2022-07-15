@@ -1,4 +1,4 @@
-import request from '../config';
+import { request } from 'umi';
 
 /** GET BACKUP */
 export async function getBackup() {

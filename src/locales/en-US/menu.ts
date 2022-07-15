@@ -52,6 +52,7 @@ export default {
   'menu.blog': 'Blog',
   'menu.blog.post': 'Article',
   'menu.blog.category': 'Category',
+  'menu.blog.center': 'Start writing',
   'menu.users': 'Users',
   'menu.users.center': 'Account Center',
   'menu.users.settings': 'Account Setting',

@@ -1,4 +1,4 @@
-import request from '../config';
+import { request } from 'umi';
 
 /** LIST CATEGORY GET /api/all */
 export async function getAllCategory() {

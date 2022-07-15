@@ -3,50 +3,20 @@ import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button, message, Popconfirm } from 'antd';
-import { useRef, useState } from 'react';
-import { FormattedMessage } from 'umi';
+import { useRef } from 'react';
+import { FormattedMessage, history } from 'umi';
 import { queryPosts, deletePost } from '@/services/ant-design-pro/api';
-import PostDrawer from './components/post-panel';
 import moment from 'moment';
-import { DOMAIN } from '@/services/config';
+import domain from '@/services/domain';
 
-const Post: React.FC = () => {
-  /**
-   * @en-US: Pop-up window of new window
-   * @vi-VN: Cửa sổ thêm/sửa
-   *  */
-  const [panelVisible, setPanelVisible] = useState<boolean>(false);
-  const [postId, setPostId] = useState<number>(0);
+const PostList: React.FC = () => {
   const ref = useRef<ActionType>();
 
-  const waitTime = (time: number = 100) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, time);
-    });
-  };
-
-  const reload = () => {
-    ref.current?.reload();
-  };
-
-  const handleUpdate = (id: number) => {
-    setPostId(id);
-    waitTime();
-    setPanelVisible(true);
-  };
-
-  const handleAdd = () => {
-    setPostId(0);
-    waitTime(2000);
-    setPanelVisible(true);
-  };
   const handleRemove = (id: number) => {
     deletePost(id).then((response) => {
       if (response.succeeded) {
         message.success('deleted!');
-        reload();
+        ref.current?.reload();
       } else {
         message.error('error!');
       }
@@ -59,7 +29,11 @@ const Post: React.FC = () => {
       dataIndex: 'title',
       render: (dom, entity) => {
         return (
-          <a href={`${DOMAIN}/post/${entity.url}-${entity.id}.html`} target="_blank">
+          <a
+            href={`${domain.DOMAIN}/post/${entity.url}-${entity.id}.html`}
+            target="_blank"
+            rel="noreferrer"
+          >
             {dom}
           </a>
         );
@@ -80,7 +54,6 @@ const Post: React.FC = () => {
     {
       title: <FormattedMessage id="global.status" defaultMessage="Status" />,
       dataIndex: 'status',
-      hideInForm: true,
       valueEnum: {
         0: {
           text: 'Draft',
@@ -97,7 +70,12 @@ const Post: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
-        <Button type="primary" icon={<EditOutlined />} onClick={() => handleUpdate(record.id)} key={0} />,
+        <Button
+          type="primary"
+          icon={<EditOutlined />}
+          onClick={() => history.push(`/blog/post/center/${record.id}`)}
+          key={0}
+        />,
         <Popconfirm
           title="Are you sure to delete this?"
           onConfirm={() => handleRemove(record.id)}
@@ -111,19 +89,26 @@ const Post: React.FC = () => {
     },
   ];
   return (
-    <PageContainer>
+    <PageContainer
+      extra={
+        <Button
+          icon={<PlusOutlined />}
+          type="primary"
+          onClick={() => history.push('/blog/post/center')}
+        >
+          Writing
+        </Button>
+      }
+    >
       <ProTable<API.PostListItem, API.PageParams>
         headerTitle="Danh sách"
         rowKey="id"
         search={{
-          layout: 'vertical'
+          layout: 'vertical',
         }}
         toolBarRender={() => [
           <Button type="primary" danger key={0}>
             Import
-          </Button>,
-          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} key={1}>
-            Viết bài
           </Button>,
         ]}
         request={queryPosts}
@@ -131,14 +116,8 @@ const Post: React.FC = () => {
         rowSelection={{}}
         actionRef={ref}
       />
-      <PostDrawer
-        visible={panelVisible}
-        setVisible={setPanelVisible}
-        postId={postId}
-        reload={reload}
-      />
     </PageContainer>
   );
 };
 
-export default Post;
+export default PostList;

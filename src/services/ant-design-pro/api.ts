@@ -1,4 +1,4 @@
-import request from '../config';
+import { request } from 'umi';
 
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser() {
@@ -103,8 +103,7 @@ export async function addPost(body: any) {
   return request(`/post/add`, {
     method: 'POST',
     data: {
-      post: body,
-      listCategoryId: body.categories,
+      ...body,
     },
   });
 }
@@ -114,8 +113,7 @@ export async function updatePost(body: any) {
   return request(`/post/update`, {
     method: 'POST',
     data: {
-      post: body,
-      listCategoryId: body.categories,
+      ...body,
     },
   });
 }

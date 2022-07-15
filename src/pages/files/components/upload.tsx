@@ -1,4 +1,3 @@
-import { DOMAIN } from '@/services/config';
 import { DrawerForm } from '@ant-design/pro-form';
 import { message, Upload } from 'antd';
 type UploadProps = {
@@ -6,11 +5,11 @@ type UploadProps = {
   setVisible: any;
 };
 const UploadFiles: React.FC<UploadProps> = (props) => {
-  const { Dragger } = Upload
+  const { Dragger } = Upload;
   const uploadProps = {
     name: 'file',
     multiple: true,
-    action: `${DOMAIN}/api/file/upload`,
+    action: `/api/file/upload`,
     headers: {
       authorization: `Bearer ${localStorage.getItem('def_token')}`,
     },
@@ -28,7 +27,7 @@ const UploadFiles: React.FC<UploadProps> = (props) => {
     onDrop(e: any) {
       console.log('Dropped files', e.dataTransfer.files);
     },
-    label: 'Drag or drop to upload!'
+    label: 'Drag or drop to upload!',
   };
   return (
     <DrawerForm visible={props.visible} onVisibleChange={props.setVisible}>

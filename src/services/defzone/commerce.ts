@@ -1,4 +1,4 @@
-import request from '../config';
+import { request } from 'umi';
 
 export async function queryProducts() {
   return request(`/product/list`);
@@ -12,7 +12,7 @@ export async function queryAddProduct(params: any) {
 }
 
 export async function queryUpdateProduct(params: any) {
-  return request(`/product/update`, {
+  return request(`/product/update-new`, {
     method: 'POST',
     data: params,
   });

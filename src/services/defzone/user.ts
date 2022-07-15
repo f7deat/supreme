@@ -1,4 +1,4 @@
-import request from '../config';
+import { request } from 'umi';
 import type { ChangePasswordType } from '../typings/user';
 
 /** LIST USER GET /api/user/list */
@@ -45,9 +45,9 @@ export async function addToRole(userId: string, roleName: string) {
     method: 'POST',
     data: {
       userId,
-      roleName
-    }
-  })
+      roleName,
+    },
+  });
 }
 
 export async function queryRoleByUser(id: string) {
@@ -56,6 +56,6 @@ export async function queryRoleByUser(id: string) {
 
 export async function syncRole() {
   return request(`/role/sync`, {
-    method: 'POST'
-  })
+    method: 'POST',
+  });
 }
