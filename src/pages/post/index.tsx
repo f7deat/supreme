@@ -7,7 +7,7 @@ import { useRef } from 'react';
 import { FormattedMessage, history } from 'umi';
 import { queryPosts, deletePost } from '@/services/ant-design-pro/api';
 import moment from 'moment';
-import domain from '@/services/domain';
+import AppSetting from '@/appSetting';
 
 const PostList: React.FC = () => {
   const ref = useRef<ActionType>();
@@ -30,7 +30,7 @@ const PostList: React.FC = () => {
       render: (dom, entity) => {
         return (
           <a
-            href={`${domain.DOMAIN}/post/${entity.url}-${entity.id}.html`}
+            href={`${AppSetting.domain}/post/${entity.url}-${entity.id}.html`}
             target="_blank"
             rel="noreferrer"
           >

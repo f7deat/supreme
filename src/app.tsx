@@ -26,6 +26,9 @@ export async function getInitialState(): Promise<{
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
+    if (!localStorage.getItem('def_token')) {
+      return undefined;
+    }
     try {
       const msg = await queryCurrentUser();
       return msg;
@@ -57,7 +60,7 @@ export const request: RequestConfig = {
         authorization: `Bearer ${token}`,
       };
       return {
-        url: `https://localhost:60176/api${url}`,
+        url: `https://defzone.net/api${url}`,
         options,
       };
     },
@@ -86,15 +89,15 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     },
     links: isDev
       ? [
-          <Link to="/umi/plugin/openapi" target="_blank" key={0}>
-            <LinkOutlined />
-            <span>OpenAPI</span>
-          </Link>,
-          <Link to="/~docs" key={1}>
-            <BookOutlined />
-            <span>Document</span>
-          </Link>,
-        ]
+        <Link to="/umi/plugin/openapi" target="_blank" key={0}>
+          <LinkOutlined />
+          <span>OpenAPI</span>
+        </Link>,
+        <Link to="/~docs" key={1}>
+          <BookOutlined />
+          <span>Document</span>
+        </Link>,
+      ]
       : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面

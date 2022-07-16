@@ -7,14 +7,6 @@ export async function currentUser() {
   });
 }
 
-/** 退出登录接口 POST /api/login/outLogin */
-export async function outLogin(options?: Record<string, any>) {
-  return request<Record<string, any>>('/api/login/outLogin', {
-    method: 'POST',
-    ...(options || {}),
-  });
-}
-
 /** 登录接口 POST /api/login/account */
 export async function login(body: API.LoginParams, options?: Record<string, any>) {
   return request<API.LoginResult>(`/user/password-sign-in`, {

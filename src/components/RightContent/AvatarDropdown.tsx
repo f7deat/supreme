@@ -5,7 +5,6 @@ import { FormattedMessage, history, useIntl, useModel } from 'umi';
 import { stringify } from 'querystring';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import { outLogin } from '@/services/ant-design-pro/api';
 import type { MenuInfo } from 'rc-menu/lib/interface';
 
 export type GlobalHeaderRightProps = {
@@ -16,11 +15,11 @@ export type GlobalHeaderRightProps = {
  * 退出登录，并且将当前的 url 保存
  */
 const loginOut = async () => {
-  await outLogin();
   const { query = {}, search, pathname } = history.location;
   const { redirect } = query;
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/user/login' && !redirect) {
+    localStorage.removeItem('def_token')
     history.replace({
       pathname: '/user/login',
       search: stringify({
@@ -43,14 +42,17 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const onMenuClick = useCallback(
     (event: MenuInfo) => {
       const { key } = event;
+      let url = `/account/${key}`;
       if (key === 'logout') {
         setInitialState((s) => ({ ...s, currentUser: undefined }));
         loginOut();
         return;
+      } else if (key === 'center') {
+        url += `/${initialState.currentUser.id}`
       }
-      history.push(`/account/${key}`);
+      history.push(url);
     },
-    [setInitialState],
+    [initialState.currentUser.id, setInitialState],
   );
 
   const loading = (

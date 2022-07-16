@@ -6,10 +6,10 @@ import {
   UserOutlined,
   GithubOutlined,
 } from '@ant-design/icons';
-import { Alert, Button, message, Tabs } from 'antd';
+import { Alert, Divider, message, Space, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
-import { useIntl, history, FormattedMessage, SelectLang, useModel } from 'umi';
+import { useIntl, history, FormattedMessage, SelectLang, useModel, Link } from 'umi';
 import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
@@ -80,6 +80,34 @@ const Login: React.FC = () => {
   };
   const { status, type: loginType } = userLoginState;
 
+  const ExternalLogin = () => (
+    <div className='text-center'>
+      <div className='mb-4'>
+        <FormattedMessage
+          key="loginWith"
+          id="pages.login.loginWith"
+          defaultMessage="Logion with"
+        />
+      </div>
+      <Space align='center'>
+        <FacebookOutlined key="FacebookOutlined" className={styles.icon} />
+        <TwitterOutlined key="TwitterOutlined" className={styles.icon} />
+        <GithubOutlined key="GithubOutlined" className={styles.icon} />
+      </Space>
+    </div>
+  )
+
+  const RegisterLink = () => (
+    <div className='text-center'>
+      <Space align='center'>
+        Not a member?
+        <Link to='/user/register'>
+          <FormattedMessage id="global.register" defaultMessage="Đăng ký" />
+        </Link>
+      </Space>
+    </div>
+  )
+
   return (
     <div className={styles.container}>
       <div className={styles.lang} data-lang>
@@ -94,21 +122,9 @@ const Login: React.FC = () => {
             autoLogin: true,
           }}
           actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <FacebookOutlined key="FacebookOutlined" className={styles.icon} />,
-            <TwitterOutlined key="TwitterOutlined" className={styles.icon} />,
-            <GithubOutlined key="GithubOutlined" className={styles.icon} />,
-            <Button
-              type="text"
-              onClick={() => history.push('/user/register')}
-              style={{ float: 'right' }}
-            >
-              <FormattedMessage id="global.register" defaultMessage="Đăng ký" />
-            </Button>,
+            <ExternalLogin key={0} />,
+            <Divider key={1} />,
+            <RegisterLink key={2} />
           ]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
@@ -119,14 +135,14 @@ const Login: React.FC = () => {
               key="account"
               tab={intl.formatMessage({
                 id: 'pages.login.accountLogin.tab',
-                defaultMessage: '账户密码登录',
+                defaultMessage: 'Account login',
               })}
             />
             <Tabs.TabPane
               key="mobile"
               tab={intl.formatMessage({
                 id: 'pages.login.phoneLogin.tab',
-                defaultMessage: '手机号登录',
+                defaultMessage: 'Phone login',
               })}
             />
           </Tabs>
@@ -253,7 +269,7 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.captcha.required"
-                        defaultMessage="请输入验证码！"
+                        defaultMessage="Please input captcha!"
                       />
                     ),
                   },
@@ -276,14 +292,14 @@ const Login: React.FC = () => {
             }}
           >
             <ProFormCheckbox noStyle name="autoLogin">
-              <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录" />
+              <FormattedMessage id="pages.login.rememberMe" defaultMessage="Remember me" />
             </ProFormCheckbox>
             <a
               style={{
                 float: 'right',
               }}
             >
-              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
+              <FormattedMessage id="pages.login.forgotPassword" defaultMessage="Forgot password" />
             </a>
           </div>
         </LoginForm>

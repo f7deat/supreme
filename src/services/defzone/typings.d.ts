@@ -49,5 +49,7 @@ declare namespace API {
     title: string;
     thumbnail: string;
     createdDate: Date;
+    url: string;
+    modifiedDate: Date;
   };
 }

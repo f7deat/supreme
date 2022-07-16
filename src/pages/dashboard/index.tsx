@@ -1,12 +1,10 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { Avatar, Card, Col, List, Skeleton, Row, Statistic, Typography, Space } from 'antd';
-import { Radar } from '@ant-design/charts';
-import { useModel, useRequest } from 'umi';
+import { Avatar, Card, Col, List, Skeleton, Row, Statistic, Typography, Space, Empty, Divider } from 'antd';
+import { useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { CurrentUser } from './data.d';
-import { fakeChartData } from './service';
 import { queryPopularPosts } from '@/services/defzone/api';
 
 const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentUser }) => {
@@ -46,7 +44,6 @@ const ExtraContent: FC<Record<string, any>> = () => (
 const Workplace: FC = () => {
   const [popularPosts, setPopularPosts] = useState<API.PostListItem[]>();
 
-  const { data } = useRequest(fakeChartData);
   const { initialState } = useModel<any>('@@initialState');
   const { currentUser } = initialState;
   useEffect(() => {
@@ -73,9 +70,19 @@ const Workplace: FC = () => {
     >
       <Row gutter={24}>
         <Col span={16}>
+          <Card title="Chart">
+            <Empty />
+          </Card>
+          <Divider />
           <Card title="Dự án đang khởi chạy">
             <Card.Grid>CRM</Card.Grid>
           </Card>
+        </Col>
+        <Col xl={8} lg={24} md={24} sm={24} xs={24}>
+          <Card title="Dữ liệu">
+            <Empty />
+          </Card>
+          <Divider />
           <Card title="Bài viết xem nhiều">
             <List
               bordered
@@ -87,21 +94,6 @@ const Workplace: FC = () => {
                 </List.Item>
               )}
             />
-          </Card>
-        </Col>
-        <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-          <Card title="Dữ liệu" loading={data?.radarData?.length === 0}>
-            <div>
-              <Radar
-                height={343}
-                data={data?.radarData || []}
-                xField="name"
-                yField="value"
-                legend={{
-                  position: 'bottom',
-                }}
-              />
-            </div>
           </Card>
         </Col>
       </Row>

@@ -1,8 +1,8 @@
-import { HomeOutlined, ContactsOutlined, ClusterOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Divider, Row, Tag } from 'antd';
+import { HomeOutlined, ContactsOutlined, ClusterOutlined, EditOutlined, UserAddOutlined, MessageOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Divider, Row, Space, Tag } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { GridContent } from '@ant-design/pro-layout';
-import { Link } from 'umi';
+import { PageContainer } from '@ant-design/pro-layout';
+import { Link, useParams } from 'umi';
 import type { RouteChildrenProps } from 'react-router';
 import Projects from './components/Projects';
 import Articles from './components/Articles';
@@ -11,33 +11,7 @@ import type { tabKeyType } from './data.d';
 import styles from './center.less';
 import { queryUser } from '@/services/defzone/api';
 import { queryRoleByUser } from '@/services/defzone/user';
-
-const operationTabList = [
-  {
-    key: 'articles',
-    tab: (
-      <span>
-        Bài viết <span style={{ fontSize: 14 }}>(8)</span>
-      </span>
-    ),
-  },
-  {
-    key: 'applications',
-    tab: (
-      <span>
-        Ứng dụng <span style={{ fontSize: 14 }}>(8)</span>
-      </span>
-    ),
-  },
-  {
-    key: 'projects',
-    tab: (
-      <span>
-        Dự án <span style={{ fontSize: 14 }}>(8)</span>
-      </span>
-    ),
-  },
-];
+import { FormattedMessage } from 'umi';
 
 const TagList: React.FC<{ tags: string[] }> = ({ tags }) => {
   return (
@@ -51,6 +25,9 @@ const TagList: React.FC<{ tags: string[] }> = ({ tags }) => {
 };
 
 const Center: React.FC<RouteChildrenProps> = (props) => {
+
+  const params = useParams<any>();
+
   const [tabKey, setTabKey] = useState<tabKeyType>('articles');
   const [currentUser, setCurrentUser] = useState<API.CurrentUser>();
   const [roles, setRoles] = useState<any>();
@@ -63,6 +40,30 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
       });
     });
   }, [props.match?.params]);
+
+
+  const operationTabList = [
+    {
+      key: 'articles',
+      tab: <FormattedMessage id="menu.blog.post" />,
+    },
+    {
+      key: 'applications',
+      tab: (
+        <span>
+          Ứng dụng
+        </span>
+      ),
+    },
+    {
+      key: 'projects',
+      tab: (
+        <span>
+          Dự án
+        </span>
+      ),
+    },
+  ];
 
   //  渲染用户信息
   const renderUserInfo = ({ phoneNumber, group }: Partial<API.CurrentUser>) => {
@@ -104,7 +105,7 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
       return <Applications />;
     }
     if (tabValue === 'articles') {
-      return <Articles />;
+      return <Articles userId={params.id} />;
     }
     return null;
   };
@@ -118,7 +119,7 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
   );
 
   return (
-    <GridContent>
+    <PageContainer extra={<Extra />}>
       <Row gutter={24}>
         <Col lg={7} md={24}>
           <Card bordered={false} style={{ marginBottom: 24 }}>
@@ -127,15 +128,15 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
                 <div className={styles.avatarHolder}>
                   <img alt="" src={currentUser.avatar} />
                   <div className={styles.name}>{currentUser.userName}</div>
-                  <div>{currentUser?.signature}</div>
+                  <div className='mb-4'>{currentUser?.signature}</div>
+                  <Space>
+                    <Button icon={<UserAddOutlined />} type="primary">Follow</Button>
+                    <Button icon={<MessageOutlined />}>Message</Button>
+                  </Space>
                 </div>
                 {renderUserInfo(currentUser)}
                 <Divider dashed />
                 <TagList tags={roles || []} />
-                <Divider style={{ marginTop: 16 }} dashed />
-                <div className={styles.team}>
-                  <div className={styles.teamTitle}>Tags</div>
-                </div>
               </div>
             )}
           </Card>
@@ -149,13 +150,12 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
             onTabChange={(_tabKey: string) => {
               setTabKey(_tabKey as tabKeyType);
             }}
-            extra={<Extra />}
           >
             {renderChildrenByTabKey(tabKey)}
           </Card>
         </Col>
       </Row>
-    </GridContent>
+    </PageContainer>
   );
 };
 export default Center;

@@ -6,13 +6,16 @@ import { PageContainer } from "@ant-design/pro-layout"
 import { Card, Input } from "antd"
 import BraftEditor from "braft-editor"
 import 'braft-editor/dist/index.css';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { history, useParams } from "umi";
+import ProductCenterCategory from "./components/category";
 
 const ProductCenterPage: React.FC = () => {
 
     const params = useParams<any>();
     const formRef = useRef<ProFormInstance>();
+
+    const [tabKey, setTabKey] = useState<string>('')
 
     useEffect(() => {
         if (params && params.id) {
@@ -60,10 +63,44 @@ const ProductCenterPage: React.FC = () => {
         }
     }
 
+    const onTabChange = (key: string) => {
+        setTabKey(key)
+    }
+
+    const renderChildrenByTabKey = () => {
+        if (tabKey === 'categories') {
+            return <ProductCenterCategory />;
+        }
+        return null;
+    }
+
     return (
-        <PageContainer>
+        <PageContainer
+            tabList={[
+                {
+                    tab: 'General',
+                    key: 'general'
+                },
+                {
+                    tab: 'Categories',
+                    key: 'categories'
+                },
+                {
+                    tab: 'Images',
+                    key: 'images'
+                },
+                {
+                    tab: 'Tags',
+                    key: 'tags'
+                },
+                {
+                    tab: 'Setting',
+                    key: 'setting'
+                }
+            ]}
+            onTabChange={onTabChange}>
             <Card>
-                <ProForm onFinish={onFinish} formRef={formRef}>
+                {tabKey === 'category' ? renderChildrenByTabKey() : <ProForm onFinish={onFinish} formRef={formRef}>
                     <ProFormText name="id" hidden={true} />
                     <ProFormText name="title" label="Tiêu đề" rules={[{ required: true }]} />
                     <ProForm.Item name="url" label="Đường dẫn">
@@ -100,7 +137,7 @@ const ProductCenterPage: React.FC = () => {
                             />
                         </ProForm.Item>
                     </div>
-                </ProForm>
+                </ProForm>}
             </Card>
         </PageContainer>
     )

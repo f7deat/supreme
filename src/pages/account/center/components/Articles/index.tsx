@@ -1,58 +1,66 @@
 import React from 'react';
-import { StarTwoTone, LikeOutlined, MessageFilled } from '@ant-design/icons';
-import { useRequest } from 'umi';
-import { List, Tag } from 'antd';
-import ArticleListContent from '../ArticleListContent';
-import type { ListItemDataType } from '../../data.d';
-import styles from './index.less';
+import { queryPostByUser } from '@/services/defzone/post';
+import type { ProColumns } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
+import moment from 'moment';
+import { FormattedMessage } from 'umi';
 
-const Articles: React.FC = () => {
-  const IconText: React.FC<{
-    icon: React.ReactNode;
-    text: React.ReactNode;
-  }> = ({ icon, text }) => (
-    <span>
-      {icon} {text}
-    </span>
-  );
+export type UserArticleProps = {
+  userId: string;
+}
 
-  // 获取tab列表数据
-  const { data: listData } = useRequest(() => {
-    return [];
-  });
+const Articles: React.FC<UserArticleProps> = (props) => {
+
+  const columns: ProColumns<API.PostListItem>[] = [
+    {
+      title: '#',
+      valueType: 'indexBorder',
+    },
+    {
+      title: 'Title',
+      dataIndex: 'title',
+    },
+    {
+      title: 'Modified',
+      render: (_, record) => moment(record.modifiedDate).format('DD/MM/YYYY hh:mm:ss'),
+      search: false,
+    },
+    {
+      title: 'View',
+      render: (_, record) => record.view.toLocaleString(),
+      search: false,
+    },
+    {
+      title: <FormattedMessage id="global.status" defaultMessage="Status" />,
+      dataIndex: 'status',
+      valueEnum: {
+        0: {
+          text: 'Draft',
+          status: 'Default',
+        },
+        1: {
+          text: 'Active',
+          status: 'Processing',
+        },
+      },
+    }
+  ]
+
   return (
-    <List<ListItemDataType>
-      size="large"
-      className={styles.articleList}
+    <ProTable
       rowKey="id"
-      itemLayout="vertical"
-      dataSource={listData?.list || []}
-      renderItem={(item) => (
-        <List.Item
-          key={item.id}
-          actions={[
-            <IconText key="star" icon={<StarTwoTone />} text={item.star} />,
-            <IconText key="like" icon={<LikeOutlined />} text={item.like} />,
-            <IconText key="message" icon={<MessageFilled />} text={item.message} />,
-          ]}
-        >
-          <List.Item.Meta
-            title={
-              <a className={styles.listItemMetaTitle} href={item.href}>
-                {item.title}
-              </a>
-            }
-            description={
-              <span>
-                <Tag>Ant Design</Tag>
-                <Tag>设计语言</Tag>
-                <Tag>蚂蚁金服</Tag>
-              </span>
-            }
-          />
-          <ArticleListContent data={item} />
-        </List.Item>
-      )}
+      request={(params) => queryPostByUser({
+        userId: props.userId,
+        type: 0,
+        ...params
+      })}
+      pagination={{
+        pageSize: 5
+      }}
+      search={{
+        layout: 'vertical',
+      }}
+      columns={columns}
     />
   );
 };

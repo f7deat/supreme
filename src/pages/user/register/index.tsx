@@ -1,12 +1,12 @@
 import type { FC } from 'react';
 import { useState, useEffect } from 'react';
-import { Form, Button, Input, Popover, Progress, message } from 'antd';
-import { Link, history } from 'umi';
+import { Form, Button, Input, Popover, Progress, message, Divider, Space } from 'antd';
+import { Link, history, SelectLang, FormattedMessage } from 'umi';
 import type { UserRegisterParams } from './service';
 import { fakeRegister } from './service';
 import Footer from '@/components/Footer';
-
 import styles from './style.less';
+import { FacebookOutlined, TwitterOutlined, GithubOutlined } from '@ant-design/icons';
 
 const FormItem = Form.Item;
 
@@ -120,8 +120,20 @@ const Register: FC = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.lang} data-lang>
+        {SelectLang && <SelectLang />}
+      </div>
       <div className={styles.content}>
         <div className={styles.main}>
+          <div className='text-center mb-4'>
+            <Space align='center' size="large" className='items-center'>
+              <img alt="logo" src="/logo.svg" width={44} />
+              <div style={{ fontSize: 33, fontWeight: 500 }}>
+                DefZone.Net
+              </div>
+            </Space>
+            <div className='p-2' style={{ color: 'rgba(0, 0, 0, 0.45)' }}><FormattedMessage id='pages.layouts.userLayout.title' /></div>
+          </div>
           <h3>Đăng ký</h3>
           <Form form={form} name="UserRegister" onFinish={onFinish}>
             <FormItem
@@ -194,14 +206,24 @@ const Register: FC = () => {
               <Input size="large" type="password" placeholder="Nhập lại mật khẩu" />
             </FormItem>
             <FormItem>
-              <Button size="large" className={styles.submit} type="primary" htmlType="submit">
+              <Button size="large" className='w-full' type="primary" htmlType="submit">
                 <span>Đăng ký</span>
               </Button>
-              <Link className={styles.login} to="/user/login">
-                <span>Đăng nhập</span>
-              </Link>
             </FormItem>
           </Form>
+          <div className='text-center'>
+            <div className='mb-4'>Or register with</div>
+            <Space align='center'>
+              <FacebookOutlined key="FacebookOutlined" className={styles.icon} />
+              <TwitterOutlined key="TwitterOutlined" className={styles.icon} />
+              <GithubOutlined key="GithubOutlined" className={styles.icon} />
+            </Space>
+            <Divider />
+            <Space>
+              Allready member?
+              <Link className={styles.login} to="/user/login">Đăng nhập</Link>
+            </Space>
+          </div>
         </div>
       </div>
       <Footer />
