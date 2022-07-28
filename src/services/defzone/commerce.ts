@@ -17,3 +17,7 @@ export async function queryUpdateProduct(params: any) {
     data: params,
   });
 }
+
+export async function queryTotalProduct() {
+  return request(`/product/count`);
+}

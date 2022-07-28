@@ -1,9 +1,10 @@
 import { queryPost } from "@/services/defzone/api";
 import { queryAddProduct, queryUpdateProduct } from "@/services/defzone/commerce";
+import { SendOutlined } from "@ant-design/icons";
 import type { ProFormInstance } from "@ant-design/pro-form";
 import ProForm, { ProFormSelect, ProFormText } from "@ant-design/pro-form"
 import { PageContainer } from "@ant-design/pro-layout"
-import { Card, Input } from "antd"
+import { Button, Card, Input } from "antd"
 import BraftEditor from "braft-editor"
 import 'braft-editor/dist/index.css';
 import { useEffect, useRef, useState } from "react";
@@ -76,6 +77,7 @@ const ProductCenterPage: React.FC = () => {
 
     return (
         <PageContainer
+            extra={<Button type="primary" icon={<SendOutlined />}>Publish</Button>}
             tabList={[
                 {
                     tab: 'General',
@@ -83,24 +85,28 @@ const ProductCenterPage: React.FC = () => {
                 },
                 {
                     tab: 'Categories',
-                    key: 'categories'
+                    key: 'categories',
+                    disabled: !params.id
                 },
                 {
                     tab: 'Images',
-                    key: 'images'
+                    key: 'images',
+                    disabled: !params.id
                 },
                 {
                     tab: 'Tags',
-                    key: 'tags'
+                    key: 'tags',
+                    disabled: !params.id
                 },
                 {
                     tab: 'Setting',
-                    key: 'setting'
+                    key: 'setting',
+                    disabled: !params.id
                 }
             ]}
             onTabChange={onTabChange}>
             <Card>
-                {tabKey === 'category' ? renderChildrenByTabKey() : <ProForm onFinish={onFinish} formRef={formRef}>
+                {tabKey === 'categories' ? renderChildrenByTabKey() : <ProForm onFinish={onFinish} formRef={formRef}>
                     <ProFormText name="id" hidden={true} />
                     <ProFormText name="title" label="Tiêu đề" rules={[{ required: true }]} />
                     <ProForm.Item name="url" label="Đường dẫn">

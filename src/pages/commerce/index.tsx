@@ -1,8 +1,17 @@
+import { queryTotalProduct } from '@/services/defzone/commerce';
 import { FormOutlined, InboxOutlined, UserAddOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Avatar, Card, Col, List, Row, Statistic } from 'antd';
+import { useState, useEffect } from 'react';
 
 const Commerce: React.FC = () => {
+
+  const [totalProduct, setTotalProduct] = useState(0)
+
+  useEffect(() => {
+    queryTotalProduct().then(response => setTotalProduct(response))
+  }, [])
+
   const data = [
     {
       title: 'Google Merchant Center ',
@@ -44,7 +53,7 @@ const Commerce: React.FC = () => {
           <Row gutter={24}>
             <Col span={8}>
               <Card>
-                <Statistic title="Product" value={232} prefix={<InboxOutlined />} />
+                <Statistic title="Product" value={totalProduct} prefix={<InboxOutlined />} />
               </Card>
             </Col>
             <Col span={8}>

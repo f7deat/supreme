@@ -103,6 +103,7 @@
     name: 'users',
     icon: 'user',
     path: '/account',
+    access: 'canAdmin',
     routes: [
       {
         name: 'center',
