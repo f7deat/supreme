@@ -1,4 +1,4 @@
-import { HomeOutlined, ContactsOutlined, ClusterOutlined, EditOutlined, UserAddOutlined, MessageOutlined } from '@ant-design/icons';
+import { HomeOutlined, ContactsOutlined, ClusterOutlined, EditOutlined, UserAddOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Divider, Row, Space, Tag } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -122,7 +122,9 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
     <PageContainer extra={<Extra />}>
       <Row gutter={24}>
         <Col lg={7} md={24}>
-          <Card bordered={false} style={{ marginBottom: 24 }}>
+          <Card bordered={false} actions={[
+            <SettingOutlined key="setting" />
+          ]}>
             {currentUser && (
               <div>
                 <div className={styles.avatarHolder}>

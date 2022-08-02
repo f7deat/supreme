@@ -48,11 +48,11 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         loginOut();
         return;
       } else if (key === 'center') {
-        url += `/${initialState.currentUser.id}`
+        url += `/${initialState?.currentUser?.id}`
       }
       history.push(url);
     },
-    [initialState.currentUser.id, setInitialState],
+    [initialState?.currentUser?.id, setInitialState],
   );
 
   const loading = (

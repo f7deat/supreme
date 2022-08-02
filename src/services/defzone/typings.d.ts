@@ -35,6 +35,7 @@ declare namespace API {
   type MenuListItem = {
     id: string;
     name: string;
+    icon: string;
     url: string;
     modifiedDate: Date;
   };

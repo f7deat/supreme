@@ -1,12 +1,13 @@
+import CategoryListComponent from '@/components/category-list';
 import { addMenu, deleteMenu, queryFindMenu, queryMenus, queryAllParrentMenu, updateMenu, syncMenu, backupMenu } from '@/services/defzone/api';
 import { DeleteOutlined, DownloadOutlined, EditOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons';
 import type { ProFormInstance } from '@ant-design/pro-form';
-import { ProFormSelect } from '@ant-design/pro-form';
+import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, message, Popconfirm } from 'antd';
+import { Button, Input, message, Popconfirm, Popover } from 'antd';
 import moment from 'moment';
 import { useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'umi';
@@ -20,6 +21,7 @@ const MenuPage: React.FC = () => {
   const formRef = useRef<ProFormInstance>();
   const actionRef = useRef<ActionType>();
   const [visible, setVisible] = useState(false);
+  const [visibleCategory, setVisibleCategory] = useState(false);
 
   const handleRemove = (id: string) => {
     deleteMenu(id).then(response => {
@@ -197,11 +199,22 @@ const MenuPage: React.FC = () => {
         <ProFormText name="id" hidden />
         <ProFormText
           name="name"
+          required
           label={intl.formatMessage({
             id: 'global.name',
           })}
         />
-        <ProFormText name="url" label="Url" />
+        <Popover
+          content={<CategoryListComponent />}
+          title="Choose one category"
+          trigger="click"
+          visible={visibleCategory}
+          onVisibleChange={setVisibleCategory}
+        >
+          <ProForm.Item name="url" label="Url" required>
+            <Input.Search allowClear onSearch={() => setVisibleCategory(true)} />
+          </ProForm.Item>
+        </Popover>
         <ProFormText name="icon" label="Icon" />
         <ProFormSelect name="parrentId" label="Parrent" request={queryAllParrentMenu} />
         <ProFormSelect name="status" label="Status" options={[
