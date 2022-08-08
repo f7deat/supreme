@@ -55,7 +55,7 @@
       {
         name: 'post',
         path: '/blog/post',
-        component: './post',
+        component: './post/list',
       },
       {
         name: 'center',
