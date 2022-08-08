@@ -106,9 +106,4 @@ declare namespace API {
     description?: string;
     type?: NoticeIconItemType;
   };
-
-  type UserListItem = {
-    emailConfirmed: boolean;
-    id: string;
-  };
 }

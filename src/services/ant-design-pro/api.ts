@@ -1,10 +1,7 @@
 import { request } from 'umi';
 
-/** 获取当前的用户 GET /api/currentUser */
 export async function currentUser() {
-  return request<API.CurrentUser>(`/user`, {
-    method: 'GET',
-  });
+  return request<API.User>(`/user`);
 }
 
 /** 登录接口 POST /api/login/account */

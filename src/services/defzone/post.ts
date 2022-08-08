@@ -14,3 +14,11 @@ export async function queryPostByUser(params: {
     },
   });
 }
+
+export async function queryViewCount() {
+  return request(`/post/view`)
+}
+
+export async function queryPieChart() {
+  return request(`/dashboard/chart-post-by-categories`);
+}

@@ -1,7 +1,7 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Image, message, Popconfirm, Space } from 'antd';
+import { Avatar, Button, Image, message, Popconfirm, Space } from 'antd';
 // @ts-ignore
 import { FormattedMessage, useIntl } from 'umi';
 import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOpenOutlined } from '@ant-design/icons';
@@ -21,6 +21,7 @@ import { useEffect, useRef, useState } from 'react';
 import Explorer from '../files/components/explorer';
 import PostCategory from './components/posts';
 import CategoryImport from './components/import';
+import AppSetting from '@/appSetting';
 
 const Category: React.FC = () => {
   /**
@@ -164,6 +165,12 @@ const Category: React.FC = () => {
     {
       title: 'Tên',
       dataIndex: 'name',
+      render: (dom, entity) => (
+        <Space>
+          <Avatar src={entity.thumbnail} />
+          <a href={`${AppSetting.domain}/details/${entity.id}`} target="_blank" rel='noreferrer'>{dom}</a>
+        </Space>
+      ),
       width: 200,
     },
     {

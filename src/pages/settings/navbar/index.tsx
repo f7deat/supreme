@@ -1,3 +1,4 @@
+import AppSetting from '@/appSetting';
 import CategoryListComponent from '@/components/category-list';
 import { addMenu, deleteMenu, queryFindMenu, queryMenus, queryAllParrentMenu, updateMenu, syncMenu, backupMenu } from '@/services/defzone/api';
 import { DeleteOutlined, DownloadOutlined, EditOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons';
@@ -74,10 +75,23 @@ const MenuPage: React.FC = () => {
     ])
   }
 
+  const renderUrl = (rawUrl: string) => {
+    if (rawUrl.startsWith('http')) {
+      return rawUrl;
+    }
+    return AppSetting.domain + rawUrl;
+  }
+
   const columns: ProColumns<API.MenuListItem>[] = [
     {
       title: 'Tiêu đề',
+      render: (_, record) => <a href={`${renderUrl(record.url)}`} target="_blank" rel="noreferrer">{record.name}</a>,
       dataIndex: 'name',
+    },
+    {
+      title: 'Url',
+      dataIndex: 'url',
+      search: false
     },
     {
       title: 'Modified Date',
@@ -164,7 +178,7 @@ const MenuPage: React.FC = () => {
       Add New
     </Button>,
     <Button key={1} icon={<SyncOutlined />} onClick={() => sync()}>
-      Sync
+      Import
     </Button>,
     <Button key={2} icon={<DownloadOutlined />} onClick={() => backup()}>
       Backup

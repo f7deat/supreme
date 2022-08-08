@@ -1,11 +1,11 @@
-import { addBilling, queryBillings, queryBillingTotal } from '@/services/defzone/api';
-import { PlusOutlined } from '@ant-design/icons';
+import { addBilling, deleteBilling, queryBillings, queryBillingTotal } from '@/services/defzone/api';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ProFormInstance } from '@ant-design/pro-form';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Card, Col, Divider, message, Row, Typography } from 'antd';
+import { Button, Card, Col, Divider, message, Popconfirm, Row, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 
 const Billing: React.FC = () => {
@@ -44,6 +44,15 @@ const Billing: React.FC = () => {
     });
   };
 
+  const handleDelete = (id: string) => {
+    deleteBilling(id).then(response => {
+      if (response.succeeded) {
+        message.success('succeeded!')
+        actionRef.current?.reload();
+      }
+    })
+  }
+
   const columns: ProColumns<API.BillingListItem>[] = [
     {
       title: '#',
@@ -63,6 +72,15 @@ const Billing: React.FC = () => {
       render: (dom, entity) => entity.price.toLocaleString(),
       search: false,
     },
+    {
+      title: 'Task',
+      render: (dom, entity) => (
+        <Popconfirm title="Are you sure?" onConfirm={() => handleDelete(entity.id)}>
+          <Button icon={<DeleteOutlined />} danger type='primary' />
+        </Popconfirm>
+      ),
+      valueType: 'option'
+    }
   ];
 
   return (

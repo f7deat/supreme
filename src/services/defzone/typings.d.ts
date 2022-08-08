@@ -1,7 +1,8 @@
 declare namespace API {
   type CategoryListItem = {
     id: number;
-    name?: string;
+    name: string;
+    thumbnail: string;
   };
   type PostListItem = {
     id: number;
@@ -53,4 +54,11 @@ declare namespace API {
     url: string;
     modifiedDate: Date;
   };
+  type User = {
+    id: string;
+    name: string;
+    avatar: string;
+    roles: string[];
+    email: string;
+  }
 }

@@ -1,68 +1,107 @@
 import type { FC } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { Avatar, Card, Col, List, Skeleton, Row, Statistic, Typography, Space, Empty, Divider } from 'antd';
-import { useModel } from 'umi';
+import { Avatar, Card, Col, List, Skeleton, Row, Statistic, Typography, Space, Tag } from 'antd';
+import { useIntl, useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
-import type { CurrentUser } from './data.d';
 import { queryPopularPosts } from '@/services/defzone/api';
+import { queryPieChart, queryViewCount } from '@/services/defzone/post';
+import { Column, Pie } from '@ant-design/charts';
+import { UserSwitchOutlined } from '@ant-design/icons';
 
-const PageHeaderContent: FC<{ currentUser: Partial<CurrentUser> }> = ({ currentUser }) => {
+const PageHeaderContent: FC<{ currentUser: Partial<API.User> }> = ({ currentUser }) => {
   const loading = currentUser && Object.keys(currentUser).length;
   if (!loading) {
     return <Skeleton avatar paragraph={{ rows: 1 }} active />;
   }
   return (
     <Space>
+      <Avatar size="large" src={currentUser.avatar} />
       <div>
-        <Avatar size="large" src={currentUser.avatar} />
-      </div>
-      <div>
-        <div>Hi, {currentUser.name}!</div>
-        <div>
-          {currentUser.title} |{currentUser.group}
-        </div>
+        <Typography.Title level={5}>Hi, {currentUser.email}!</Typography.Title>
+        <Space>
+          <UserSwitchOutlined />
+          {currentUser.roles?.map((role: string) => <Tag key={role}>{role}</Tag>)}
+        </Space>
       </div>
     </Space>
   );
 };
 
-const ExtraContent: FC<Record<string, any>> = () => (
-  <Space size="large">
-    <div>
-      <Statistic title="Bài viết" value={56} />
-    </div>
-    <div>
-      <Statistic title="Xếp hạng" value={8} suffix="/ 24" />
-    </div>
-    <div>
-      <Statistic title="Lượt xem" value={2223} />
-    </div>
-  </Space>
-);
-
 const Workplace: FC = () => {
-  const [popularPosts, setPopularPosts] = useState<API.PostListItem[]>();
-
+  const intl = useIntl();
   const { initialState } = useModel<any>('@@initialState');
   const { currentUser } = initialState;
+
+  const [popularPosts, setPopularPosts] = useState<API.PostListItem[]>();
+  const [viewCount, setViewCount] = useState(0);
+  const [pieChart, setPieChart] = useState<any>();
+
+  useEffect(() => {
+    queryViewCount().then(response => setViewCount(response));
+    queryPieChart().then(response => setPieChart(response))
+  }, [])
+
+  const ExtraContent: FC<Record<string, any>> = () => (
+    <Space size="large">
+      <Statistic title={intl.formatMessage({
+        id: 'menu.blog.post',
+        defaultMessage: 'Article'
+      })} value={56} />
+      <Statistic title="Xếp hạng" value={8} suffix="/ 24" />
+      <Statistic title="Lượt xem" value={viewCount} />
+    </Space>
+  );
   useEffect(() => {
     queryPopularPosts().then((response) => {
       setPopularPosts(response);
     });
   }, []);
+
+  const data = [
+    {
+      action: 'Browse',
+      pv: 50000,
+    },
+    {
+      action: 'Cart',
+      pv: 35000,
+    },
+    {
+      action: 'Orders',
+      pv: 25000,
+    },
+    {
+      action: 'Payment',
+      pv: 15000,
+    },
+    {
+      action: 'Seal deal',
+      pv: 8500,
+    },
+  ];
+  const configColumn = {
+    data,
+    xField: 'action',
+    yField: 'pv',
+    conversionTag: {},
+    xAxis: {
+      label: {
+        autoHide: true,
+        autoRotate: false,
+      },
+    },
+  };
+
   return (
     <PageContainer
       content={
         <PageHeaderContent
           currentUser={{
             avatar: currentUser.avatar,
-            name: currentUser.userName,
-            userid: currentUser.id,
+            id: currentUser.id,
             email: currentUser.email,
-            signature: '',
-            title: currentUser.email,
-            group: currentUser.phoneNumber,
+            roles: currentUser.roles,
           }}
         />
       }
@@ -70,19 +109,25 @@ const Workplace: FC = () => {
     >
       <Row gutter={24}>
         <Col span={16}>
-          <Card title="Chart">
-            <Empty />
-          </Card>
-          <Divider />
+          <div className='mb-4'>
+            <Card title="Chart">
+              <Column {...configColumn} />
+            </Card>
+          </div>
           <Card title="Dự án đang khởi chạy">
             <Card.Grid>CRM</Card.Grid>
           </Card>
         </Col>
-        <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-          <Card title="Dữ liệu">
-            <Empty />
-          </Card>
-          <Divider />
+        <Col span={8}>
+          <div className='mb-4'>
+            <Card title="Dữ liệu">
+              {pieChart && <Pie data={pieChart} angleField='value' colorField='key'
+                legend={{
+                  layout: 'horizontal',
+                  position: 'bottom'
+                }} />}
+            </Card>
+          </div>
           <Card title="Bài viết xem nhiều">
             <List
               bordered

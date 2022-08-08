@@ -12,7 +12,7 @@ export default {
   'layout.user.link.help': 'Trợ giúp',
   'layout.user.link.privacy': 'Quyền riêng tư',
   'layout.user.link.terms': 'Điều khoản',
-  'app.copyright.produced': 'Một sản phẩm của DefZone Financial Experience Department',
+  'app.copyright.produced': 'Một sản phẩm của Pluto Financial Experience Department',
   'app.preview.down.block': 'Download this page to your local project',
   'app.welcome.link.fetch-blocks': 'Get all block',
   'app.welcome.link.block-list': 'Quickly build standard, pages based on `block` development',

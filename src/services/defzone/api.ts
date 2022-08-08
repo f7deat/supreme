@@ -171,6 +171,12 @@ export async function addBilling(params: API.BillingListItem) {
   });
 }
 
+export async function deleteBilling(id: string) {
+  return request(`/billing/delete/${id}`, {
+    method: 'POST'
+  })
+}
+
 export async function queryBillingTotal() {
-  return request(`/billing/total`);
+  return request(`/billing/total-spend`);
 }

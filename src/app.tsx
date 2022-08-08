@@ -21,17 +21,16 @@ export const initialStateConfig = {
  * */
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
-  currentUser?: API.CurrentUser;
+  currentUser?: API.User;
   loading?: boolean;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  fetchUserInfo?: () => Promise<API.User | undefined>;
 }> {
   const fetchUserInfo = async () => {
     if (!localStorage.getItem('def_token')) {
       return undefined;
     }
     try {
-      const msg = await queryCurrentUser();
-      return msg;
+      return await queryCurrentUser();
     } catch (error) {
       history.push(loginPath);
     }
@@ -73,7 +72,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
-      content: initialState?.currentUser?.userName,
+      content: initialState?.currentUser?.email,
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
