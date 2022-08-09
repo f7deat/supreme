@@ -6,6 +6,6 @@ import AppSetting from '@/appSetting';
 export default function access(initialState: { currentUser?: API.User | undefined }) {
   const { currentUser } = initialState || {};
   return {
-    canAdmin: currentUser?.roles?.find((x) => x === AppSetting.roles.admin),
+    canAdmin: currentUser?.roles?.includes(AppSetting.roles.admin),
   };
 }

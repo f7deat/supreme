@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GridContent } from '@ant-design/pro-layout';
+import { GridContent, PageContainer } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
 import BaseView from './components/base';
 import BindingView from './components/binding';
@@ -50,30 +50,32 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <GridContent>
-      <div
-        className={styles.main}
-      >
-        <div className={styles.leftMenu}>
-          <Menu
-            mode={initConfig.mode}
-            selectedKeys={[initConfig.selectKey]}
-            onClick={({ key }) => {
-              setInitConfig({
-                ...initConfig,
-                selectKey: key as SettingsStateKeys,
-              });
-            }}
-          >
-            {getMenu()}
-          </Menu>
+    <PageContainer>
+      <GridContent>
+        <div
+          className={styles.main}
+        >
+          <div className={styles.leftMenu}>
+            <Menu
+              mode={initConfig.mode}
+              selectedKeys={[initConfig.selectKey]}
+              onClick={({ key }) => {
+                setInitConfig({
+                  ...initConfig,
+                  selectKey: key as SettingsStateKeys,
+                });
+              }}
+            >
+              {getMenu()}
+            </Menu>
+          </div>
+          <div className={styles.right}>
+            <div className={styles.title}>{menuMap[initConfig.selectKey]}</div>
+            {renderChildren()}
+          </div>
         </div>
-        <div className={styles.right}>
-          <div className={styles.title}>{menuMap[initConfig.selectKey]}</div>
-          {renderChildren()}
-        </div>
-      </div>
-    </GridContent>
+      </GridContent>
+    </PageContainer>
   );
 };
 export default Settings;

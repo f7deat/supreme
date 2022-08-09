@@ -23,7 +23,7 @@ export async function changePassword(body: ChangePasswordType) {
   });
 }
 
-export async function getRoles() {
+export async function queryRole() {
   const response = await request<API.RoleListItem[]>(`/role/list`);
   const data = {
     data: response,

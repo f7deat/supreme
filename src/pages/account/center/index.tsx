@@ -1,22 +1,22 @@
-import { HomeOutlined, ContactsOutlined, ClusterOutlined, EditOutlined, UserAddOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Divider, Row, Space, Tag } from 'antd';
+import { HomeOutlined, ContactsOutlined, ClusterOutlined, EditOutlined, UserAddOutlined, MessageOutlined, SettingOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Divider, Row, Space, Tag, Image, Typography, Empty, Tooltip, Popconfirm } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Link, useParams } from 'umi';
+import { Link, useAccess, useParams } from 'umi';
 import type { RouteChildrenProps } from 'react-router';
 import Projects from './components/Projects';
 import Articles from './components/Articles';
 import Applications from './components/Applications';
 import type { tabKeyType } from './data.d';
-import styles from './center.less';
 import { queryUser } from '@/services/defzone/api';
 import { queryRoleByUser } from '@/services/defzone/user';
 import { FormattedMessage } from 'umi';
+import RoleComponent from './components/roles';
 
 const TagList: React.FC<{ tags: string[] }> = ({ tags }) => {
   return (
-    <div className={styles.tags}>
-      <div className={styles.tagsTitle}>Nhóm</div>
+    <div>
+      <div className='font-bold mb-2'>Nhóm</div>
       {(tags || []).map((item) => (
         <Tag key={item}>{item}</Tag>
       ))}
@@ -24,22 +24,26 @@ const TagList: React.FC<{ tags: string[] }> = ({ tags }) => {
   );
 };
 
-const Center: React.FC<RouteChildrenProps> = (props) => {
+const Center: React.FC<RouteChildrenProps> = () => {
+
+  const { canAdmin } = useAccess()
 
   const params = useParams<any>();
 
   const [tabKey, setTabKey] = useState<tabKeyType>('articles');
-  const [currentUser, setCurrentUser] = useState<API.CurrentUser>();
+  const [currentUser, setCurrentUser] = useState<API.User>();
   const [roles, setRoles] = useState<any>();
+  const [visibleRole, setVisibleRole] = useState<boolean>(false);
+
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    queryUser(props.match?.params['id']).then((response) => {
+    queryUser(params.id).then((response) => {
       setCurrentUser(response);
       queryRoleByUser(response.id).then((rolesResponse) => {
         setRoles(rolesResponse);
       });
     });
-  }, [props.match?.params]);
+
+  }, [params.id]);
 
 
   const operationTabList = [
@@ -49,26 +53,17 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
     },
     {
       key: 'applications',
-      tab: (
-        <span>
-          Ứng dụng
-        </span>
-      ),
+      tab: 'Ứng dụng',
     },
     {
       key: 'projects',
-      tab: (
-        <span>
-          Dự án
-        </span>
-      ),
+      tab: 'Dự án',
     },
   ];
 
-  //  渲染用户信息
   const renderUserInfo = ({ phoneNumber, group }: Partial<API.CurrentUser>) => {
     return (
-      <div className={styles.detail}>
+      <div>
         <p>
           <ContactsOutlined
             style={{
@@ -96,7 +91,6 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
     );
   };
 
-  // 渲染tab切换
   const renderChildrenByTabKey = (tabValue: tabKeyType) => {
     if (tabValue === 'projects') {
       return <Projects />;
@@ -107,30 +101,36 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
     if (tabValue === 'articles') {
       return <Articles userId={params.id} />;
     }
-    return null;
+    return <Empty />;
   };
 
-  const Extra = () => (
-    <Link to={`/account/settings/${currentUser?.id}`}>
-      <Button icon={<EditOutlined />} type="primary">
-        Edit
-      </Button>
-    </Link>
-  );
+  const onConfirm = () => {
+
+  }
 
   return (
-    <PageContainer extra={<Extra />}>
+    <PageContainer>
       <Row gutter={24}>
-        <Col lg={7} md={24}>
+        <Col span={7}>
           <Card bordered={false} actions={[
-            <SettingOutlined key="setting" />
+            <Link to="/account/settings" key="setting">
+              <SettingOutlined />
+            </Link>,
+            <EditOutlined key="edit" />,
+            <Popconfirm title="Are you sure?" onConfirm={onConfirm} key="delete" disabled={canAdmin}>
+              <DeleteOutlined />
+            </Popconfirm>,
+            <Tooltip key="role" title="Assign roles">
+              <UserAddOutlined onClick={() => setVisibleRole(true || canAdmin)} />
+            </Tooltip>
           ]}>
             {currentUser && (
               <div>
-                <div className={styles.avatarHolder}>
-                  <img alt="" src={currentUser.avatar} />
-                  <div className={styles.name}>{currentUser.userName}</div>
-                  <div className='mb-4'>{currentUser?.signature}</div>
+                <div className="text-center">
+                  <div className='mb-4'>
+                    <Image src={currentUser.avatar} width={250} />
+                  </div>
+                  <Typography.Title level={4}>{currentUser.email}</Typography.Title>
                   <Space>
                     <Button icon={<UserAddOutlined />} type="primary">Follow</Button>
                     <Button icon={<MessageOutlined />}>Message</Button>
@@ -143,9 +143,8 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
             )}
           </Card>
         </Col>
-        <Col lg={17} md={24}>
+        <Col span={17}>
           <Card
-            className={styles.tabsCard}
             bordered={false}
             tabList={operationTabList}
             activeTabKey={tabKey}
@@ -157,6 +156,7 @@ const Center: React.FC<RouteChildrenProps> = (props) => {
           </Card>
         </Col>
       </Row>
+      <RoleComponent visible={visibleRole} onVisibleChange={setVisibleRole} />
     </PageContainer>
   );
 };

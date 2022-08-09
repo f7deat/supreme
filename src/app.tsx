@@ -54,6 +54,11 @@ export async function getInitialState(): Promise<{
 export const request: RequestConfig = {
   requestInterceptors: [
     (url: string, options: any) => {
+      if (url.startsWith('http')) {
+        return {
+          url, options
+        }
+      }
       const token = localStorage.getItem('def_token');
       options.headers = {
         authorization: `Bearer ${token}`,

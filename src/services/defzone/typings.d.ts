@@ -60,5 +60,6 @@ declare namespace API {
     avatar: string;
     roles: string[];
     email: string;
+    emailConfirmed: boolean;
   }
 }

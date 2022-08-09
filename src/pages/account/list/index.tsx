@@ -1,16 +1,17 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Col, message, Popconfirm, Popover, Row, Select } from 'antd';
-import { FormattedMessage, useIntl } from 'umi';
+import { Button, Col, Dropdown, Menu, message, Popconfirm, Popover, Row, Select } from 'antd';
+import { FormattedMessage, useIntl, useRequest } from 'umi';
 import {
   EditOutlined,
   DeleteOutlined,
   PlusOutlined,
   FolderOutlined,
   CheckCircleTwoTone,
+  DownOutlined,
 } from '@ant-design/icons';
-import { addToRole, deleteUser, getUsers } from '@/services/defzone/user';
+import { addToRole, deleteUser, getUsers, queryRole } from '@/services/defzone/user';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
 import { useRef, useState } from 'react';
 import Role from './components/role';
@@ -18,18 +19,20 @@ import { history } from 'umi';
 
 const User: React.FC = () => {
   const { Option } = Select;
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * @vi-VN Cấu hình ngôn ngữ
-   * */
   const intl = useIntl();
+
+  const roleResponse = useRequest(queryRole);
+
   const [visible, setVisible] = useState<boolean>(false);
   const [visibleAddToRole, setVisibleAddToRole] = useState<boolean>(false);
   const [roleId, setRoleId] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [roleName, setRoleName] = useState<string>('');
+  const [roles, setRoles] = useState<API.RoleListItem[]>([]);
+
   const actionRef = useRef<ActionType>();
+
+
 
   const handleRemove = (id: string) => {
     deleteUser(id).then((response) => {
@@ -70,7 +73,7 @@ const User: React.FC = () => {
     return <CheckCircleTwoTone twoToneColor={twoToneColor} />;
   };
 
-  const columns: ProColumns<API.UserListItem>[] = [
+  const columns: ProColumns<API.User>[] = [
     {
       title: 'Email',
       dataIndex: 'email',
@@ -115,7 +118,7 @@ const User: React.FC = () => {
         >
           <Button type="primary" danger icon={<DeleteOutlined />} />
         </Popconfirm>,
-      ],
+      ]
     },
   ];
 
@@ -125,6 +128,25 @@ const User: React.FC = () => {
         Create new
       </Button>
     </div>
+  );
+
+  const menu = (
+    <Menu
+      items={[
+        {
+          label: '1st menu item',
+          key: '1',
+        },
+        {
+          label: '2nd menu item',
+          key: '2',
+        },
+        {
+          label: '3rd menu item',
+          key: '3',
+        },
+      ]}
+    />
   );
 
   return (
@@ -137,7 +159,7 @@ const User: React.FC = () => {
           <Role roleId={roleId} setRoleId={setRoleId} />
         </Col>
         <Col span={14}>
-          <ProTable<API.UserListItem, API.PageParams>
+          <ProTable<API.User, API.PageParams>
             headerTitle={intl.formatMessage({
               id: 'pages.searchTable.title',
               defaultMessage: 'Enquiry form',
@@ -150,6 +172,14 @@ const User: React.FC = () => {
             columns={columns}
             rowSelection={{}}
             actionRef={actionRef}
+            toolBarRender={() => [
+              <Dropdown key={0} overlay={menu}>
+                <Button>
+                  <span>Role</span>
+                  <DownOutlined />
+                </Button>
+              </Dropdown>
+            ]}
           />
           <DrawerForm visible={visible} onVisibleChange={setVisible}>
             <ProFormText name="phoneNumber" />

@@ -1,4 +1,4 @@
-import { getRoles, syncRole } from '@/services/defzone/user';
+import { queryRole, syncRole } from '@/services/defzone/user';
 import { FolderViewOutlined, SyncOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -24,7 +24,7 @@ const Role: React.FC<RoleProps> = (props) => {
       title: 'Tác vụ',
       valueType: 'option',
       render: (dom, entity) => [
-        <Button
+        <Button key={0}
           icon={<FolderViewOutlined />}
           danger={props.roleId === entity.id}
           onClick={() => props.setRoleId(entity.id)}
@@ -53,11 +53,11 @@ const Role: React.FC<RoleProps> = (props) => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Button type="primary" icon={<SyncOutlined />} onClick={sync}>
+          <Button type="primary" icon={<SyncOutlined />} onClick={sync} key={0}>
             Đồng bộ
           </Button>,
         ]}
-        request={getRoles}
+        request={queryRole}
         columns={columns}
         rowSelection={{}}
       />

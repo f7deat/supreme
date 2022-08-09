@@ -44,9 +44,9 @@ export async function saveSetting(body: any) {
 
 export async function queryUser(id: string) {
   if (id) {
-    return request<API.CurrentUser>(`/user/${id}`);
+    return request<API.User>(`/user/${id}`);
   }
-  return request<API.CurrentUser>(`/user`);
+  return request<API.User>(`/user`);
 }
 
 /** Total storage file size (KB) */
@@ -179,4 +179,8 @@ export async function deleteBilling(id: string) {
 
 export async function queryBillingTotal() {
   return request(`/billing/total-spend`);
+}
+
+export async function queryCountry() {
+  return request(`https://restcountries.com/v3/all?fields=name`)
 }

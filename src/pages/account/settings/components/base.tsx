@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Divider, Image, Input, message } from 'antd';
+import type {
+  ProFormInstance
+} from '@ant-design/pro-form';
 import ProForm, {
-  ProFormDependency,
   ProFormFieldSet,
   ProFormGroup,
   ProFormSelect,
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { queryProvince, queryCity } from '../service';
 
 import styles from './BaseView.less';
-import { queryUser } from '@/services/defzone/api';
+import { queryCountry, queryUser } from '@/services/defzone/api';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
@@ -30,15 +31,22 @@ const AvatarView = ({ avatar }: { avatar: string }) => (
     <div className={styles.avatar}>
       <Image src={avatar} alt="avatar" width={72} height={72} />
     </div>
-    <a href='https://gravatar.com' target="_blank">Change avatar</a>
+    <a href='https://gravatar.com' target="_blank" rel='noreferrer'>Change avatar</a>
   </div>
 );
 
 const BaseView: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<API.CurrentUser>()
+  const [currentUser, setCurrentUser] = useState<API.User>()
+  const formRef = useRef<ProFormInstance>()
   useEffect(() => {
-    queryUser().then(response => {
-      setCurrentUser(response)
+    queryUser('').then(response => {
+      setCurrentUser(response);
+      formRef.current?.setFields([
+        {
+          name: 'email',
+          value: response.email
+        }
+      ])
     })
   }, [])
 
@@ -73,6 +81,7 @@ const BaseView: React.FC = () => {
             },
           }}
           hideRequiredMark
+          formRef={formRef}
         >
           <ProFormGroup>
             <ProFormText
@@ -84,19 +93,16 @@ const BaseView: React.FC = () => {
                   message: 'Please input name!',
                 },
               ]}
-              disabled
             />
             <ProFormText
               name="email"
               label="Email"
-              initialValue={currentUser?.email}
               rules={[
                 {
                   required: true,
                   message: 'Please input email!',
                 },
               ]}
-              disabled
             />
             <ProFormFieldSet
               name="phoneNumber"
@@ -120,73 +126,37 @@ const BaseView: React.FC = () => {
             disabled
           />
 
-          <ProForm.Group title="Province" size={8}>
-            <ProFormSelect
-              name="country"
-              options={[
-                {
-                  label: 'Viet Nam',
-                  value: 'vi-VN',
-                },
-              ]}
-              disabled
-            />
+          <ProForm.Group title="Address">
             <ProFormSelect
               fieldProps={{
                 labelInValue: true,
               }}
-              disabled
-              name="province"
+              name="country"
+              required
+              showSearch
               request={async () => {
-                return queryProvince().then(({ data }) => {
-                  return data.map((item) => {
+                return queryCountry().then((response) => {
+                  return response.map((item: any) => {
                     return {
-                      label: item.name,
-                      value: item.id,
+                      label: item.name.common,
+                      value: item.name.common,
                     };
                   });
                 });
               }}
             />
-            <ProFormDependency name={['province']}>
-              {({ province }) => {
-                return (
-                  <ProFormSelect
-                    params={{
-                      key: province?.value,
-                    }}
-                    name="city"
-                    disabled={!province}
-                    request={async () => {
-                      if (!province?.key) {
-                        return [];
-                      }
-                      return queryCity(province.key || '').then(({ data }) => {
-                        return data.map((item) => {
-                          return {
-                            label: item.name,
-                            value: item.id,
-                          };
-                        });
-                      });
-                    }}
-                  />
-                );
-              }}
-            </ProFormDependency>
+            <ProFormText
+              name="line"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input line!',
+                },
+              ]}
+            />
           </ProForm.Group>
-          <ProFormText
-            name="address"
-            label="Address"
-            rules={[
-              {
-                required: true,
-                message: 'Please input address!',
-              },
-            ]}
-            disabled
-          />
         </ProForm>
+
       </div>
     </div>
   );
