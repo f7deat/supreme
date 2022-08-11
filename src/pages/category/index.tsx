@@ -168,7 +168,7 @@ const Category: React.FC = () => {
       render: (dom, entity) => (
         <Space>
           <Avatar src={entity.thumbnail} />
-          <a href={`${AppSetting.domain}/details/${entity.id}`} target="_blank" rel='noreferrer'>{dom}</a>
+          <a href={`${AppSetting.domain}/category/details/${entity.id}`} target="_blank" rel='noreferrer'>{dom}</a>
         </Space>
       ),
       width: 200,
@@ -176,6 +176,11 @@ const Category: React.FC = () => {
     {
       title: 'Mô tả',
       dataIndex: 'description',
+      search: false
+    },
+    {
+      title: 'Modified',
+      dataIndex: 'modifiedDate',
       search: false
     },
     {

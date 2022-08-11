@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { GridContent, PageContainer } from '@ant-design/pro-layout';
-import { Menu } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { PageContainer } from '@ant-design/pro-layout';
+import { Card, Col, Menu, Row } from 'antd';
 import BaseView from './components/base';
 import BindingView from './components/binding';
 import NotificationView from './components/notification';
 import SecurityView from './components/security';
-import styles from './style.less';
+import { queryUser } from '@/services/defzone/api';
 
 const { Item } = Menu;
 
@@ -16,6 +16,14 @@ type SettingsState = {
 };
 
 const Settings: React.FC = () => {
+
+  const [user, setUser] = useState<API.User>();
+
+  useEffect(() => {
+    queryUser('').then(response => {
+      setUser(response);
+    })
+  }, [])
 
   const menuMap: Record<string, React.ReactNode> = {
     base: 'Cơ bản',
@@ -39,7 +47,7 @@ const Settings: React.FC = () => {
       case 'base':
         return <BaseView />;
       case 'security':
-        return <SecurityView />;
+        return <SecurityView user={user} />;
       case 'binding':
         return <BindingView />;
       case 'notification':
@@ -51,11 +59,9 @@ const Settings: React.FC = () => {
 
   return (
     <PageContainer>
-      <GridContent>
-        <div
-          className={styles.main}
-        >
-          <div className={styles.leftMenu}>
+      <Card>
+        <Row gutter={24}>
+          <Col span={4}>
             <Menu
               mode={initConfig.mode}
               selectedKeys={[initConfig.selectKey]}
@@ -68,13 +74,13 @@ const Settings: React.FC = () => {
             >
               {getMenu()}
             </Menu>
-          </div>
-          <div className={styles.right}>
-            <div className={styles.title}>{menuMap[initConfig.selectKey]}</div>
+          </Col>
+          <Col span={20}>
+            <div>{menuMap[initConfig.selectKey]}</div>
             {renderChildren()}
-          </div>
-        </div>
-      </GridContent>
+          </Col>
+        </Row>
+      </Card>
     </PageContainer>
   );
 };

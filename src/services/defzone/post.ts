@@ -22,3 +22,7 @@ export async function queryViewCount() {
 export async function queryPieChart() {
   return request(`/dashboard/chart-post-by-categories`);
 }
+
+export async function queryPostCount() {
+  return request(`/post/count`);
+}

@@ -25,6 +25,10 @@ const PostList: React.FC = () => {
 
   const columns: ProColumns<API.PostListItem>[] = [
     {
+      title: '#',
+      valueType: 'indexBorder',
+    },
+    {
       title: 'Tiêu đề',
       dataIndex: 'title',
       render: (dom, entity) => {

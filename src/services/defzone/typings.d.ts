@@ -61,5 +61,19 @@ declare namespace API {
     roles: string[];
     email: string;
     emailConfirmed: boolean;
+    userName: string;
+    phoneNumber: string;
+  }
+  type Post = PostListItem & {
+    createdDate: Date;
+    thumbnail: string;
+    tags: string;
+    description: string;
+    content: string;
+    status: string;
+  }
+  type PostBody = {
+    post: Post;
+    categories: Category
   }
 }

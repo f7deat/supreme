@@ -1,38 +1,35 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, Col, Dropdown, Menu, message, Popconfirm, Popover, Row, Select } from 'antd';
-import { FormattedMessage, useIntl, useRequest } from 'umi';
+import { Avatar, Button, Dropdown, Menu, message, Popconfirm, Space, Tooltip } from 'antd';
+import { FormattedMessage, Link, useIntl } from 'umi';
 import {
-  EditOutlined,
   DeleteOutlined,
   PlusOutlined,
-  FolderOutlined,
   CheckCircleTwoTone,
   DownOutlined,
+  FolderViewOutlined,
+  MailOutlined,
 } from '@ant-design/icons';
-import { addToRole, deleteUser, getUsers, queryRole } from '@/services/defzone/user';
+import { deleteUser, getUsers, queryRole } from '@/services/defzone/user';
 import { DrawerForm, ProFormText } from '@ant-design/pro-form';
 import { useRef, useState } from 'react';
-import Role from './components/role';
 import { history } from 'umi';
+import { useEffect } from 'react';
 
 const User: React.FC = () => {
-  const { Option } = Select;
   const intl = useIntl();
 
-  const roleResponse = useRequest(queryRole);
-
   const [visible, setVisible] = useState<boolean>(false);
-  const [visibleAddToRole, setVisibleAddToRole] = useState<boolean>(false);
-  const [roleId, setRoleId] = useState<string>('');
-  const [userId, setUserId] = useState<string>('');
-  const [roleName, setRoleName] = useState<string>('');
   const [roles, setRoles] = useState<API.RoleListItem[]>([]);
 
   const actionRef = useRef<ActionType>();
 
-
+  useEffect(() => {
+    queryRole().then(response => {
+      setRoles(response)
+    })
+  }, [])
 
   const handleRemove = (id: string) => {
     deleteUser(id).then((response) => {
@@ -42,24 +39,6 @@ const User: React.FC = () => {
       }
     });
   };
-
-  const handleAddToRole = () => {
-    addToRole(userId, roleName).then((response) => {
-      if (response.succeeded) {
-        message.success('Succeeded!');
-      }
-    });
-  };
-
-  const AddToRole = () => (
-    <div className="flex">
-      <Select defaultValue="member" onChange={(value) => setRoleName(value)}>
-        <Option value="member">Member</Option>
-        <Option value="admin">Admin</Option>
-      </Select>
-      <Button onClick={handleAddToRole}>Add</Button>
-    </div>
-  );
 
   const handleUpdate = (id: string) => {
     history.push(`/account/center/${id}`);
@@ -74,6 +53,16 @@ const User: React.FC = () => {
   };
 
   const columns: ProColumns<API.User>[] = [
+    {
+      title: 'Username',
+      dataIndex: 'userName',
+      render: (dom, record) => (
+        <Space>
+          <Avatar src={record.avatar} />
+          <Link to={`/account/center/${record.id}`}>{record.userName}</Link>
+        </Space>
+      )
+    },
     {
       title: 'Email',
       dataIndex: 'email',
@@ -96,19 +85,12 @@ const User: React.FC = () => {
         <Button
           type="primary"
           key={0}
-          icon={<EditOutlined />}
+          icon={<FolderViewOutlined />}
           onClick={() => handleUpdate(record.id)}
         />,
-        <Popover
-          key={1}
-          content={<AddToRole />}
-          title="Add to role"
-          trigger="click"
-          visible={visibleAddToRole}
-          onVisibleChange={setVisibleAddToRole}
-        >
-          <Button icon={<FolderOutlined />} onClick={() => setUserId(record.id)} />
-        </Popover>,
+        <Tooltip title="Confirm email" key={1}>
+          <Button icon={<MailOutlined />} disabled={record.emailConfirmed} />
+        </Tooltip>,
         <Popconfirm
           key={2}
           title="Are you sure to delete this?"
@@ -132,20 +114,12 @@ const User: React.FC = () => {
 
   const menu = (
     <Menu
-      items={[
-        {
-          label: '1st menu item',
-          key: '1',
-        },
-        {
-          label: '2nd menu item',
-          key: '2',
-        },
-        {
-          label: '3rd menu item',
-          key: '3',
-        },
-      ]}
+      items={roles?.map(role => {
+        return {
+          key: role.id,
+          label: role.name
+        }
+      })}
     />
   );
 
@@ -154,38 +128,31 @@ const User: React.FC = () => {
       title={intl.formatMessage({ id: 'menu.users', defaultMessage: 'Thành viên' })}
       extra={<Extra />}
     >
-      <Row gutter={16}>
-        <Col span={10}>
-          <Role roleId={roleId} setRoleId={setRoleId} />
-        </Col>
-        <Col span={14}>
-          <ProTable<API.User, API.PageParams>
-            headerTitle={intl.formatMessage({
-              id: 'pages.searchTable.title',
-              defaultMessage: 'Enquiry form',
-            })}
-            rowKey="id"
-            search={{
-              layout: 'vertical',
-            }}
-            request={getUsers}
-            columns={columns}
-            rowSelection={{}}
-            actionRef={actionRef}
-            toolBarRender={() => [
-              <Dropdown key={0} overlay={menu}>
-                <Button>
-                  <span>Role</span>
-                  <DownOutlined />
-                </Button>
-              </Dropdown>
-            ]}
-          />
-          <DrawerForm visible={visible} onVisibleChange={setVisible}>
-            <ProFormText name="phoneNumber" />
-          </DrawerForm>
-        </Col>
-      </Row>
+      <ProTable<API.User, API.PageParams>
+        headerTitle={intl.formatMessage({
+          id: 'pages.searchTable.title',
+          defaultMessage: 'Enquiry form',
+        })}
+        rowKey="id"
+        search={{
+          layout: 'vertical',
+        }}
+        request={getUsers}
+        columns={columns}
+        rowSelection={{}}
+        actionRef={actionRef}
+        toolBarRender={() => [
+          <Dropdown key={0} overlay={menu}>
+            <Button>
+              <span>Role</span>
+              <DownOutlined />
+            </Button>
+          </Dropdown>
+        ]}
+      />
+      <DrawerForm visible={visible} onVisibleChange={setVisible}>
+        <ProFormText name="phoneNumber" />
+      </DrawerForm>
     </PageContainer>
   );
 };

@@ -80,11 +80,8 @@ export async function queryPosts(params: {
   });
 }
 
-/** Get single post GET /api/post/get/{id} */
-export async function getPost(id: number) {
-  return request<any>(`/post/get/${id}`, {
-    method: 'GET',
-  });
+export async function getPost(id: string) {
+  return request<API.PostBody>(`/post/get/${id}`);
 }
 
 /** Add post POST /api/post/add */

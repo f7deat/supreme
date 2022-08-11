@@ -5,7 +5,7 @@ import { Avatar, Card, Col, List, Skeleton, Row, Statistic, Typography, Space, T
 import { useIntl, useModel } from 'umi';
 import { PageContainer } from '@ant-design/pro-layout';
 import { queryPopularPosts } from '@/services/defzone/api';
-import { queryPieChart, queryViewCount } from '@/services/defzone/post';
+import { queryPieChart, queryPostCount, queryViewCount } from '@/services/defzone/post';
 import { Column, Pie } from '@ant-design/charts';
 import { UserSwitchOutlined } from '@ant-design/icons';
 
@@ -36,10 +36,12 @@ const Workplace: FC = () => {
   const [popularPosts, setPopularPosts] = useState<API.PostListItem[]>();
   const [viewCount, setViewCount] = useState(0);
   const [pieChart, setPieChart] = useState<any>();
+  const [postCount, setPostCount] = useState<number>(0);
 
   useEffect(() => {
     queryViewCount().then(response => setViewCount(response));
-    queryPieChart().then(response => setPieChart(response))
+    queryPieChart().then(response => setPieChart(response));
+    queryPostCount().then(response => setPostCount(response))
   }, [])
 
   const ExtraContent: FC<Record<string, any>> = () => (
@@ -47,7 +49,7 @@ const Workplace: FC = () => {
       <Statistic title={intl.formatMessage({
         id: 'menu.blog.post',
         defaultMessage: 'Article'
-      })} value={56} />
+      })} value={postCount} />
       <Statistic title="Xếp hạng" value={8} suffix="/ 24" />
       <Statistic title="Lượt xem" value={viewCount} />
     </Space>

@@ -1,9 +1,7 @@
 import type { ProFormInstance } from '@ant-design/pro-form';
 import { ProFormText } from '@ant-design/pro-form';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
-import 'braft-editor/dist/index.css';
-import { Button, Card, Empty, Image, Input, message, Popover } from 'antd';
-import BraftEditor from 'braft-editor';
+import { Button, Card, Image, Input, message, Popover } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { getPost, addPost, updatePost } from '@/services/ant-design-pro/api';
 import { getAllCategory } from '@/services/defzone/category';
@@ -12,18 +10,25 @@ import Explorer from '@/pages/files/components/explorer';
 import { PageContainer } from '@ant-design/pro-layout';
 import EditableTagGroup from '../components/editable-tag-group';
 import { history, useParams } from 'umi';
+import PostCenterSetting from './components/setting';
+import ProBraftEditor from '@/components/pro-braft-editor';
+import BraftEditor from 'braft-editor';
 
 type GeneralTabProps = {
-  id: number;
+  id: string;
+  categories?: API.Category;
+  post?: API.Post;
 }
 
 const GeneralTab: React.FC<GeneralTabProps> = (props) => {
 
+  const { post, categories } = props;
   const [options, setOptions] = useState<any>();
   const [thumbnail, setThumbnail] = useState<string>('');
   const [visibleExplorer, setVisibleExplorer] = useState<boolean>(false);
   const formRef = useRef<ProFormInstance>();
   const [tags, setTags] = useState<string[]>([]);
+
   useEffect(() => {
     getAllCategory().then((response) => {
       setOptions(
@@ -39,53 +44,50 @@ const GeneralTab: React.FC<GeneralTabProps> = (props) => {
 
   useEffect(() => {
     if (props.id) {
-      getPost(props.id).then((response) => {
-        const { post, categories } = response;
-        setThumbnail(post.thumbnail);
-        if (post.tags) {
-          setTags(post.tags.split(','));
-        }
-        formRef.current?.setFields([
-          {
-            name: 'id',
-            value: post.id,
-          },
-          {
-            name: 'title',
-            value: post.title,
-          },
-          {
-            name: 'url',
-            value: post.url,
-          },
-          {
-            name: 'description',
-            value: post.description,
-          },
-          {
-            name: 'thumbnail',
-            value: post.thumbnail,
-          },
-          {
-            name: 'content',
-            value: BraftEditor.createEditorState(post.content),
-          },
-          {
-            name: 'categories',
-            value: categories,
-          },
-          {
-            name: 'status',
-            value: post.status,
-          },
-        ]);
-      });
+      setThumbnail(post?.thumbnail || '');
+      if (post?.tags) {
+        setTags(post.tags.split(','));
+      }
+      formRef.current?.setFields([
+        {
+          name: 'id',
+          value: post?.id,
+        },
+        {
+          name: 'title',
+          value: post?.title,
+        },
+        {
+          name: 'url',
+          value: post?.url,
+        },
+        {
+          name: 'description',
+          value: post?.description,
+        },
+        {
+          name: 'thumbnail',
+          value: post?.thumbnail,
+        },
+        {
+          name: 'content',
+          value: BraftEditor.createEditorState(post?.content),
+        },
+        {
+          name: 'categories',
+          value: categories,
+        },
+        {
+          name: 'status',
+          value: post?.status,
+        },
+      ]);
     } else {
       formRef.current?.resetFields();
       setTags([]);
       setThumbnail('');
     }
-  }, [props.id]);
+  }, [categories, post, props.id]);
 
   const content = <Image src={thumbnail} width={200} height={150} />;
 
@@ -124,7 +126,7 @@ const GeneralTab: React.FC<GeneralTabProps> = (props) => {
         <Input.TextArea />
       </ProForm.Item>
       <ProForm.Item name="content" label="Nội dung" rules={[{ required: true }]}>
-        <BraftEditor language="en" style={{ border: '1px solid #d1d1d1' }} />
+        <ProBraftEditor />
       </ProForm.Item>
       <div className="mb-2">Ảnh đại diện</div>
       <div className="flex gap-4">
@@ -181,7 +183,18 @@ const GeneralTab: React.FC<GeneralTabProps> = (props) => {
 
 const PostCenter = () => {
   const params = useParams<any>();
-  const [tabKey, setTabKey] = useState<string>('')
+
+  const [tabKey, setTabKey] = useState<string>('');
+  const [post, setPost] = useState<API.Post>();
+  const [categories, setCategories] = useState<API.Category>();
+
+  useEffect(() => {
+    getPost(params.id).then(response => {
+
+      setPost(response.post);
+      setCategories(response.categories);
+    })
+  }, [params.id])
 
   const onTabChange = (key: string) => {
     setTabKey(key)
@@ -189,9 +202,9 @@ const PostCenter = () => {
 
   const renderChildrenByTabKey = () => {
     if (tabKey === 'setting') {
-      return <Empty />;
+      return <PostCenterSetting data={post} />;
     }
-    return <GeneralTab id={params.id} />;
+    return <GeneralTab id={params.id} post={post} categories={categories} />;
   }
 
   return (

@@ -1,4 +1,4 @@
-import { HomeOutlined, ContactsOutlined, ClusterOutlined, EditOutlined, UserAddOutlined, MessageOutlined, SettingOutlined, DeleteOutlined } from '@ant-design/icons';
+import { ContactsOutlined, EditOutlined, UserAddOutlined, MessageOutlined, SettingOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Divider, Row, Space, Tag, Image, Typography, Empty, Tooltip, Popconfirm } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -7,9 +7,8 @@ import type { RouteChildrenProps } from 'react-router';
 import Projects from './components/Projects';
 import Articles from './components/Articles';
 import Applications from './components/Applications';
-import type { tabKeyType } from './data.d';
 import { queryUser } from '@/services/defzone/api';
-import { queryRoleByUser } from '@/services/defzone/user';
+import { queryUserRoles } from '@/services/defzone/user';
 import { FormattedMessage } from 'umi';
 import RoleComponent from './components/roles';
 
@@ -30,19 +29,19 @@ const Center: React.FC<RouteChildrenProps> = () => {
 
   const params = useParams<any>();
 
-  const [tabKey, setTabKey] = useState<tabKeyType>('articles');
+  const [tabKey, setTabKey] = useState<string>('articles');
   const [currentUser, setCurrentUser] = useState<API.User>();
-  const [roles, setRoles] = useState<any>();
+  const [roles, setRoles] = useState<string[]>([]);
   const [visibleRole, setVisibleRole] = useState<boolean>(false);
 
   useEffect(() => {
     queryUser(params.id).then((response) => {
       setCurrentUser(response);
-      queryRoleByUser(response.id).then((rolesResponse) => {
-        setRoles(rolesResponse);
-      });
     });
 
+    queryUserRoles(params.id).then(response => {
+      setRoles(response)
+    })
   }, [params.id]);
 
 
@@ -61,37 +60,16 @@ const Center: React.FC<RouteChildrenProps> = () => {
     },
   ];
 
-  const renderUserInfo = ({ phoneNumber, group }: Partial<API.CurrentUser>) => {
+  const renderUserInfo = ({ phoneNumber }: Partial<API.User>) => {
     return (
-      <div>
-        <p>
-          <ContactsOutlined
-            style={{
-              marginRight: 8,
-            }}
-          />
-          {phoneNumber}
-        </p>
-        <p>
-          <ClusterOutlined
-            style={{
-              marginRight: 8,
-            }}
-          />
-          {group}
-        </p>
-        <p>
-          <HomeOutlined
-            style={{
-              marginRight: 8,
-            }}
-          />
-        </p>
-      </div>
+      <Typography.Title level={5}>
+        <ContactsOutlined />
+        {phoneNumber}
+      </Typography.Title>
     );
   };
 
-  const renderChildrenByTabKey = (tabValue: tabKeyType) => {
+  const renderChildrenByTabKey = (tabValue: string) => {
     if (tabValue === 'projects') {
       return <Projects />;
     }
@@ -117,7 +95,7 @@ const Center: React.FC<RouteChildrenProps> = () => {
               <SettingOutlined />
             </Link>,
             <EditOutlined key="edit" />,
-            <Popconfirm title="Are you sure?" onConfirm={onConfirm} key="delete" disabled={canAdmin}>
+            <Popconfirm title="Are you sure delete this?" onConfirm={onConfirm} key="delete" disabled={canAdmin}>
               <DeleteOutlined />
             </Popconfirm>,
             <Tooltip key="role" title="Assign roles">
@@ -149,14 +127,14 @@ const Center: React.FC<RouteChildrenProps> = () => {
             tabList={operationTabList}
             activeTabKey={tabKey}
             onTabChange={(_tabKey: string) => {
-              setTabKey(_tabKey as tabKeyType);
+              setTabKey(_tabKey as string);
             }}
           >
             {renderChildrenByTabKey(tabKey)}
           </Card>
         </Col>
       </Row>
-      <RoleComponent visible={visibleRole} onVisibleChange={setVisibleRole} />
+      <RoleComponent visible={visibleRole} onVisibleChange={setVisibleRole} roles={roles} />
     </PageContainer>
   );
 };

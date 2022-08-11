@@ -24,14 +24,7 @@ export async function changePassword(body: ChangePasswordType) {
 }
 
 export async function queryRole() {
-  const response = await request<API.RoleListItem[]>(`/role/list`);
-  const data = {
-    data: response,
-    current: 1,
-    pageSize: 10,
-    total: 10,
-  };
-  return Promise.resolve(data);
+  return request<API.RoleListItem[]>(`/role/list`);
 }
 
 export async function deleteUser(id: string) {
@@ -50,8 +43,14 @@ export async function addToRole(userId: string, roleName: string) {
   });
 }
 
-export async function queryRoleByUser(id: string) {
+export async function queryUserRoles(id: string) {
   return request(`/user/roles/${id}`);
+}
+
+export async function disable2fa() {
+  return request(`/user/disable-2fa`, {
+    method: 'POST'
+  })
 }
 
 export async function syncRole() {

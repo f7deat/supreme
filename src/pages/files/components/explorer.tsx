@@ -48,16 +48,17 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
   const columns: ProColumns<API.FileListItem>[] = [
     {
       title: '#',
-      render: (dom: any, record: any, index: number) => index + 1,
-      search: false,
+      valueType: 'indexBorder',
     },
     {
       title: <FormattedMessage defaultMessage="Name" id="global.name" />,
+      dataIndex: 'name',
       render: (dom, record) => PreViewFile(record),
     },
     {
       title: 'Uploaded date',
       dataIndex: 'uploadedDate',
+      valueType: 'dateTime',
       search: false,
     },
     {
@@ -79,17 +80,19 @@ const Explorer: React.FC<ExplorerProps> = (props) => {
     <Drawer
       title="File Explorer"
       visible={props.visible}
-      width={window.innerWidth - 500}
+      width={window.innerWidth - window.innerWidth / 2}
       onClose={() => props.onVisibleChange(false)}
     >
       <ProTable<API.FileListItem>
         columns={columns}
-        search={{
-          layout: 'vertical',
-        }}
-        key="id"
+        search={false}
+        rowKey="id"
         dataSource={dataSource}
         rowSelection={{}}
+        options={{
+          search: true
+        }}
+
       />
     </Drawer>
   );

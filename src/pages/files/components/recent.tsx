@@ -21,6 +21,10 @@ const RecentFiles: React.FC = () => {
 
   const columns: ProColumns<API.FileListItem>[] = [
     {
+      title: '#',
+      valueType: 'indexBorder',
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
     },
