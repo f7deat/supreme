@@ -5,7 +5,6 @@ import { useRef, useState } from 'react';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { deleteFile, queryFiles } from '@/services/defzone/api';
 import UploadFiles from './upload';
-import moment from 'moment';
 
 const RecentFiles: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -32,7 +31,7 @@ const RecentFiles: React.FC = () => {
       title: 'Uploaded date',
       dataIndex: 'uploadedDate',
       search: false,
-      render: (dom, entity) => moment(entity.uploadedDate).format('DD/MM/yyyy hh:mm:ss'),
+      valueType: 'dateTime'
     },
     {
       title: 'Size',

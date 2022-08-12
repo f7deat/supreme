@@ -6,7 +6,6 @@ import { Button, message, Popconfirm } from 'antd';
 import { useRef } from 'react';
 import { FormattedMessage, history } from 'umi';
 import { queryPosts, deletePost } from '@/services/ant-design-pro/api';
-import moment from 'moment';
 import AppSetting from '@/appSetting';
 
 const PostList: React.FC = () => {
@@ -52,8 +51,8 @@ const PostList: React.FC = () => {
     {
       title: 'Ngày cập nhật',
       dataIndex: 'modifiedDate',
-      search: false,
-      render: (dom, entity) => moment(entity.modifiedDate).format('DD/MM/YYYY hh:mm:ss'),
+      valueType: 'dateTime',
+      search: false
     },
     {
       title: <FormattedMessage id="global.status" defaultMessage="Status" />,

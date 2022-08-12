@@ -1,4 +1,5 @@
-import { DrawerForm } from '@ant-design/pro-form';
+import { InboxOutlined } from '@ant-design/icons';
+import { ModalForm } from '@ant-design/pro-form';
 import { message, Upload } from 'antd';
 type UploadProps = {
   visible: boolean;
@@ -30,9 +31,17 @@ const UploadFiles: React.FC<UploadProps> = (props) => {
     label: 'Drag or drop to upload!',
   };
   return (
-    <DrawerForm visible={props.visible} onVisibleChange={props.setVisible}>
-      <Dragger {...uploadProps} />
-    </DrawerForm>
+    <ModalForm visible={props.visible} onVisibleChange={props.setVisible} title="Upload file">
+      <Dragger {...uploadProps}>
+        <p className="ant-upload-drag-icon">
+          <InboxOutlined />
+        </p>
+        <p className="ant-upload-text">Click or drag file to this area to upload</p>
+        <p className="ant-upload-hint">
+          Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
+        </p>
+      </Dragger>
+    </ModalForm>
   );
 };
 export default UploadFiles;
