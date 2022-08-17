@@ -3,6 +3,7 @@ declare namespace API {
     id: number;
     name: string;
     thumbnail: string;
+    type: number;
   };
   type PostListItem = {
     id: number;

@@ -53,7 +53,7 @@ export async function deleteCategory(id: number) {
 }
 
 /** GET SINGLE CATEGORY GET /api/category/get */
-export async function getCategory(id: number) {
+export async function queryCategory(id: number) {
   return request(`/category/${id}`);
 }
 

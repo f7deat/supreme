@@ -1,60 +1,31 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Avatar, Button, Image, message, Popconfirm, Space } from 'antd';
-// @ts-ignore
+import { Button, message, Popconfirm, Space, Tag } from 'antd';
 import { FormattedMessage, useIntl } from 'umi';
 import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOpenOutlined } from '@ant-design/icons';
 import {
-  addCategory,
   deleteCategory,
   getCategories,
-  getCategory,
-  getListParrentCategory,
   queryListType,
-  updateCategory,
 } from '@/services/defzone/category';
-import type { ProFormInstance } from '@ant-design/pro-form';
-import { ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import { DrawerForm } from '@ant-design/pro-form';
 import { useEffect, useRef, useState } from 'react';
-import Explorer from '../files/components/explorer';
 import PostCategory from './components/posts';
 import CategoryImport from './components/import';
 import AppSetting from '@/appSetting';
+import CategorySetting from './components/settings';
+import type { DefaultOptionType } from 'antd/lib/select';
 
 const Category: React.FC = () => {
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * @vi-VN Cấu hình ngôn ngữ
-   * */
   const intl = useIntl();
-  const formRef = useRef<ProFormInstance>();
-  const [drawerVisit, setDrawerVisit] = useState<boolean>();
-  const [parrentCategries, setParrentCategories] = useState<any>();
-  const [previewImage, setPreviewImage] = useState<string>();
-  const [explorerVisible, setExplorerVisible] = useState<boolean>(false);
+  const [drawerVisit, setDrawerVisit] = useState<boolean>(false);
   const [visiblePosts, setVisiblePosts] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
   const [visibleImport, setVisibleImport] = useState<boolean>(false);
-  const [types, setTypes] = useState<string[]>([])
+  const [types, setTypes] = useState<DefaultOptionType[]>([])
   const ref = useRef<ActionType>();
 
   useEffect(() => {
-    getListParrentCategory().then((response) =>
-      setParrentCategories(
-        response.map((x: API.CategoryListItem) => {
-          return { value: x.id, label: x.name };
-        }),
-      ),
-    );
-  }, []);
-
-  const getListType = () => {
-    if (types.length > 0) {
-      return;
-    }
     queryListType().then(response => {
       setTypes(response.map((x: string, i: number) => {
         return {
@@ -63,49 +34,18 @@ const Category: React.FC = () => {
         }
       }));
     })
-  }
+  }, [])
 
-  const waitTime = (time: number = 100) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, time);
-    });
-  };
-
-  const handleFinish = async (values: any) => {
-    if (values.id) {
-      const response = await updateCategory(values);
-      if (response.succeeded) {
-        message.success('succeeded!');
-        setDrawerVisit(false);
-        ref.current?.reload();
-      } else {
-        message.error(response.message);
-      }
-    } else {
-      const response = await addCategory(values);
-      if (response.succeeded) {
-        message.success('succeeded!');
-        setDrawerVisit(false);
-        ref.current?.reload();
-      } else {
-        message.error(response.message);
-      }
-    }
-  };
+  const reload = () => ref?.current?.reload();
 
   const handleAdd = () => {
-    getListType();
-    formRef.current?.resetFields();
-    setPreviewImage('');
     setDrawerVisit(true);
   };
 
   const handleRemove = (id: number) => {
     deleteCategory(id).then((response) => {
       if (response.succeeded) {
-        ref?.current?.reload();
+        reload();
         message.success(response.message);
       } else {
         message.error(response.message);
@@ -114,46 +54,8 @@ const Category: React.FC = () => {
   };
 
   const handleUpdate = (id: number) => {
-    getListType();
-    getCategory(id).then(async (response) => {
-      setDrawerVisit(true);
-      await waitTime();
-      formRef.current?.setFields([
-        {
-          name: 'id',
-          value: response.id,
-        },
-        {
-          name: 'name',
-          value: response.name,
-        },
-        {
-          name: 'normalizeName',
-          value: response.normalizeName,
-        },
-        {
-          name: 'description',
-          value: response.description,
-        },
-        {
-          name: 'parrentId',
-          value: response.parrentId,
-        },
-        {
-          name: 'status',
-          value: response.status,
-        },
-        {
-          name: 'thumbnail',
-          value: response.thumbnail,
-        },
-        {
-          name: 'type',
-          value: response.type
-        }
-      ]);
-      setPreviewImage(response.thumbnail);
-    });
+    setSelectedCategoryId(id);
+    setDrawerVisit(true);
   };
 
   const handleShowPosts = (id: number) => {
@@ -161,27 +63,15 @@ const Category: React.FC = () => {
     setVisiblePosts(true);
   };
 
+  const renderType = (value: number) => types.find(x => x.value === value)?.label
+
   const columns: ProColumns<API.CategoryListItem>[] = [
     {
       title: 'Tên',
       dataIndex: 'name',
       render: (dom, entity) => (
-        <Space>
-          <Avatar src={entity.thumbnail} />
-          <a href={`${AppSetting.domain}/category/details/${entity.id}`} target="_blank" rel='noreferrer'>{dom}</a>
-        </Space>
+        <a href={`${AppSetting.domain}/category/details/${entity.id}`} target="_blank" rel='noreferrer'>{dom}</a>
       ),
-      width: 200,
-    },
-    {
-      title: 'Mô tả',
-      dataIndex: 'description',
-      search: false
-    },
-    {
-      title: 'Modified',
-      dataIndex: 'modifiedDate',
-      search: false
     },
     {
       title: <FormattedMessage id="global.status" defaultMessage="Status" />,
@@ -196,7 +86,12 @@ const Category: React.FC = () => {
           status: 'Processing',
         },
       },
-      width: 150,
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      render: (_, record) => <Tag key={record.id} color={record.type === 0 ? 'green' : 'cyan'}>{renderType(record.type)}</Tag>,
+      valueType: 'option'
     },
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
@@ -223,11 +118,6 @@ const Category: React.FC = () => {
       ],
     },
   ];
-
-  const handleSelectThumbnail = (url: string) => {
-    formRef.current?.setFieldsValue({ thumbnail: url });
-    setPreviewImage(url);
-  };
 
   const Extra = () => (
     <Space>
@@ -256,87 +146,7 @@ const Category: React.FC = () => {
         rowSelection={{}}
         actionRef={ref}
       />
-      <DrawerForm
-        title="Manager"
-        formRef={formRef}
-        onVisibleChange={setDrawerVisit}
-        visible={drawerVisit}
-        autoFocusFirstInput
-        drawerProps={{
-          forceRender: true,
-          destroyOnClose: true,
-        }}
-        onFinish={handleFinish}
-      >
-        <ProFormText name="id" hidden={true} />
-        <div className="flex gap-4">
-          <div className="w-1/2">
-            <ProFormText name="name" label="Tên danh mục" className="w-full" />
-          </div>
-          <div className="w-1/2">
-            <ProFormText
-              name="normalizeName"
-              label="Normalize name"
-              tooltip="Name without special character"
-              className="w-full"
-            />
-          </div>
-        </div>
-        <ProFormTextArea name="description" label="Description" />
-        <div className="flex gap-4">
-          <div className="w-1/2">
-            <ProFormSelect
-              options={parrentCategries}
-              name="parrentId"
-              label="Danh mục cha"
-              className="w-full"
-            />
-          </div>
-          <div className="w-1/2">
-            <ProFormSelect
-              className="w-full"
-              initialValue={1}
-              options={[
-                {
-                  value: 0,
-                  label: 'Draft',
-                },
-                {
-                  value: 1,
-                  label: 'Active',
-                },
-              ]}
-              name="status"
-              label="Trạng thái"
-            />
-          </div>
-        </div>
-        <ProFormSelect
-          options={types}
-          name="type"
-          label="Type"
-          className="w-full"
-        />
-        <div className="flex gap-4">
-          <div className="flex-grow">
-            <ProFormText name="thumbnail" className="w-full" />
-          </div>
-          <Button
-            style={{ marginBottom: 24 }}
-            icon={<FolderOpenOutlined />}
-            onClick={() => setExplorerVisible(true)}
-          >
-            Explorer
-          </Button>
-        </div>
-
-        <Image src={previewImage} />
-      </DrawerForm>
-      <Explorer
-        visible={explorerVisible}
-        onVisibleChange={setExplorerVisible}
-        onSelect={handleSelectThumbnail}
-      />
+      <CategorySetting types={types} visible={drawerVisit} setVisible={setDrawerVisit} categoryId={selectedCategoryId} onFinish={reload} />
       <PostCategory visible={visiblePosts} onClose={setVisiblePosts} id={selectedCategoryId} />
       <CategoryImport visible={visibleImport} setVisible={setVisibleImport} />
     </PageContainer>
