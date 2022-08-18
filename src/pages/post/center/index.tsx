@@ -6,13 +6,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { getPost, addPost, updatePost } from '@/services/ant-design-pro/api';
 import { getAllCategory } from '@/services/defzone/category';
 import { EyeOutlined, FolderOutlined } from '@ant-design/icons';
-import Explorer from '@/pages/files/components/explorer';
 import { PageContainer } from '@ant-design/pro-layout';
 import EditableTagGroup from '../components/editable-tag-group';
 import { history, useParams } from 'umi';
 import PostCenterSetting from './components/setting';
 import ProBraftEditor from '@/components/pro-braft-editor';
 import BraftEditor from 'braft-editor';
+import Gallery from '@/components/gallery';
 
 type GeneralTabProps = {
   id: string;
@@ -106,12 +106,6 @@ const GeneralTab: React.FC<GeneralTabProps> = (props) => {
     }
   };
 
-  const hanldeSelectThumbnail = (imageUrl: string) => {
-    setThumbnail(imageUrl);
-    formRef.current?.setFieldsValue({
-      thumbnail: imageUrl,
-    });
-  };
   return (
 
     <ProForm onFinish={handleFinish} formRef={formRef}>
@@ -172,11 +166,7 @@ const GeneralTab: React.FC<GeneralTabProps> = (props) => {
       <div className="mb-4">
         <EditableTagGroup tags={tags} setTags={setTags} />
       </div>
-      <Explorer
-        visible={visibleExplorer}
-        onVisibleChange={setVisibleExplorer}
-        onSelect={hanldeSelectThumbnail}
-      />
+      <Gallery visible={visibleExplorer} />
     </ProForm>
   )
 }

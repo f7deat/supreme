@@ -14,10 +14,6 @@ import { useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'umi';
 
 const MenuPage: React.FC = () => {
-  /**
-   * @en-US International configuration
-   * @zh-CN 国际化配置
-   * */
   const intl = useIntl();
   const formRef = useRef<ProFormInstance>();
   const actionRef = useRef<ActionType>();
@@ -200,7 +196,9 @@ const MenuPage: React.FC = () => {
         actionRef={actionRef}
       />
       <DrawerForm<API.MenuListItem>
-        title="新建表单"
+        title={intl.formatMessage({
+          id: 'global.settings'
+        })}
         formRef={formRef}
         autoFocusFirstInput
         drawerProps={{

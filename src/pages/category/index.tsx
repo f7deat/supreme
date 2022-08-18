@@ -1,9 +1,9 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button, message, Popconfirm, Space, Tag } from 'antd';
+import { Button, Dropdown, Menu, message, Popconfirm, Space, Tag } from 'antd';
 import { FormattedMessage, useIntl } from 'umi';
-import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOpenOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOpenOutlined, DownOutlined } from '@ant-design/icons';
 import {
   deleteCategory,
   getCategories,
@@ -130,6 +130,17 @@ const Category: React.FC = () => {
     </Space>
   );
 
+  const menu = (
+    <Menu
+      items={types?.map(type => {
+        return {
+          key: type.id,
+          label: type.label
+        }
+      })}
+    />
+  );
+
   return (
     <PageContainer extra={<Extra />}>
       <ProTable<API.CategoryListItem, API.PageParams>
@@ -145,6 +156,14 @@ const Category: React.FC = () => {
         columns={columns}
         rowSelection={{}}
         actionRef={ref}
+        toolBarRender={() => [
+          <Dropdown key={0} overlay={menu}>
+            <Button>
+              <span>Type</span>
+              <DownOutlined />
+            </Button>
+          </Dropdown>
+        ]}
       />
       <CategorySetting types={types} visible={drawerVisit} setVisible={setDrawerVisit} categoryId={selectedCategoryId} onFinish={reload} />
       <PostCategory visible={visiblePosts} onClose={setVisiblePosts} id={selectedCategoryId} />

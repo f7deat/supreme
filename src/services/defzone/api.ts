@@ -184,3 +184,24 @@ export async function queryBillingTotal() {
 export async function queryCountry() {
   return request(`https://restcountries.com/v3/all?fields=name`)
 }
+
+export async function querySearchPhotos(query: string, page: number) {
+  return request(`https://api.unsplash.com/search/photos`, {
+    method: 'GET',
+    params: {
+      query,
+      page,
+      client_id: 'CZPN7ThG5VGGhT-N4pKutskjCkEu_0Tp4fPn62xmsXQ'
+    }
+  })
+}
+
+export async function queryPhotos() {
+  return request(`https://api.unsplash.com/photos`, {
+    method: 'GET',
+    params: {
+      page: 1,
+      client_id: 'CZPN7ThG5VGGhT-N4pKutskjCkEu_0Tp4fPn62xmsXQ'
+    }
+  })
+}

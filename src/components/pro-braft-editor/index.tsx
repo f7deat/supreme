@@ -1,7 +1,13 @@
 import BraftEditor from "braft-editor";
 import 'braft-editor/dist/index.css';
+import 'braft-extensions/dist/table.css'
 import React, { useEffect, useState } from "react";
 import { useIntl } from "umi";
+import Table from 'braft-extensions/dist/table';
+
+BraftEditor.use(Table({
+    includeEditors: ['pro-braft-editor']
+}))
 
 const ProBraftEditor: React.FC = (props) => {
 
@@ -19,8 +25,8 @@ const ProBraftEditor: React.FC = (props) => {
         }
     }, [intl.locale])
 
-    return (
-        <BraftEditor {...props} language={language} style={{ border: '1px solid #d1d1d1' }} />
-    )
+    // @ts-ignore
+    return <BraftEditor {...props} language={language} id="pro-braft-editor" />
 }
+
 export default ProBraftEditor

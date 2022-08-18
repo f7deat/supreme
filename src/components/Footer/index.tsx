@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
   const intl = useIntl();
   const defaultMessage = intl.formatMessage({
     id: 'app.copyright.produced',
-    defaultMessage: 'Produced by Pluto Financial Department',
+    defaultMessage: 'Produced by DefZone Financial Department',
   });
 
   const currentYear = new Date().getFullYear();
