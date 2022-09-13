@@ -55,3 +55,12 @@ npm test
 ## More
 
 You can view full document on our [official website](https://pro.ant.design). And welcome any feedback in our [github](https://github.com/ant-design/ant-design-pro).
+
+## Git
+
+- 💥 feat(compiler): add 'comments' option
+- 🐛 fix(compiler): fix some bug
+- 📝 docs(compiler): add some docs
+- 🌷 UI(compiler): better styles
+- 🏰 chore(compiler): Made some changes to the scaffolding
+- 🌐 locale(compiler): Made a small contribution to internationalization
