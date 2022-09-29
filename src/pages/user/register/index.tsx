@@ -125,14 +125,14 @@ const Register: FC = () => {
       </div>
       <div className={styles.content}>
         <div className={styles.main}>
-          <div className='text-center mb-4'>
-            <Space align='center' size="large" className='items-center'>
+          <div className="text-center mb-4">
+            <Space align="center" size="large" className="items-center">
               <img alt="logo" src="/logo.svg" width={44} />
-              <div style={{ fontSize: 33, fontWeight: 500 }}>
-                DefZone.Net
-              </div>
+              <div style={{ fontSize: 33, fontWeight: 500 }}>DefZone.Net</div>
             </Space>
-            <div className='p-2' style={{ color: 'rgba(0, 0, 0, 0.45)' }}><FormattedMessage id='pages.layouts.userLayout.title' /></div>
+            <div className="p-2" style={{ color: 'rgba(0, 0, 0, 0.45)' }}>
+              <FormattedMessage id="pages.layouts.userLayout.title" />
+            </div>
           </div>
           <h3>Đăng ký</h3>
           <Form form={form} name="UserRegister" onFinish={onFinish}>
@@ -206,14 +206,14 @@ const Register: FC = () => {
               <Input size="large" type="password" placeholder="Nhập lại mật khẩu" />
             </FormItem>
             <FormItem>
-              <Button size="large" className='w-full' type="primary" htmlType="submit">
-                <span>Đăng ký</span>
+              <Button size="large" className="w-full" type="primary" htmlType="submit">
+                <FormattedMessage id="menu.register" />
               </Button>
             </FormItem>
           </Form>
-          <div className='text-center'>
-            <div className='mb-4'>Or register with</div>
-            <Space align='center'>
+          <div className="text-center">
+            <div className="mb-4">Or register with</div>
+            <Space align="center">
               <FacebookOutlined key="FacebookOutlined" className={styles.icon} />
               <TwitterOutlined key="TwitterOutlined" className={styles.icon} />
               <GithubOutlined key="GithubOutlined" className={styles.icon} />
@@ -221,7 +221,9 @@ const Register: FC = () => {
             <Divider />
             <Space>
               Allready member?
-              <Link className={styles.login} to="/user/login">Đăng nhập</Link>
+              <Link className={styles.login} to="/user/login">
+                <FormattedMessage id="menu.login" />
+              </Link>
             </Space>
           </div>
         </div>

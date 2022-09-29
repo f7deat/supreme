@@ -3,9 +3,16 @@ import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button, Dropdown, Menu, message, Popconfirm, Space, Tag } from 'antd';
 import { FormattedMessage, useIntl } from 'umi';
-import { EditOutlined, DeleteOutlined, PlusOutlined, FolderOpenOutlined, DownOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+  FolderOpenOutlined,
+  DownOutlined,
+} from '@ant-design/icons';
 import {
   deleteCategory,
+  exportCategory,
   getCategories,
   queryListType,
 } from '@/services/defzone/category';
@@ -22,19 +29,21 @@ const Category: React.FC = () => {
   const [visiblePosts, setVisiblePosts] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
   const [visibleImport, setVisibleImport] = useState<boolean>(false);
-  const [types, setTypes] = useState<DefaultOptionType[]>([])
+  const [types, setTypes] = useState<DefaultOptionType[]>([]);
   const ref = useRef<ActionType>();
 
   useEffect(() => {
-    queryListType().then(response => {
-      setTypes(response.map((x: string, i: number) => {
-        return {
-          value: i,
-          label: x
-        }
-      }));
-    })
-  }, [])
+    queryListType().then((response) => {
+      setTypes(
+        response.map((x: string, i: number) => {
+          return {
+            value: i,
+            label: x,
+          };
+        }),
+      );
+    });
+  }, []);
 
   const reload = () => ref?.current?.reload();
 
@@ -63,14 +72,20 @@ const Category: React.FC = () => {
     setVisiblePosts(true);
   };
 
-  const renderType = (value: number) => types.find(x => x.value === value)?.label
+  const renderType = (value: number) => types.find((x) => x.value === value)?.label;
 
   const columns: ProColumns<API.CategoryListItem>[] = [
     {
       title: 'Tên',
       dataIndex: 'name',
       render: (dom, entity) => (
-        <a href={`${AppSetting.domain}/category/details/${entity.id}`} target="_blank" rel='noreferrer'>{dom}</a>
+        <a
+          href={`${AppSetting.domain}/category/details/${entity.id}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {dom}
+        </a>
       ),
     },
     {
@@ -90,8 +105,12 @@ const Category: React.FC = () => {
     {
       title: 'Type',
       dataIndex: 'type',
-      render: (_, record) => <Tag key={record.id} color={record.type === 0 ? 'green' : 'cyan'}>{renderType(record.type)}</Tag>,
-      valueType: 'option'
+      render: (_, record) => (
+        <Tag key={record.id} color={record.type === 0 ? 'green' : 'cyan'}>
+          {renderType(record.type)}
+        </Tag>
+      ),
+      valueType: 'option',
     },
     {
       title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
@@ -119,12 +138,21 @@ const Category: React.FC = () => {
     },
   ];
 
+  const handleExport = () => {
+    exportCategory().then((response) => {
+      if (!response.succeeded) {
+        message.error(response.message);
+      }
+    });
+  };
+
   const Extra = () => (
     <Space>
-      <Button type="primary" key={0} danger onClick={() => setVisibleImport(true)}>
+      <Button onClick={handleExport}>Export</Button>
+      <Button type="primary" danger onClick={() => setVisibleImport(true)}>
         Import
       </Button>
-      <Button type="primary" key={1} icon={<PlusOutlined />} onClick={handleAdd}>
+      <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
         Thêm mới
       </Button>
     </Space>
@@ -132,11 +160,11 @@ const Category: React.FC = () => {
 
   const menu = (
     <Menu
-      items={types?.map(type => {
+      items={types?.map((type) => {
         return {
           key: type.id,
-          label: type.label
-        }
+          label: type.label,
+        };
       })}
     />
   );
@@ -162,10 +190,16 @@ const Category: React.FC = () => {
               <span>Type</span>
               <DownOutlined />
             </Button>
-          </Dropdown>
+          </Dropdown>,
         ]}
       />
-      <CategorySetting types={types} visible={drawerVisit} setVisible={setDrawerVisit} categoryId={selectedCategoryId} onFinish={reload} />
+      <CategorySetting
+        types={types}
+        visible={drawerVisit}
+        setVisible={setDrawerVisit}
+        categoryId={selectedCategoryId}
+        onFinish={reload}
+      />
       <PostCategory visible={visiblePosts} onClose={setVisiblePosts} id={selectedCategoryId} />
       <CategoryImport visible={visibleImport} setVisible={setVisibleImport} />
     </PageContainer>

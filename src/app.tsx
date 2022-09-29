@@ -56,22 +56,23 @@ export const request: RequestConfig = {
     (url: string, options: any) => {
       if (url.startsWith('http')) {
         return {
-          url, options
-        }
+          url,
+          options,
+        };
       }
       const token = localStorage.getItem('def_token');
+      const domain = localStorage.getItem('base_url') || 'defzone.net';
       options.headers = {
         authorization: `Bearer ${token}`,
       };
       return {
-        url: `https://defzone.net/api${url}`,
+        url: `https://${domain}/api${url}`,
         options,
       };
     },
   ],
 };
 
-// ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
     rightContentRender: () => <RightContent />,
@@ -82,7 +83,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
-      // Nếu chưa đăng nhập => Login
       if (
         !initialState?.currentUser &&
         location.pathname !== loginPath &&
@@ -93,22 +93,18 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     },
     links: isDev
       ? [
-        <Link to="/umi/plugin/openapi" target="_blank" key={0}>
-          <LinkOutlined />
-          <span>OpenAPI</span>
-        </Link>,
-        <Link to="/~docs" key={1}>
-          <BookOutlined />
-          <span>Document</span>
-        </Link>,
-      ]
+          <Link to="/umi/plugin/openapi" target="_blank" key={0}>
+            <LinkOutlined />
+            <span>OpenAPI</span>
+          </Link>,
+          <Link to="/~docs" key={1}>
+            <BookOutlined />
+            <span>Document</span>
+          </Link>,
+        ]
       : [],
     menuHeaderRender: undefined,
-    // 自定义 403 页面
-    // unAccessible: <div>unAccessible</div>,
-    // 增加一个 loading 的状态
     childrenRender: (children, props) => {
-      // if (initialState?.loading) return <PageLoading />;
       return (
         <>
           {children}

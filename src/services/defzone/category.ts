@@ -60,3 +60,9 @@ export async function queryCategory(id: number) {
 export async function queryListType() {
   return request(`/category/list-type`);
 }
+
+export async function exportCategory() {
+  return request(`/category/export`, {
+    method: 'POST',
+  });
+}

@@ -5,32 +5,23 @@ import {
   TwitterOutlined,
   UserOutlined,
   GithubOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
-import { Alert, Divider, message, Space, Tabs } from 'antd';
+import { Divider, message, Popover, Space, Tabs } from 'antd';
 import React, { useState } from 'react';
-import { ProFormCaptcha, ProFormCheckbox, ProFormText, LoginForm } from '@ant-design/pro-form';
+import ProForm, {
+  ProFormCaptcha,
+  ProFormCheckbox,
+  ProFormText,
+  LoginForm,
+} from '@ant-design/pro-form';
 import { useIntl, history, FormattedMessage, SelectLang, useModel, Link } from 'umi';
 import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
-
 import styles from './index.less';
 
-const LoginMessage: React.FC<{
-  content: string;
-}> = ({ content }) => (
-  <Alert
-    style={{
-      marginBottom: 24,
-    }}
-    message={content}
-    type="error"
-    showIcon
-  />
-);
-
 const Login: React.FC = () => {
-  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
 
@@ -48,17 +39,14 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (values: API.LoginParams) => {
     try {
-      // Login
       const msg = await login({ ...values, type });
       if (msg.succeeded) {
         localStorage.setItem('def_token', msg.token || '');
-        msg.status = 'ok';
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: 'Đăng nhập thành công!',
         });
         message.success(defaultLoginSuccessMessage);
-        debugger
         await fetchUserInfo();
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;
@@ -66,51 +54,55 @@ const Login: React.FC = () => {
         const { redirect } = query as { redirect: string };
         history.push(redirect || '/');
         return;
+      } else {
+        message.error(intl.formatMessage({ id: 'pages.login.failure' }));
       }
-      msg.status = 'error';
-      // Thông báo lỗi tới người dùng khi đăng nhập thất bại
-      setUserLoginState(msg);
     } catch (error) {
-      const defaultLoginFailureMessage = intl.formatMessage({
-        id: 'pages.login.failure',
-        defaultMessage: 'Đăng nhập thất bại!',
-      });
-      message.error(defaultLoginFailureMessage);
+      message.error(intl.formatMessage({ id: 'pages.login.failure' }));
     }
   };
-  const { status, type: loginType } = userLoginState;
 
   const ExternalLogin = () => (
-    <div className='text-center'>
-      <div className='mb-4'>
-        <FormattedMessage
-          key="loginWith"
-          id="pages.login.loginWith"
-          defaultMessage="Logion with"
-        />
+    <div className="text-center">
+      <div className="mb-4">
+        <FormattedMessage id="pages.login.loginWith" />
       </div>
-      <Space align='center'>
+      <Space align="center">
         <FacebookOutlined key="FacebookOutlined" className={styles.icon} />
         <TwitterOutlined key="TwitterOutlined" className={styles.icon} />
         <GithubOutlined key="GithubOutlined" className={styles.icon} />
       </Space>
     </div>
-  )
+  );
 
   const RegisterLink = () => (
-    <div className='text-center'>
-      <Space align='center'>
+    <div className="text-center">
+      <Space align="center">
         Not a member?
-        <Link to='/user/register'>
-          <FormattedMessage id="global.register" defaultMessage="Đăng ký" />
+        <Link to="/user/register">
+          <FormattedMessage id="global.register" />
         </Link>
       </Space>
     </div>
-  )
+  );
+
+  const handleSaveBaseUrl = async (values: any) => {
+    localStorage.setItem('base_url', values.baseUrl);
+  };
 
   return (
     <div className={styles.container}>
-      <div className={styles.lang} data-lang>
+      <div className="flex items-center flex-end mr-4 gap-4" data-lang>
+        <Popover
+          title="Your domain"
+          content={
+            <ProForm onFinish={handleSaveBaseUrl}>
+              <ProFormText placeholder="e.g: defzone.net" required name="baseUrl" />
+            </ProForm>
+          }
+        >
+          <SettingOutlined style={{ fontSize: 16 }} />
+        </Popover>
         {SelectLang && <SelectLang />}
       </div>
       <div className={styles.content}>
@@ -121,11 +113,7 @@ const Login: React.FC = () => {
           initialValues={{
             autoLogin: true,
           }}
-          actions={[
-            <ExternalLogin key={0} />,
-            <Divider key={1} />,
-            <RegisterLink key={2} />
-          ]}
+          actions={[<ExternalLogin key={0} />, <Divider key={1} />, <RegisterLink key={2} />]}
           onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
@@ -146,15 +134,6 @@ const Login: React.FC = () => {
               })}
             />
           </Tabs>
-
-          {status === 'error' && loginType === 'account' && (
-            <LoginMessage
-              content={intl.formatMessage({
-                id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误(admin/ant.design)',
-              })}
-            />
-          )}
           {type === 'account' && (
             <>
               <ProFormText
@@ -204,7 +183,6 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
           {type === 'mobile' && (
             <>
               <ProFormText
