@@ -10,7 +10,7 @@ import { useRequest } from 'umi';
 const Files: React.FC = () => {
   const { Text } = Typography;
   const [visibleImport, setVisibleImport] = useState<boolean>(false);
-  const { data: totalUsed } = useRequest(queryTotalUsed)
+  const { data: totalUsed } = useRequest(queryTotalUsed);
 
   const handleBackup = async () => {
     const response = await getBackup();
@@ -55,7 +55,9 @@ const Files: React.FC = () => {
         <Col span={6}>
           <div className="p-4 bg-white rounded">
             <div className="flex justify-between items-center">
-              <h1 className="text-primary">{totalUsed}KB</h1>
+              <h1 className="text-primary">
+                {((totalUsed ?? 0) / 1024 / 1024).toLocaleString()}MB
+              </h1>
               <h1>50GB</h1>
             </div>
             <div className="flex justify-between">

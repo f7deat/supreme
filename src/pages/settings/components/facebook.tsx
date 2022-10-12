@@ -46,8 +46,10 @@ const FacebookSetting: React.FC<FacebookSettingProps> = (props) => {
       <ProForm formRef={formRef} onFinish={handleFinish}>
         <ProFormText name="access_token" label="Access token" />
       </ProForm>
-      <div className='py-2 text-right'>
-        <a href='https://f7deat.github.io/fuzzy' target="_blank">Exchange token</a>
+      <div className="py-2 text-right">
+        <a href="https://f7deat.github.io/fuzzy" target="_blank" rel="noreferrer">
+          Exchange token
+        </a>
       </div>
     </Drawer>
   );

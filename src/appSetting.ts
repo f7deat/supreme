@@ -2,7 +2,7 @@ const AppSetting = {
   roles: {
     admin: 'admin',
   },
-  domain: 'https://defzone.net',
+  domain: localStorage.getItem('base_url'),
 };
 
 export default AppSetting;

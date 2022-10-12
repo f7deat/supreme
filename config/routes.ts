@@ -140,6 +140,12 @@
         component: './settings/applications',
         access: 'canAdmin',
       },
+      {
+        name: 'backup',
+        path: '/settings/backup',
+        component: './settings/backup',
+        access: 'canAdmin',
+      },
     ],
   },
   {

@@ -1,9 +1,8 @@
 import ProBraftEditor from '@/components/pro-braft-editor';
 import BraftEditor from 'braft-editor';
-import type { ProFormInstance } from '@ant-design/pro-form';
-import { ProFormTextArea } from '@ant-design/pro-form';
-import { ProFormText } from '@ant-design/pro-form';
-import ProForm from '@ant-design/pro-form';
+import type { ProFormInstance } from '@ant-design/pro-components';
+import { ProForm } from '@ant-design/pro-components';
+import { ProFormTextArea, ProFormText } from '@ant-design/pro-components';
 import { useRef, useEffect } from 'react';
 
 type GeneralTabProps = {

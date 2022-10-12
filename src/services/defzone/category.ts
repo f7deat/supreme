@@ -2,7 +2,7 @@ import { request } from 'umi';
 
 /** LIST CATEGORY GET /api/all */
 export async function getAllCategory() {
-  return request<API.CategoryListItem[]>(`/category/all`, {
+  return request<API.CategoryListItem[]>(`category/all`, {
     method: 'GET',
   });
 }
@@ -14,7 +14,7 @@ export async function getCategories(params: {
   /** PAGE SIZE */
   pageSize?: number;
 }) {
-  return request<API.CategoryListItem>(`/category/list`, {
+  return request<API.CategoryListItem>(`category/list`, {
     method: 'GET',
     params: {
       ...params,
@@ -22,47 +22,47 @@ export async function getCategories(params: {
   });
 }
 
-/** ADD CATEGORY POST /api/category/add */
+/** ADD CATEGORY POST /apicategory/add */
 export async function addCategory(body: any) {
-  return request(`/category/add`, {
+  return request(`category/add`, {
     method: 'POST',
     data: body,
   });
 }
 
-/** UPDATE CATEGORY POST /api/category/update */
+/** UPDATE CATEGORY POST /apicategory/update */
 export async function updateCategory(body: any) {
-  return request(`/category/update`, {
+  return request(`category/update`, {
     method: 'POST',
     data: body,
   });
 }
 
-/** LIST PARRENT CATEGORY GET /api/category/list-parrent */
+/** LIST PARRENT CATEGORY GET /apicategory/list-parrent */
 export async function getListParrentCategory() {
-  return request<API.CategoryListItem[]>(`/category/list-parrent`, {
+  return request<API.CategoryListItem[]>(`category/list-parrent`, {
     method: 'GET',
   });
 }
 
-/** DELETE CATEGORY GET /api/category/delete */
+/** DELETE CATEGORY GET /apicategory/delete */
 export async function deleteCategory(id: number) {
-  return request(`/category/delete/${id}`, {
+  return request(`category/delete/${id}`, {
     method: 'POST',
   });
 }
 
-/** GET SINGLE CATEGORY GET /api/category/get */
+/** GET SINGLE CATEGORY GET /apicategory/get */
 export async function queryCategory(id: number) {
-  return request(`/category/${id}`);
+  return request(`category/${id}`);
 }
 
 export async function queryListType() {
-  return request(`/category/list-type`);
+  return request(`category/list-type`);
 }
 
 export async function exportCategory() {
-  return request(`/category/export`, {
+  return request(`category/export`, {
     method: 'POST',
   });
 }

@@ -8,7 +8,7 @@ export async function queryPostByUser(params: {
   userId: string;
   type: number;
 }) {
-  return request(`/post/list`, {
+  return request(`post/list`, {
     params: {
       ...params,
     },
@@ -16,13 +16,13 @@ export async function queryPostByUser(params: {
 }
 
 export async function queryViewCount() {
-  return request(`/post/view`)
+  return request(`post/view`);
 }
 
 export async function queryPieChart() {
-  return request(`/dashboard/chart-post-by-categories`);
+  return request(`dashboard/chart-post-by-categories`);
 }
 
 export async function queryPostCount() {
-  return request(`/post/count`);
+  return request(`post/count`);
 }

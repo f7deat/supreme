@@ -88,6 +88,7 @@ const Login: React.FC = () => {
 
   const handleSaveBaseUrl = async (values: any) => {
     localStorage.setItem('base_url', values.baseUrl);
+    message.success('Saved!');
   };
 
   return (

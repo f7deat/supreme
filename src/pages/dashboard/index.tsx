@@ -8,6 +8,7 @@ import { queryPopularPosts } from '@/services/defzone/api';
 import { queryPieChart, queryPostCount, queryViewCount } from '@/services/defzone/post';
 import { Column, Pie } from '@ant-design/charts';
 import { UserSwitchOutlined } from '@ant-design/icons';
+import { ProCard } from '@ant-design/pro-components';
 
 const PageHeaderContent: FC<{ currentUser: Partial<API.User> }> = ({ currentUser }) => {
   const loading = currentUser && Object.keys(currentUser).length;
@@ -21,7 +22,9 @@ const PageHeaderContent: FC<{ currentUser: Partial<API.User> }> = ({ currentUser
         <Typography.Title level={5}>Hi, {currentUser.email}!</Typography.Title>
         <Space>
           <UserSwitchOutlined />
-          {currentUser.roles?.map((role: string) => <Tag key={role}>{role}</Tag>)}
+          {currentUser.roles?.map((role: string) => (
+            <Tag key={role}>{role}</Tag>
+          ))}
         </Space>
       </div>
     </Space>
@@ -39,17 +42,20 @@ const Workplace: FC = () => {
   const [postCount, setPostCount] = useState<number>(0);
 
   useEffect(() => {
-    queryViewCount().then(response => setViewCount(response));
-    queryPieChart().then(response => setPieChart(response));
-    queryPostCount().then(response => setPostCount(response))
-  }, [])
+    queryViewCount().then((response) => setViewCount(response));
+    queryPieChart().then((response) => setPieChart(response));
+    queryPostCount().then((response) => setPostCount(response));
+  }, []);
 
   const ExtraContent: FC<Record<string, any>> = () => (
     <Space size="large">
-      <Statistic title={intl.formatMessage({
-        id: 'menu.blog.post',
-        defaultMessage: 'Article'
-      })} value={postCount} />
+      <Statistic
+        title={intl.formatMessage({
+          id: 'menu.blog.post',
+          defaultMessage: 'Article',
+        })}
+        value={postCount}
+      />
       <Statistic title="Xếp hạng" value={8} suffix="/ 24" />
       <Statistic title="Lượt xem" value={viewCount} />
     </Space>
@@ -111,26 +117,32 @@ const Workplace: FC = () => {
     >
       <Row gutter={24}>
         <Col span={16}>
-          <div className='mb-4'>
-            <Card title="Chart">
+          <div className="mb-4">
+            <ProCard title="Chart">
               <Column {...configColumn} />
-            </Card>
+            </ProCard>
           </div>
-          <Card title="Dự án đang khởi chạy">
+          <ProCard title="Dự án đang khởi chạy">
             <Card.Grid>CRM</Card.Grid>
-          </Card>
+          </ProCard>
         </Col>
         <Col span={8}>
-          <div className='mb-4'>
-            <Card title="Dữ liệu">
-              {pieChart && <Pie data={pieChart} angleField='value' colorField='key'
-                legend={{
-                  layout: 'horizontal',
-                  position: 'bottom'
-                }} />}
-            </Card>
+          <div className="mb-4">
+            <ProCard title="Dữ liệu">
+              {pieChart && (
+                <Pie
+                  data={pieChart}
+                  angleField="value"
+                  colorField="key"
+                  legend={{
+                    layout: 'horizontal',
+                    position: 'bottom',
+                  }}
+                />
+              )}
+            </ProCard>
           </div>
-          <Card title="Bài viết xem nhiều">
+          <ProCard title="Bài viết xem nhiều">
             <List
               bordered
               dataSource={popularPosts}
@@ -141,7 +153,7 @@ const Workplace: FC = () => {
                 </List.Item>
               )}
             />
-          </Card>
+          </ProCard>
         </Col>
       </Row>
     </PageContainer>

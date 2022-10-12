@@ -1,11 +1,14 @@
-import type { ProFormInstance } from '@ant-design/pro-form';
-import { ProFormSelect } from '@ant-design/pro-form';
-import ProForm, { ProFormText, ProFormDateTimePicker } from '@ant-design/pro-form';
 import { Button, Col, Input, Popover, Row } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { getAllCategory } from '@/services/defzone/category';
 import EditableTagGroup from '@/pages/post/components/editable-tag-group';
 import { EyeOutlined, FolderOutlined } from '@ant-design/icons';
+import type { ProFormInstance } from '@ant-design/pro-components';
+import ProForm, {
+  ProFormSelect,
+  ProFormText,
+  ProFormDateTimePicker,
+} from '@ant-design/pro-components';
 
 type PostCenterSettingProps = {
   data?: API.Post;
@@ -47,6 +50,10 @@ const PostCenterSetting: React.FC<PostCenterSettingProps> = (props) => {
         name: 'categories',
         value: categories,
       },
+      {
+        name: 'thumbnail',
+        value: data?.thumbnail,
+      },
     ]);
     if (data?.tags) {
       setTags(data.tags.split(','));
@@ -55,7 +62,7 @@ const PostCenterSetting: React.FC<PostCenterSettingProps> = (props) => {
 
   return (
     <ProForm onFinish={handleFinish} formRef={formRef}>
-      <Row>
+      <Row gutter={16}>
         <Col span={12}>
           <ProFormText name="id" hidden />
           <ProForm.Item name="categories" label="Danh mục">

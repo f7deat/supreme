@@ -80,7 +80,7 @@ const Category: React.FC = () => {
       dataIndex: 'name',
       render: (dom, entity) => (
         <a
-          href={`${AppSetting.domain}/category/details/${entity.id}`}
+          href={`${AppSetting.domain}/category/detail/${entity.id}`}
           target="_blank"
           rel="noreferrer"
         >
