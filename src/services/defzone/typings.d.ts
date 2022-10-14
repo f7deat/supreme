@@ -23,11 +23,12 @@ declare namespace API {
     concurrencyStamp: string;
   };
   type FileListItem = {
-    extension: string;
     id: string;
     name: string;
     size: number;
+    type: string;
     uploadedDate: Date;
+    url: string;
   };
   type FileRecentParams = {
     current?: number;
@@ -64,7 +65,7 @@ declare namespace API {
     emailConfirmed: boolean;
     userName: string;
     phoneNumber: string;
-  }
+  };
   type Post = PostListItem & {
     createdDate: Date;
     thumbnail: string;
@@ -72,9 +73,9 @@ declare namespace API {
     description: string;
     content: string;
     status: string;
-  }
+  };
   type PostBody = {
     post: Post;
-    categories: Category
-  }
+    categories: Category;
+  };
 }

@@ -63,6 +63,7 @@ export default {
   'menu.settings.theme': 'Giao diện',
   'menu.settings.application': 'Application',
   'menu.users.new-user': 'Thành viên mới',
+  'menu.users.billing': 'Thanh toán',
   'menu.settings.navbar': 'Navbar',
   'menu.settings.backup': 'Backup',
   'menu.commerce': 'Commerce',

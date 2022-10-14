@@ -64,6 +64,7 @@ export default {
   'menu.settings.theme': 'Themes',
   'menu.settings.application': 'Application',
   'menu.users.new-user': 'New user',
+  'menu.users.billing': 'Billing',
   'menu.settings.navbar': 'Navbar',
   'menu.settings.backup': 'Backup',
   'menu.commerce': 'Commerce',

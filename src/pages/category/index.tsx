@@ -89,6 +89,11 @@ const Category: React.FC = () => {
       ),
     },
     {
+      title: 'Description',
+      dataIndex: 'description',
+      width: window.innerWidth / 3,
+    },
+    {
       title: <FormattedMessage id="global.status" defaultMessage="Status" />,
       dataIndex: 'status',
       valueEnum: {
