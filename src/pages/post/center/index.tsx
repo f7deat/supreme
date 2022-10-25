@@ -1,24 +1,25 @@
-import { Card, message } from 'antd';
+import { Button, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { addPost, getPost, updatePost } from '@/services/ant-design-pro/api';
 import { PageContainer } from '@ant-design/pro-layout';
 import { useParams } from 'umi';
-import PostCenterSetting from './components/setting';
 import GeneralTab from './components/general';
 import { history } from 'umi';
+import { SendOutlined } from '@ant-design/icons';
+import { publishRequest, queryPost } from '@/services/defzone/post';
+import { ProCard } from '@ant-design/pro-components';
+import CategoryTab from './components/categories';
+import PostCenterSetting from './components/setting';
 
 const PostCenter = () => {
   const params = useParams<any>();
 
   const [tabKey, setTabKey] = useState<string>('');
   const [post, setPost] = useState<API.Post>();
-  const [categories, setCategories] = useState<API.Category>();
   const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
-    getPost(params.id).then((response) => {
-      setPost(response.post);
-      setCategories(response.categories);
+    queryPost(params.id).then((response) => {
+      setPost(response);
     });
   }, [params.id]);
 
@@ -26,37 +27,27 @@ const PostCenter = () => {
     setTabKey(key);
   };
 
-  const handleFinish = async (values: any) => {
-    values.content = values.content.toHTML();
-    if (tags) {
-      values.tags = tags.join(',');
-    } else {
-      values.tags = '';
+  const renderChildrenByTabKey = () => {
+    if (tabKey === 'setting') {
+      return <PostCenterSetting data={post} setTags={setTags} tags={tags} />;
     }
-    const response = values.id ? await updatePost(values) : await addPost(values);
+    if (tabKey === 'categories') {
+      return <CategoryTab id={params.id} />;
+    }
+    return <GeneralTab id={params.id} post={post} />;
+  };
+
+  const publish = async () => {
+    const response = await publishRequest(post?.id ?? 0);
     if (response.succeeded) {
+      message.success('Published!');
       history.push('/blog/post');
     } else {
       message.error(response.message);
     }
   };
 
-  const renderChildrenByTabKey = () => {
-    if (tabKey === 'setting') {
-      return (
-        <PostCenterSetting
-          data={post}
-          categories={categories}
-          setTags={setTags}
-          handleFinish={handleFinish}
-          tags={tags}
-        />
-      );
-    }
-    return (
-      <GeneralTab id={params.id} post={post} categories={categories} handleFinish={handleFinish} />
-    );
-  };
+  const hasData = post?.id !== null && post?.id !== undefined;
 
   return (
     <PageContainer
@@ -71,9 +62,18 @@ const PostCenter = () => {
           tab: 'Setting',
           key: 'setting',
         },
+        {
+          tab: 'Categories',
+          key: 'categories',
+        },
       ]}
+      extra={
+        <Button icon={<SendOutlined />} type="primary" onClick={publish} disabled={!hasData}>
+          Publish
+        </Button>
+      }
     >
-      <Card size="small">{renderChildrenByTabKey()}</Card>
+      <ProCard>{renderChildrenByTabKey()}</ProCard>
     </PageContainer>
   );
 };

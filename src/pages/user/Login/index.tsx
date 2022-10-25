@@ -20,6 +20,7 @@ import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import styles from './index.less';
+import AppSetting from '@/appSetting';
 
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
@@ -98,7 +99,7 @@ const Login: React.FC = () => {
           title="Your domain"
           content={
             <ProForm onFinish={handleSaveBaseUrl}>
-              <ProFormText placeholder="e.g: defzone.net" required name="baseUrl" />
+              <ProFormText placeholder={`e.g: ${AppSetting.domain}`} required name="baseUrl" />
             </ProForm>
           }
         >

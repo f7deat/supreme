@@ -2,9 +2,7 @@ import { request } from 'umi';
 
 /** LIST CATEGORY GET /api/all */
 export async function getAllCategory() {
-  return request<API.CategoryListItem[]>(`category/all`, {
-    method: 'GET',
-  });
+  return request<API.CategoryListItem[]>(`category/all`);
 }
 
 /** LIST PARENT CATEGORY GET /api/list */

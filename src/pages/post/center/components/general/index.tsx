@@ -4,16 +4,17 @@ import type { ProFormInstance } from '@ant-design/pro-components';
 import { ProForm } from '@ant-design/pro-components';
 import { ProFormTextArea, ProFormText } from '@ant-design/pro-components';
 import { useRef, useEffect } from 'react';
+import { addPost, updatePost } from '@/services/ant-design-pro/api';
+import { message } from 'antd';
+import { history } from 'umi';
 
 type GeneralTabProps = {
   id: string;
-  categories?: API.Category;
   post?: API.Post;
-  handleFinish: any;
 };
 
 const GeneralTab: React.FC<GeneralTabProps> = (props) => {
-  const { post, categories, handleFinish } = props;
+  const { post } = props;
   const formRef = useRef<ProFormInstance>();
 
   useEffect(() => {
@@ -28,10 +29,6 @@ const GeneralTab: React.FC<GeneralTabProps> = (props) => {
           value: post?.title,
         },
         {
-          name: 'url',
-          value: post?.url,
-        },
-        {
           name: 'description',
           value: post?.description,
         },
@@ -44,10 +41,6 @@ const GeneralTab: React.FC<GeneralTabProps> = (props) => {
           value: BraftEditor.createEditorState(post?.content),
         },
         {
-          name: 'categories',
-          value: categories,
-        },
-        {
           name: 'status',
           value: post?.status,
         },
@@ -55,13 +48,23 @@ const GeneralTab: React.FC<GeneralTabProps> = (props) => {
     } else {
       formRef.current?.resetFields();
     }
-  }, [categories, post, props.id]);
+  }, [post, props.id]);
+
+  const handleFinish = async (values: any) => {
+    values.content = values.content.toHTML();
+    const response = values.id ? await updatePost(values) : await addPost(values);
+    if (response.succeeded) {
+      message.success('Saved!');
+      history.push(`/blog/post/center/${response.data.id}`);
+    } else {
+      message.error(response.message);
+    }
+  };
 
   return (
     <ProForm onFinish={handleFinish} formRef={formRef}>
       <ProFormText name="id" hidden={true} />
       <ProFormText name="title" label="Tiêu đề" rules={[{ required: true }]} />
-      <ProFormText name="url" label="Đường dẫn" />
       <ProFormTextArea name="description" label="Mô tả" />
       <ProForm.Item name="content" label="Nội dung" rules={[{ required: true }]}>
         <ProBraftEditor />
