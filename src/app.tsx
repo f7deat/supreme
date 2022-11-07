@@ -61,12 +61,11 @@ export const request: RequestConfig = {
         };
       }
       const token = localStorage.getItem('def_token');
-      const domain = localStorage.getItem('base_url') || 'https://defzone.net';
       options.headers = {
         authorization: `Bearer ${token}`,
       };
       return {
-        url: `${domain}/api/${url}`,
+        url: `https://localhost:60176/api/${url}`,
         options,
       };
     },
