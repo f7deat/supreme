@@ -1,16 +1,16 @@
 import { queryTotalProduct } from '@/services/defzone/commerce';
 import { FormOutlined, InboxOutlined, UserAddOutlined } from '@ant-design/icons';
+import { ProList } from '@ant-design/pro-components';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Avatar, Card, Col, List, Row, Statistic } from 'antd';
+import { Card, Col, Row, Statistic } from 'antd';
 import { useState, useEffect } from 'react';
 
 const Commerce: React.FC = () => {
-
-  const [totalProduct, setTotalProduct] = useState(0)
+  const [totalProduct, setTotalProduct] = useState(0);
 
   useEffect(() => {
-    queryTotalProduct().then(response => setTotalProduct(response))
-  }, [])
+    queryTotalProduct().then((response) => setTotalProduct(response));
+  }, []);
 
   const data = [
     {
@@ -34,18 +34,23 @@ const Commerce: React.FC = () => {
       <Row gutter={24}>
         <Col span={8}>
           <Card title="External Market">
-            <List
+            <ProList
               itemLayout="horizontal"
               dataSource={data}
-              renderItem={(item) => (
-                <List.Item actions={[<a key="list-loadmore-edit">connect</a>]}>
-                  <List.Item.Meta
-                    avatar={<Avatar src={item.avatar} size="large" />}
-                    title={<a href="https://defzone.net">{item.title}</a>}
-                    description={item.description}
-                  />
-                </List.Item>
-              )}
+              metas={{
+                avatar: {
+                  dataIndex: 'avatar',
+                },
+                description: {
+                  dataIndex: 'description',
+                },
+                title: {
+                  dataIndex: 'title',
+                },
+                actions: {
+                  render: (text, row) => [<a key={row.title}>connect</a>],
+                },
+              }}
             />
           </Card>
         </Col>

@@ -35,6 +35,10 @@
     name: 'blog',
     routes: [
       {
+        path: '/blog',
+        redirect: '/blog/post',
+      },
+      {
         name: 'post',
         path: '/blog/post',
         component: './post/list',
@@ -45,18 +49,23 @@
         component: './post/center',
         hideInMenu: true,
       },
-      {
-        name: 'category',
-        path: '/blog/category',
-        component: './category',
-      },
     ],
+  },
+  {
+    name: 'category',
+    icon: 'block',
+    path: '/category',
+    component: './category',
   },
   {
     path: '/commerce',
     icon: 'shop',
     name: 'commerce',
     routes: [
+      {
+        path: '/commerce',
+        redirect: '/commerce/overview',
+      },
       {
         name: 'overview',
         path: '/commerce/overview',

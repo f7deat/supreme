@@ -51,7 +51,7 @@ export default {
   'menu.editor.koni': 'Koni Editor',
   'menu.blog': 'Blog',
   'menu.blog.post': 'Bài viết',
-  'menu.blog.category': 'Danh mục',
+  'menu.category': 'Danh mục',
   'menu.blog.center': 'Viết bài',
   'menu.users': 'Thành viên',
   'menu.users.center': 'Hồ sơ',

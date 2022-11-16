@@ -1,12 +1,31 @@
-import { ContactsOutlined, EditOutlined, UserAddOutlined, MessageOutlined, SettingOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Divider, Row, Space, Tag, Image, Typography, Empty, Tooltip, Popconfirm } from 'antd';
+import {
+  ContactsOutlined,
+  EditOutlined,
+  UserAddOutlined,
+  MessageOutlined,
+  SettingOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons';
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Row,
+  Space,
+  Tag,
+  Image,
+  Typography,
+  Empty,
+  Tooltip,
+  Popconfirm,
+} from 'antd';
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Link, useAccess, useParams } from 'umi';
 import type { RouteChildrenProps } from 'react-router';
 import Projects from './components/Projects';
 import Articles from './components/Articles';
-import Applications from './components/Applications';
 import { queryUser } from '@/services/defzone/api';
 import { queryUserRoles } from '@/services/defzone/user';
 import { FormattedMessage } from 'umi';
@@ -15,7 +34,7 @@ import RoleComponent from './components/roles';
 const TagList: React.FC<{ tags: string[] }> = ({ tags }) => {
   return (
     <div>
-      <div className='font-bold mb-2'>Nhóm</div>
+      <div className="font-bold mb-2">Nhóm</div>
       {(tags || []).map((item) => (
         <Tag key={item}>{item}</Tag>
       ))}
@@ -24,8 +43,7 @@ const TagList: React.FC<{ tags: string[] }> = ({ tags }) => {
 };
 
 const Center: React.FC<RouteChildrenProps> = () => {
-
-  const { canAdmin } = useAccess()
+  const { canAdmin } = useAccess();
 
   const params = useParams<any>();
 
@@ -39,11 +57,10 @@ const Center: React.FC<RouteChildrenProps> = () => {
       setCurrentUser(response);
     });
 
-    queryUserRoles(params.id).then(response => {
-      setRoles(response)
-    })
+    queryUserRoles(params.id).then((response) => {
+      setRoles(response);
+    });
   }, [params.id]);
-
 
   const operationTabList = [
     {
@@ -74,7 +91,7 @@ const Center: React.FC<RouteChildrenProps> = () => {
       return <Projects />;
     }
     if (tabValue === 'applications') {
-      return <Applications />;
+      return <Empty />;
     }
     if (tabValue === 'articles') {
       return <Articles userId={params.id} />;
@@ -82,35 +99,43 @@ const Center: React.FC<RouteChildrenProps> = () => {
     return <Empty />;
   };
 
-  const onConfirm = () => {
-
-  }
+  const onConfirm = () => {};
 
   return (
     <PageContainer>
       <Row gutter={24}>
         <Col span={7}>
-          <Card bordered={false} actions={[
-            <Link to="/account/settings" key="setting">
-              <SettingOutlined />
-            </Link>,
-            <EditOutlined key="edit" />,
-            <Popconfirm title="Are you sure delete this?" onConfirm={onConfirm} key="delete" disabled={canAdmin}>
-              <DeleteOutlined />
-            </Popconfirm>,
-            <Tooltip key="role" title="Assign roles">
-              <UserAddOutlined onClick={() => setVisibleRole(true || canAdmin)} />
-            </Tooltip>
-          ]}>
+          <Card
+            bordered={false}
+            actions={[
+              <Link to="/account/settings" key="setting">
+                <SettingOutlined />
+              </Link>,
+              <EditOutlined key="edit" />,
+              <Popconfirm
+                title="Are you sure delete this?"
+                onConfirm={onConfirm}
+                key="delete"
+                disabled={canAdmin}
+              >
+                <DeleteOutlined />
+              </Popconfirm>,
+              <Tooltip key="role" title="Assign roles">
+                <UserAddOutlined onClick={() => setVisibleRole(true || canAdmin)} />
+              </Tooltip>,
+            ]}
+          >
             {currentUser && (
               <div>
                 <div className="text-center">
-                  <div className='mb-4'>
+                  <div className="mb-4">
                     <Image src={currentUser.avatar} width={250} />
                   </div>
                   <Typography.Title level={4}>{currentUser.email}</Typography.Title>
                   <Space>
-                    <Button icon={<UserAddOutlined />} type="primary">Follow</Button>
+                    <Button icon={<UserAddOutlined />} type="primary">
+                      Follow
+                    </Button>
                     <Button icon={<MessageOutlined />}>Message</Button>
                   </Space>
                 </div>

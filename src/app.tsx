@@ -65,7 +65,7 @@ export const request: RequestConfig = {
         authorization: `Bearer ${token}`,
       };
       return {
-        url: `https://localhost:60176/api/${url}`,
+        url: `https://defzone.net/api/${url}`,
         options,
       };
     },

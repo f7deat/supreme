@@ -52,7 +52,7 @@ const PostList: React.FC = () => {
       title: 'Ngày cập nhật',
       dataIndex: 'modifiedDate',
       valueType: 'dateTime',
-      search: false
+      search: false,
     },
     {
       title: <FormattedMessage id="global.status" defaultMessage="Status" />,
@@ -109,11 +109,6 @@ const PostList: React.FC = () => {
         search={{
           layout: 'vertical',
         }}
-        toolBarRender={() => [
-          <Button type="primary" danger key={0}>
-            Import
-          </Button>,
-        ]}
         request={queryPosts}
         columns={columns}
         rowSelection={{}}
